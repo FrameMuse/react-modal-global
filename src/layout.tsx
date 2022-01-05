@@ -1,7 +1,7 @@
 /* THIS FILE IS DEPRECATED */
 
-import { classMerge } from './utils'
-import { usePopupContext } from './hook'
+import { usePopupContext } from "./hook"
+import { classMerge } from "./utils"
 
 interface PopupDefaultLayoutProps {
   children: any

@@ -1,8 +1,9 @@
 import React from "react"
-import { classWithModifiers } from "./utils"
+
 import { PopupContext } from "./context"
-import { PopupWindow } from "./interfaces"
 import { PopupPrivate } from "./controller"
+import { PopupWindow } from "./interfaces"
+import { classWithModifiers } from "./utils"
 
 export interface PopupContainerProps {
   className?: string

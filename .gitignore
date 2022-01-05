@@ -104,3 +104,6 @@ dist
 .tern-port
 
 package-lock.json
+.eslintrc
+.vscode
+.editorconfig

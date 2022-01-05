@@ -1,4 +1,5 @@
 import { useContext, useRef } from "react"
+
 import { PopupContext } from "./context"
 import { PopupWindow } from "./interfaces"
 
