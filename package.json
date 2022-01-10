@@ -1,6 +1,6 @@
 {
   "name": "react-plugin-popup",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Easy to Popup provider for react",
   "main": "index.ts",
   "scripts": {
