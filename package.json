@@ -3,6 +3,7 @@
   "version": "0.8.6",
   "description": "Easy to Popup provider for react",
   "main": "index.ts",
+  "types": "index.d.ts",
   "scripts": {
     "release-patch": "npm version patch && npm publish"
   },
