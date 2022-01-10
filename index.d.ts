@@ -16,6 +16,4 @@ copies or substantial portions of the Software.
 
 */
 
-import { Popup } from "./src/controller"
-import { PopupContainer } from "./src/container"
-import { usePopupContext } from "./src/hook"
+import "./index"
