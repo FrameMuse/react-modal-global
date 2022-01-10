@@ -1,0 +1,35 @@
+{
+  "name": "react-plugin-popup",
+  "version": "0.8.5",
+  "description": "Easy to Popup provider for react",
+  "main": "index.ts",
+  "scripts": {
+    "release-patch": "npm version patch && npm publish"
+  },
+  "dependencies": {
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "typescript": "^4.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrameMuse/react-plugin-popup.git"
+  },
+  "keywords": [
+    "react",
+    "popup",
+    "ts"
+  ],
+  "author": "FrameMuse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FrameMuse/react-plugin-popup/issues"
+  },
+  "homepage": "https://github.com/FrameMuse/react-plugin-popup#readme"
+}

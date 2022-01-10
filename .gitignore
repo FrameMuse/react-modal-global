@@ -102,8 +102,3 @@ dist
 
 # TernJS port file
 .tern-port
-
-package-lock.json
-.eslintrc
-.vscode
-.editorconfig
