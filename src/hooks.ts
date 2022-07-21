@@ -16,8 +16,13 @@ copies or substantial portions of the Software.
 
 */
 
-import { createContext } from "react"
+import { useContext } from "react"
 
-import { ModalWindow } from "./types"
+import { modalContext } from "./context"
 
-export const modalContext = createContext<ModalWindow | null>(null)
+export function useModalContext() {
+  const context = useContext(modalContext)
+  if (!context) throw new Error("ModalError: Out of Modal context")
+
+  return context
+}

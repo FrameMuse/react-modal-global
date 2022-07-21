@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2022 FrameMuse
+Copyright (c) 2022 Valery Zinchenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -16,16 +16,19 @@ copies or substantial portions of the Software.
 
 */
 
-import { useContext, useRef } from "react"
+import { FunctionComponent } from "react"
 
-import { PopupContext } from "./context"
-import { PopupWindow } from "./interfaces"
+export type ModalComponent<P = {}> = FunctionComponent<P>
 
-export function usePopupContext() {
-  const context = useRef(useContext(PopupContext))
+export interface ModalParams {
+  id: string | number
+  closable: boolean
+  weak: boolean
+  fork: boolean
+}
 
-  return {
-    ...context.current,
-    component: undefined
-  } as Omit<PopupWindow, "component">
+export interface ModalWindow<Params = {}> {
+  component: ModalComponent<ModalParams & Params>
+  params: ModalParams & Params
+  close: () => void
 }

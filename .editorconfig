@@ -15,13 +15,3 @@ indent_size = 2
 [*.{css,scss}]
 indent_style = tab
 indent_size = 2
-
-# 4 space indentation
-[*.py]
-indent_style = tab
-indent_size = 4
-
-# Tab indentation (no size specified)
-[Makefile]
-indent_style = tab
-indent_size = no

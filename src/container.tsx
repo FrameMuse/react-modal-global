@@ -2,7 +2,7 @@
 
 MIT License
 
-Copyright (c) 2022 FrameMuse
+Copyright (c) 2022 Valery Zinchenko
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -16,49 +16,69 @@ copies or substantial portions of the Software.
 
 */
 
-import React from "react"
+// import "./modal.scss"
 
-import { PopupContext } from "./context"
-import { PopupPrivate } from "./controller"
-import { PopupWindow } from "./interfaces"
-import { classWithModifiers } from "./utils"
+import { Component } from "react"
 
-export interface PopupContainerProps {
+import { modalContext } from "./context"
+import { modalPrivate } from "./controller"
+import { ModalWindow } from "./types"
+import { classWithModifiers, stopPropagation } from "./utils"
+
+export interface ModalContainerProps {
   className?: string
 }
-export interface PopupContainerState {
-  isActive: boolean
-  queue: PopupWindow[]
+export interface ModalContainerState {
+  active: boolean
+  queue: ModalWindow[]
+  forkedQueue: ModalWindow[]
 }
 
-export class PopupContainer extends React.Component<PopupContainerProps, PopupContainerState> {
-  state: PopupContainerState = {
-    isActive: false,
-    queue: []
+export class ModalContainer extends Component<ModalContainerProps, ModalContainerState> {
+  state: ModalContainerState = {
+    active: false,
+    queue: [],
+    forkedQueue: []
   }
 
-  constructor(props: any) {
+  constructor(props: ModalContainerProps) {
     super(props)
-    // Set Popup dispatcher
-    PopupPrivate.dispatch = this.setState.bind(this)
+    // Set Modal dispatcher
+    modalPrivate.dispatch = this.setState.bind(this)
+  }
+
+  get className(): string {
+    return this.props.className || "modal"
   }
 
   render() {
-    const { isActive, queue } = this.state
-    const lastPopup = queue[queue.length - 1]
-    const { component: PopupWindowComponent, params = {}, close } = lastPopup || {}
-
-    const className = this.props.className || "popup"
+    const { active, queue } = this.state
+    const currentModal = queue[queue.length - 1] as (ModalWindow | undefined)
+    const onClose = currentModal?.params?.closable ? stopPropagation(close) : undefined
     return (
-      <div className={classWithModifiers(className, isActive && "active")} onClick={close}>
-        <div className={className + "__container"} onClick={event => event.stopPropagation()}>
-          <div className={className + "__inner"} onClick={event => event.stopPropagation()}>
-            <PopupContext.Provider value={lastPopup}>
-              {PopupWindowComponent && <PopupWindowComponent {...params} />}
-            </PopupContext.Provider>
+      <>
+        <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active} key={currentModal?.params?.id}>
+          <div className={this.className + "__container"} onClick={onClose}>
+            <modalContext.Provider value={currentModal || null}>
+              {currentModal?.component && <currentModal.component {...currentModal.params} />}
+            </modalContext.Provider>
           </div>
         </div>
-      </div>
+
+        {this.renderForks()}
+      </>
     )
+  }
+
+  renderForks() {
+    return this.state.forkedQueue.map(modal => (
+      <div className={this.className} aria-modal key={modal.params.id}>
+        <div className={this.className + "__container"} onClick={modal.params?.closable ? stopPropagation(modal.close) : undefined}>
+          <modalContext.Provider value={modal}>
+            {<modal.component {...modal.params} />}
+          </modalContext.Provider>
+        </div>
+      </div >
+    ))
   }
 }
