@@ -35,7 +35,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FrameMuse/react-plugin-popup.git"
+    "url": "git+https://github.com/FrameMuse/react-modal-global.git"
   },
   "keywords": [
     "react",
@@ -45,7 +45,7 @@
   "author": "FrameMuse",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FrameMuse/react-plugin-popup/issues"
+    "url": "https://github.com/FrameMuse/react-modal-global/issues"
   },
-  "homepage": "https://github.com/FrameMuse/react-plugin-popup#readme"
+  "homepage": "https://github.com/FrameMuse/react-modal-global#readme"
 }
