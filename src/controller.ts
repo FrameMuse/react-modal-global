@@ -44,7 +44,10 @@ export class Modal {
   public static open<
     P extends object = {},
     AC extends Partial<ModalParams> & P = Partial<ModalParams> & P
-  >(component: ModalComponent<P>, params?: AC): { promise: Promise<void>, window: ModalWindow<AC> } {
+  >(
+    component: ModalComponent<P>,
+    ...[params]: P extends object ? [AC] : [AC?]
+  ): { promise: Promise<void>, window: ModalWindow<AC> } {
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
     const modal: ModalWindow<any> = { component, params: { ...DEFAULT_PARAMS, id: Date.now(), ...params }, close }
