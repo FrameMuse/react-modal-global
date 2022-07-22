@@ -1,0 +1,71 @@
+.popup-layout {
+  // Using `animation` here but you can go with `transition` too
+
+  @keyframes show {
+    from {
+      transform: translateY(75%);
+    }
+  }
+
+  @keyframes hide {
+    to {
+      transform: translateY(75%);
+    }
+  }
+
+  margin: auto;
+  animation: 250ms ease show forwards;
+  cursor: initial;
+
+  .modal:not(.modal--active) & {
+    animation: 250ms ease hide forwards;
+  }
+}
+
+.popup-layout__container {
+  display: grid;
+  gap: $gap;
+
+  width: var(--popup-width);
+  min-width: 15em;
+  padding: 2.5em 6em 3.5em;
+  background: $color-white;
+  border-radius: $border-radius-1;
+
+  // May be include mobile version of popup container
+  @include Mobile {
+    width: 100vw;
+    height: 100vh;
+
+    border-radius: unset;
+    padding-inline: 3em;
+  }
+}
+
+.popup-layout__close {
+  --icon-size: 1.25em;
+  margin-top: -1em;
+  margin-left: auto;
+  margin-right: -4.5em;
+
+  &--hidden {
+    visibility: hidden;
+  }
+
+  @include Mobile {
+    margin-right: unset;
+  }
+}
+
+.popup-layout__inner {
+  display: grid;
+  align-content: baseline;
+  gap: $gap;
+
+  /* When passing only one child, it shows a desire to pass a wrapper (e.g. form element) */
+  &>:only-child {
+    display: grid;
+    align-content: baseline;
+    gap: $gap;
+  }
+}

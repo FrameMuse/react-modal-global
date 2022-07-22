@@ -7,7 +7,7 @@ This is a package that provides modal dialogs which does similar to [`react-moda
 ### Motivation
 
 It is often to happen that in the function context, for example `fetchMyLovelyData`, after some, probably async, actions, you need to open a `Modal`.
-In [`react-modal`](https://www.npmjs.com/package/react-modal) you add `Modal` component to your components tree and this approach requires doing so each time you want a modal to exist, it may cause some **unwanted overlaping**, is a bit of **boilerplate code** and inflicts a holder of this `Modal` to control the `isOpen` state and other parameters.
+In [`react-modal`](https://www.npmjs.com/package/react-modal) you add `Modal` component to your components tree and this approach requires doing so each time you want a modal to exist, it may cause some **unwanted overlaping**, is a bit of **boilerplate code** and inflicts a holder of this `Modal` to control the `isOpen` state and other parameters. Also, use of different types of modal with same controller.
 
 Likely to create a package that would solve these problems while still covering most of use cases.
 
@@ -45,6 +45,8 @@ There are other features upon this idea.
 
 ## Usage
 
+Usage may seem a bit complicated, please, be patient and read all the thing throughout.
+
 ### Create new Modal component
 
 All it needs for creating such is a valid `JSX.Element`:
@@ -79,7 +81,11 @@ function ModalComponent() {
 
 ### Modal component usage
 
+Note that `PopupLogin` should have its own styles to look like a popup, it is advised to use custom `PopupLayout` (Learn below).
+
 ```tsx
+import "react-modal-global/styles/modal.scss" // import default styles if should
+
 import { Modal } from "react-modal-global"
 
 import PopupLogin from "./PopupLogin"
@@ -112,3 +118,45 @@ Available options
 |`weak`|By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen.|
 |`fork`|Creates a new layer for a single modal|
 
+### Modal layouts
+
+To use various modal types (Dialog, Popup, Drawer), you create your own `layout` for each one, advised naming is [Type][Name] => `DrawerLayout`.
+
+[See example here](./examples/PopupLayout)
+
+To create your first `Popup` modal try this
+
+```tsx
+import { FormEvent } from "react"
+import { useModalContext } from "react-modal-global"
+
+import PopupLayout from "modal-layouts/PopupLayout/PopupLayout"
+
+function PopupMyFirst() {
+  const modal = useModalContext()
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const target = event.currentTarget
+    const ageInput = target.elements.namedItem("age")
+
+    alert(ageInput) // Show age
+    modal.close() // Then close `this modal`
+  }
+  return (
+    <PopupLayout>
+      <form onSubmit={onSubmit}>
+        <h2>My first popup modal</h2>
+        <input name="age" placeholder="Enter your `first popup modal` age" />
+        <button type="submit">See my age</button>
+      </form>
+    </PopupLayout>
+  )
+}
+
+export default PopupMyFirst
+
+```
+
+The end.
