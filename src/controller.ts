@@ -66,7 +66,7 @@ export class Modal {
     AC extends Partial<ModalParams> & P = Partial<ModalParams> & P
   >(
     component: ModalComponent<P>,
-    ...[params]: P extends object ? [AC] : [AC?]
+    ...[params]: keyof P extends never ? [AC?] : [AC]
   ): { promise: Promise<void>, window: ModalWindow<AC> } {
     modalPrivate.dispatch(state => ({
       ...state,
