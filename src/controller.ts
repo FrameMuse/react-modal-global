@@ -52,12 +52,12 @@ export class Modal {
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
     const modal: ModalWindow<any> = { component, params: { ...DEFAULT_PARAMS, id: Date.now(), ...params }, close }
 
-    Modal.add(modal)
-
     function close() {
       resolveFunction()
       Modal.remove(modal)
     }
+
+    Modal.add(modal)
 
     return { promise, window: modal }
   }
