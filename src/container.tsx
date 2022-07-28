@@ -57,10 +57,10 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
     const onClose = currentModal?.params?.closable ? stopPropagation(currentModal.close) : undefined
     return (
       <>
-        <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active} key={currentModal?.params?.id}>
+        <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active}>
           <div className={this.className + "__container"} onClick={onClose}>
             <modalContext.Provider value={currentModal || null}>
-              {currentModal?.component && <currentModal.component {...currentModal.params} />}
+              {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
             </modalContext.Provider>
           </div>
         </div>
