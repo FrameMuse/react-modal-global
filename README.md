@@ -1,6 +1,6 @@
 # React Modal Global
 
-Needs feedback, please contribute in GitHub Issues or leave your message on [my discord server](https://discord.gg/3yT3n5x9).
+Needs feedback, please contribute in GitHub Issues or leave your message on [my discord server](https://discord.gg/DCUWrRhvnt).
 
 ## Introduction
 
