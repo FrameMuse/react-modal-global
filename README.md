@@ -1,5 +1,7 @@
 # React Modal Global
 
+Needs feedback, please contribute in GitHub Issues or leave your message on [my discord server](https://discord.gg/3yT3n5x9).
+
 ## Introduction
 
 This is a package that provides modal dialogs which does similar to [`react-modal`](https://www.npmjs.com/package/react-modal) except that it is accessed from _anywhere_.
