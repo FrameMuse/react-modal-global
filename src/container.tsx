@@ -59,9 +59,11 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
       <>
         <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active}>
           <div className={this.className + "__container"} onClick={onClose}>
-            <modalContext.Provider value={currentModal || null}>
-              {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
-            </modalContext.Provider>
+            <div className={this.className + "__inner"}>
+              <modalContext.Provider value={currentModal || null}>
+                {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
+              </modalContext.Provider>
+            </div>
           </div>
         </div>
 
