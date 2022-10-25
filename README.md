@@ -6,17 +6,18 @@ Needs feedback, please contribute in GitHub Issues or leave your message on [my 
 
 This is a package that provides modal dialogs which does similar to [`react-modal`](https://www.npmjs.com/package/react-modal) except that it is accessed from _anywhere_.
 
-### Motivation
+## Features
 
-It is often to happen that in the function context, for example `fetchMyLovelyData`, after some, probably async, actions, you need to open a `Modal`.
-In [`react-modal`](https://www.npmjs.com/package/react-modal) you add `Modal` component to your components tree and this approach requires doing so each time you want a modal to exist, it may cause some **unwanted overlaping**, is a bit of **boilerplate code** and inflicts a holder of this `Modal` to control the `isOpen` state and other parameters. Also, use of different types of modal with same controller.
-
-Likely to create a package that would solve these problems while still covering most of use cases.
-
-### How it works
+- Globalization - opened from anywhere (even from non-component context)
+- Multicontainers - for e.g. templates
+- Context - the data passed when openning can be accessed in the component via `useModalContext` hook
+- Stacking/Nesting
+- Forking
+- Data preservation
+- `open` method returns `Promise`
+- 
 
 - The package uses only react as a dependency.
-- Relies on `react context` to transfer information between `ModalContainer` and modal components.
 
 #### The main idea
 
@@ -170,4 +171,10 @@ export default PopupMyFirst
 
 ```
 
-The end.
+#### If using several containers
+
+Instead of wrapping your modal components manually you can pass `template` attribute to `ModalContainer`, for example, `PopupLayout`
+
+```tsx
+<ModalContainer template={PopupLayout} />
+```
