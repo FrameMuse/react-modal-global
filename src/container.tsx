@@ -16,16 +16,16 @@ copies or substantial portions of the Software.
 
 */
 
-// import "./modal.scss"
-
-import { Component } from "react"
+import { Component, Fragment, ReactElement } from "react"
 
 import { modalContext } from "./context"
-import { modalPrivate } from "./controller"
 import { ModalWindow } from "./types"
 import { classWithModifiers, stopPropagation } from "./utils"
 
+export const containers: Set<ModalContainer> = new Set
+
 export interface ModalContainerProps {
+  template?: (...args: unknown[]) => ReactElement
   className?: string
 }
 export interface ModalContainerState {
@@ -41,27 +41,32 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
     forkedQueue: []
   }
 
-  constructor(props: ModalContainerProps) {
-    super(props)
-    // Set Modal dispatcher
-    modalPrivate.dispatch = this.setState.bind(this)
-  }
-
   get className(): string {
     return this.props.className || "modal"
+  }
+
+  componentDidMount(): void {
+    containers.add(this)
+  }
+
+  componentWillUnmount(): void {
+    containers.delete(this)
   }
 
   render() {
     const { active, queue } = this.state
     const currentModal = queue[queue.length - 1] as (ModalWindow | undefined)
     const onClose = currentModal?.params?.closable ? stopPropagation(currentModal.close) : undefined
+    const Template = this.props.template || Fragment
     return (
       <>
         <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active}>
           <div className={this.className + "__container"} onClick={onClose}>
             <div className={this.className + "__inner"}>
               <modalContext.Provider value={currentModal || null}>
-                {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
+                <Template>
+                  {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
+                </Template>
               </modalContext.Provider>
             </div>
           </div>

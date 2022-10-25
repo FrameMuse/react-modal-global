@@ -16,9 +16,10 @@ copies or substantial portions of the Software.
 
 */
 
-import { Dispatch, SetStateAction } from "react"
+import { SetStateAction } from "react"
+import { ModalContainer } from "react-modal-global"
 
-import { ModalContainerState } from "./container"
+import { containers, ModalContainerState } from "./container"
 import { ModalComponent, ModalParams, ModalWindow } from "./types"
 import { serialize } from "./utils"
 
@@ -34,10 +35,15 @@ const DEFAULT_PARAMS: ModalParams = {
   fork: false,
 }
 
-export const modalPrivate: {
-  dispatch: Dispatch<SetStateAction<ModalContainerState>>
-} = {
-  dispatch: () => { throw new Error("ModalError: no containers were found") }
+function dispatch(setStateAction: SetStateAction<ModalContainerState>) {
+  const lastContainer = [...containers][containers.size - 1] as (ModalContainer | undefined)
+  if (lastContainer == null) {
+    console.warn("ModalError: no containers were mounted.")
+
+    return
+  }
+
+  lastContainer.setState(setStateAction)
 }
 
 export class Modal {
@@ -68,7 +74,7 @@ export class Modal {
     component: ModalComponent<P>,
     ...[params]: keyof P extends never ? [AC?] : [AC]
   ): { promise: Promise<void>, window: ModalWindow<AC> } {
-    modalPrivate.dispatch(state => ({
+    dispatch(state => ({
       ...state,
       queue: state.queue.slice(0, -1)
     }))
@@ -76,7 +82,7 @@ export class Modal {
   }
   private static add(modalWindow: ModalWindow) {
     if (modalWindow.params.fork) {
-      modalPrivate.dispatch(state => {
+      dispatch(state => {
         return {
           ...state,
           forkedQueue: [...state.forkedQueue, modalWindow]
@@ -86,7 +92,7 @@ export class Modal {
     }
 
 
-    modalPrivate.dispatch(state => {
+    dispatch(state => {
       // Make that we need it
       if (!modalWindow.params?.weak) {
         // Skip adding to queue if there is already the same window
@@ -118,14 +124,14 @@ export class Modal {
   }
   private static remove(modalWindow: ModalWindow) {
     if (modalWindow.params.fork) {
-      modalPrivate.dispatch(state => {
+      dispatch(state => {
         const forkedQueue = state.forkedQueue.filter(mw => mw !== modalWindow)
         return { ...state, forkedQueue }
       })
       return
     }
 
-    modalPrivate.dispatch(state => {
+    dispatch(state => {
       const queue = state.queue.filter(mw => mw !== modalWindow)
       if (!modalWindow.params.weak) {
         // Hide modal without removing if it's the last window
@@ -137,7 +143,7 @@ export class Modal {
     })
   }
   public static closeAll() {
-    modalPrivate.dispatch(state => {
+    dispatch(state => {
       state.queue.forEach(modal => modal.close())
       return DEFAULT_STATE
     })

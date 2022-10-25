@@ -120,6 +120,15 @@ Available options
 |`weak`|By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen.|
 |`fork`|Creates a new layer for a single modal|
 
+### Modal Template
+
+There is a multicontainers feature - you can put containers at different depths of your app to vary templates.
+
+Only one container will be used.
+
+The last mounted container will be used.
+
+
 ### Modal layouts
 
 To use various modal types (Dialog, Popup, Drawer), you create your own `layout` for each one, advised naming is [Type][Name] => `DrawerLayout`.
