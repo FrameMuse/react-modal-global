@@ -9,6 +9,7 @@
     "styles"
   ],
   "dependencies": {
+    "@vercel/ncc": "^0.34.0",
     "react": "^18.2.0"
   },
   "devDependencies": {
@@ -27,7 +28,7 @@
     "typescript": "4.7.4"
   },
   "scripts": {
-    "build": "rollup --config",
+    "build": "ncc build src/index.ts",
     "watch": "ncc build src/index.ts -w",
     "compile": "npm run build && npm run start && npm run post-fix",
     "help": "ncc",
