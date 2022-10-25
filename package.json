@@ -1,6 +1,6 @@
 {
   "name": "react-modal-global",
-  "version": "0.9.22",
+  "version": "0.9.23",
   "description": "React Modal but Global",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
