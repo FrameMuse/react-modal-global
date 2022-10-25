@@ -10,14 +10,14 @@ This is a package that provides modal dialogs which does similar to [`react-moda
 
 - Globalization - opened from anywhere (even from non-component context)
 - Multicontainers - for e.g. templates
+- Context - the data passed when openning can be accessed in the component via `useModalContext` hook
 - Stacking/Nesting
 - Forking
 - Data preservation
 - `open` method returns `Promise`
-
+- 
 
 - The package uses only react as a dependency.
-- Relies on `react context` to transfer information between `ModalContainer` and modal components.
 
 #### The main idea
 
