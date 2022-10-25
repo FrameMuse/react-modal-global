@@ -6,7 +6,14 @@ Needs feedback, please contribute in GitHub Issues or leave your message on [my 
 
 This is a package that provides modal dialogs which does similar to [`react-modal`](https://www.npmjs.com/package/react-modal) except that it is accessed from _anywhere_.
 
-### How it works
+## Features
+
+- Globalization - opened from anywhere (even from non-component context)
+- Multicontainers - for e.g. templates
+- Stacking/Nesting
+- Forking
+- Data preservation
+- `open` method returns `Promise`
 
 - The package uses only react as a dependency.
 - Relies on `react context` to transfer information between `ModalContainer` and modal components.
