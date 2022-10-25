@@ -171,4 +171,10 @@ export default PopupMyFirst
 
 ```
 
-The end.
+#### If using several containers
+
+Instead of wrapping your modal components manually you can pass `template` attribute to `ModalContainer`, for example, `PopupLayout`
+
+```tsx
+<ModalContainer template={PopupLayout} />
+```
