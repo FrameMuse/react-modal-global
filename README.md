@@ -15,6 +15,7 @@ This is a package that provides modal dialogs which does similar to [`react-moda
 - Data preservation
 - `open` method returns `Promise`
 
+
 - The package uses only react as a dependency.
 - Relies on `react context` to transfer information between `ModalContainer` and modal components.
 
