@@ -67,7 +67,9 @@ export class Modal {
 
     return {
       ...modal,
-      ...promise
+      then(onfulfilled?, onrejected?) {
+        return promise.then(onfulfilled, onrejected)
+      },
     }
   }
   public static replace<
