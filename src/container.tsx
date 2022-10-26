@@ -16,7 +16,7 @@ copies or substantial portions of the Software.
 
 */
 
-import { Component, Fragment, ReactElement } from "react"
+import { Component, Fragment, ReactElement, ReactNode } from "react"
 
 import { modalContext } from "./context"
 import { ModalWindow } from "./types"
@@ -25,7 +25,7 @@ import { classWithModifiers, stopPropagation } from "./utils"
 export const containers: Set<ModalContainer> = new Set
 
 export interface ModalContainerProps {
-  template?: (...args: unknown[]) => ReactElement
+  template?: (props: { children: ReactNode }) => ReactElement
   className?: string
 }
 export interface ModalContainerState {
