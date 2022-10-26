@@ -56,7 +56,7 @@ export class Modal {
   ): PromiseLike<void> & ModalWindow<AC> {
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
-    const modal: ModalWindow<any> = { component, params: { ...DEFAULT_PARAMS, id: Date.now(), ...params }, close }
+    const modal: ModalWindow<any> = { component, params: { ...DEFAULT_PARAMS, ...params }, close }
 
     function close() {
       resolveFunction()
