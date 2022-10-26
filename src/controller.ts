@@ -53,7 +53,7 @@ export class Modal {
   >(
     component: ModalComponent<P>,
     ...[params]: keyof P extends never ? [AC?] : [AC]
-  ): { promise: Promise<void>, window: ModalWindow<AC> } {
+  ): PromiseLike<void> & ModalWindow<AC> {
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
     const modal: ModalWindow<any> = { component, params: { ...DEFAULT_PARAMS, id: Date.now(), ...params }, close }
@@ -65,7 +65,10 @@ export class Modal {
 
     Modal.add(modal)
 
-    return { promise, window: modal }
+    return {
+      ...modal,
+      ...promise
+    }
   }
   public static replace<
     P extends object = {},
@@ -73,7 +76,7 @@ export class Modal {
   >(
     component: ModalComponent<P>,
     ...[params]: keyof P extends never ? [AC?] : [AC]
-  ): { promise: Promise<void>, window: ModalWindow<AC> } {
+  ): PromiseLike<void> & ModalWindow<AC> {
     dispatch(state => ({
       ...state,
       queue: state.queue.slice(0, -1)
@@ -82,12 +85,7 @@ export class Modal {
   }
   private static add(modalWindow: ModalWindow) {
     if (modalWindow.params.fork) {
-      dispatch(state => {
-        return {
-          ...state,
-          forkedQueue: [...state.forkedQueue, modalWindow]
-        }
-      })
+      this.fork(modalWindow)
       return
     }
 
@@ -115,6 +113,7 @@ export class Modal {
           queue: [modalWindow]
         }
       }
+
       return {
         ...state,
         active: true,
@@ -140,6 +139,14 @@ export class Modal {
         }
       }
       return { ...state, queue, active: false }
+    })
+  }
+  private static fork(modalWindow: ModalWindow) {
+    dispatch(state => {
+      return {
+        ...state,
+        forkedQueue: [...state.forkedQueue, modalWindow]
+      }
     })
   }
   public static closeAll() {
