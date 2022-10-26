@@ -77,7 +77,7 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
 
   renderForks() {
     return this.state.forkedQueue.map(modal => (
-      <div className={this.className} aria-modal key={modal.params.id}>
+      <div className={classWithModifiers(this.className, "active")} aria-modal key={modal.params.id}>
         <div className={this.className + "__container"} onClick={modal.params?.closable ? stopPropagation(modal.close) : undefined}>
           <modalContext.Provider value={modal}>
             {<modal.component {...modal.params} />}
