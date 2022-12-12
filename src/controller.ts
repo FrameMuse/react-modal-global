@@ -133,14 +133,15 @@ export class Modal {
     }
 
     dispatch(state => {
-      const queue = state.queue.filter(mw => mw !== modalWindow)
+      const filteredQueue = state.queue.filter(mw => mw !== modalWindow)
+      const isFilteredQueueEmpty = filteredQueue.length === 0
       if (!modalWindow.params.weak) {
         // Hide modal without removing if it's the last window
-        if (queue.length === 0) {
-          return { ...state, active: false, queue: [modalWindow] }
+        if (isFilteredQueueEmpty) {
+          return { ...state, active: false }
         }
       }
-      return { ...state, queue, active: false }
+      return { ...state, queue: filteredQueue, active: !isFilteredQueueEmpty }
     })
   }
   private static fork(modalWindow: ModalWindow) {
