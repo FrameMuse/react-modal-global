@@ -114,12 +114,12 @@ function HomeView() {
 You can use options when opening a modal.
 Available options
 
-|Option|Description|
-|---|---|
-|`id`|Specifies id of a modal (default: `Date.now()`). In react it's used as a `key`. May be used to find and close specific modal or else.|
-|`closable`|Specifies if a modal closing is controlled itself|
-|`weak`|By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen.|
-|`fork`|Creates a new layer for a single modal|
+| Option     | Description                                                                                                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`       | Specifies id of a modal (default: `Date.now()`). In react it's used as a `key`. May be used to find and close specific modal or else.                                     |
+| `closable` | Specifies if a modal closing is controlled itself                                                                                                                         |
+| `weak`     | By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen. |
+| `fork`     | Creates a new layer for a single modal                                                                                                                                    |
 
 ### Modal Template
 
@@ -142,7 +142,7 @@ To create your first `Popup` modal try this
 import { FormEvent } from "react"
 import { useModalContext } from "react-modal-global"
 
-import PopupLayout from "modal-layouts/PopupLayout/PopupLayout"
+import PopupLayout from "../modal/layouts/PopupLayout/PopupLayout"
 
 function PopupMyFirst() {
   const modal = useModalContext()
