@@ -16,17 +16,17 @@ copies or substantial portions of the Software.
 
 */
 
-export type PopupComponent<P> = (props: P) => JSX.Element
+export type ModalComponent<P> = (props: P) => JSX.Element
 
-export interface PopupParams {
+export interface ModalParams {
   id: string | number
   title: any
   desc: any
   closable: boolean
 }
 
-export interface PopupWindow<P = {}> {
-  component: PopupComponent<Partial<PopupParams> & P>
-  params: Partial<PopupParams> & P
+export interface ModalWindow<P = {}> {
+  component: ModalComponent<Partial<ModalParams> & P>
+  params: Partial<ModalParams> & P
   close: () => void
 }
