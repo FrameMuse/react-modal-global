@@ -40,8 +40,10 @@
   },
   "keywords": [
     "react",
+    "modal",
     "popup",
-    "ts"
+    "ts",
+    "typescript"
   ],
   "author": "FrameMuse",
   "license": "MIT",
