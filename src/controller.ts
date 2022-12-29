@@ -17,7 +17,6 @@ copies or substantial portions of the Software.
 */
 
 import { SetStateAction } from "react"
-import { ModalContainer } from "react-modal-global"
 
 import { containers, ModalContainerState } from "./container"
 import { ModalComponent, ModalParams, ModalWindow } from "./types"
@@ -35,8 +34,8 @@ const DEFAULT_PARAMS: ModalParams = {
   fork: false,
 }
 
-function dispatch(setStateAction: SetStateAction<ModalContainerState>) {
-  const lastContainer = [...containers][containers.size - 1] as (ModalContainer | undefined)
+function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerState<P>>) {
+  const lastContainer = [...containers].at(-1)
   if (lastContainer == null) {
     console.warn("ModalError: no containers were mounted.")
 
@@ -47,16 +46,15 @@ function dispatch(setStateAction: SetStateAction<ModalContainerState>) {
 }
 
 export class Modal {
-  public static open<
-    P extends object = {},
-    AC extends Partial<ModalParams> & P = Partial<ModalParams> & P
-  >(
+  public static open<P>(
     component: ModalComponent<P>,
-    ...[params]: keyof P extends never ? [AC?] : [AC]
-  ): PromiseLike<void> & ModalWindow<AC> {
+    ...[modalParams]: keyof P extends never ? [Partial<ModalParams>?] : [Partial<ModalParams> & P]
+  ): ModalWindow<P> & PromiseLike<void> {
+    const params: ModalParams & P = { ...DEFAULT_PARAMS, ...modalParams as P }
+    const modal: ModalWindow<P> = { component, params, close }
+
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
-    const modal: ModalWindow<any> = { component, params: { ...DEFAULT_PARAMS, ...params }, close }
 
     function close() {
       resolveFunction()
@@ -72,27 +70,24 @@ export class Modal {
       },
     }
   }
-  public static replace<
-    P extends object = {},
-    AC extends Partial<ModalParams> & P = Partial<ModalParams> & P
-  >(
+  public static replace<P>(
     component: ModalComponent<P>,
-    ...[params]: keyof P extends never ? [AC?] : [AC]
-  ): PromiseLike<void> & ModalWindow<AC> {
+    ...[params]: keyof P extends never ? [Partial<ModalParams>?] : [Partial<ModalParams> & P]
+  ): ModalWindow<P> & PromiseLike<void> {
     dispatch(state => ({
       ...state,
       queue: state.queue.slice(0, -1)
     }))
-    return Modal.open(component, params as never) as never
+    return Modal.open(component, params as never)
   }
-  private static add(modalWindow: ModalWindow) {
+  private static add<P>(modalWindow: ModalWindow<P>) {
     if (modalWindow.params.fork) {
       this.fork(modalWindow)
       return
     }
 
 
-    dispatch(state => {
+    dispatch<P>(state => {
       // Make that we need it
       if (!modalWindow.params?.weak) {
         // Skip adding to queue if there is already the same window
@@ -123,7 +118,7 @@ export class Modal {
       }
     })
   }
-  private static remove(modalWindow: ModalWindow) {
+  private static remove<P>(modalWindow: ModalWindow<P>) {
     if (modalWindow.params.fork) {
       dispatch(state => {
         const forkedQueue = state.forkedQueue.filter(mw => mw !== modalWindow)
@@ -144,8 +139,8 @@ export class Modal {
       return { ...state, queue: filteredQueue, active: !isFilteredQueueEmpty }
     })
   }
-  private static fork(modalWindow: ModalWindow) {
-    dispatch(state => {
+  private static fork<P>(modalWindow: ModalWindow<P>) {
+    dispatch<P>(state => {
       return {
         ...state,
         forkedQueue: [...state.forkedQueue, modalWindow]
