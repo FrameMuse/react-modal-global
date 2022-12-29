@@ -28,10 +28,10 @@ export interface ModalContainerProps {
   template?: (props: { children: ReactNode }) => ReactElement
   className?: string
 }
-export interface ModalContainerState {
+export interface ModalContainerState<P = unknown> {
   active: boolean
-  queue: ModalWindow[]
-  forkedQueue: ModalWindow[]
+  queue: ModalWindow<P>[]
+  forkedQueue: ModalWindow<P>[]
 }
 
 export class ModalContainer extends Component<ModalContainerProps, ModalContainerState> {
