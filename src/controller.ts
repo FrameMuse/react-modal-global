@@ -45,23 +45,22 @@ function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerStat
   lastContainer.setState(setStateAction)
 }
 
-export class Modal {
-  public static open<P>(
+export class ModalController {
+  public open<P>(
     component: ModalComponent<P>,
     ...[modalParams]: keyof P extends never ? [Partial<ModalParams>?] : [Partial<ModalParams> & P]
   ): ModalWindow<P> & PromiseLike<void> {
+    let resolveFunction = () => { /* Noop */ }
+    const promise = new Promise<void>(resolve => resolveFunction = resolve)
+    const close = () => {
+      this.remove(modal)
+      resolveFunction()
+    }
+
     const params: ModalParams & P = { ...DEFAULT_PARAMS, ...modalParams as P }
     const modal: ModalWindow<P> = { component, params, close }
 
-    let resolveFunction = () => { /* Noop */ }
-    const promise = new Promise<void>(resolve => resolveFunction = resolve)
-
-    function close() {
-      resolveFunction()
-      Modal.remove(modal)
-    }
-
-    Modal.add(modal)
+    this.add(modal)
 
     return {
       ...modal,
@@ -70,7 +69,7 @@ export class Modal {
       },
     }
   }
-  public static replace<P>(
+  public replace<P>(
     component: ModalComponent<P>,
     ...[params]: keyof P extends never ? [Partial<ModalParams>?] : [Partial<ModalParams> & P]
   ): ModalWindow<P> & PromiseLike<void> {
@@ -78,9 +77,9 @@ export class Modal {
       ...state,
       queue: state.queue.slice(0, -1)
     }))
-    return Modal.open(component, params as never)
+    return this.open(component, params as never)
   }
-  private static add<P>(modalWindow: ModalWindow<P>) {
+  private add<P>(modalWindow: ModalWindow<P>) {
     if (modalWindow.params.fork) {
       this.fork(modalWindow)
       return
@@ -118,7 +117,7 @@ export class Modal {
       }
     })
   }
-  private static remove<P>(modalWindow: ModalWindow<P>) {
+  private remove<P>(modalWindow: ModalWindow<P>) {
     if (modalWindow.params.fork) {
       dispatch(state => {
         const forkedQueue = state.forkedQueue.filter(mw => mw !== modalWindow)
@@ -139,7 +138,7 @@ export class Modal {
       return { ...state, queue: filteredQueue, active: !isFilteredQueueEmpty }
     })
   }
-  private static fork<P>(modalWindow: ModalWindow<P>) {
+  private fork<P>(modalWindow: ModalWindow<P>) {
     dispatch<P>(state => {
       return {
         ...state,
@@ -147,10 +146,12 @@ export class Modal {
       }
     })
   }
-  public static closeAll() {
+  public closeAll() {
     dispatch(state => {
       state.queue.forEach(modal => modal.close())
       return DEFAULT_STATE
     })
   }
 }
+
+export const Modal = new ModalController
