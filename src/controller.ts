@@ -19,7 +19,7 @@ copies or substantial portions of the Software.
 import { SetStateAction } from "react"
 
 import { containers, ModalContainerState } from "./container"
-import { ModalComponent, ModalParams, ModalWindow } from "./types"
+import { ModalComponent, ModalParams, ModalWindow, ModalWindowParams } from "./types"
 import { serialize } from "./utils"
 
 const DEFAULT_STATE: ModalContainerState = {
@@ -81,21 +81,17 @@ export class ModalController {
 
 
     dispatch<P>(state => {
-      // Make that we need it
-      if (!modalWindow.params?.weak) {
-        // Skip adding to queue if there is already the same window
-        if (state.queue.length > 0) {
-          const lastWindow = state.queue[state.queue.length - 1]
-          if ((serialize(lastWindow.params) === serialize(modalWindow.params)) && lastWindow.component === modalWindow.component) {
-            return {
-              ...state,
-              active: true,
-              queue: [modalWindow]
-            }
+      // Skip adding to queue if the window is already in the beginning of the queue.
+      if (!modalWindow.params?.weak && state.queue.length > 0) {
+        const lastWindow = state.queue[state.queue.length - 1]
+        if ((serialize(lastWindow.params) === serialize(modalWindow.params)) && lastWindow.component === modalWindow.component) {
+          return {
+            ...state,
+            active: true
           }
         }
       }
-      // Replace stale window
+      // Replace the last inactive window if weak.
       if (state.active === false && state.queue.length === 1) {
         return {
           ...state,
