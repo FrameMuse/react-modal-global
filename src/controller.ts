@@ -46,10 +46,7 @@ function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerStat
 }
 
 export class ModalController {
-  public open<P>(
-    component: ModalComponent<P>,
-    ...[modalParams]: keyof P extends never ? [Partial<ModalParams>?] : [Partial<ModalParams> & P]
-  ): ModalWindow<P> & PromiseLike<void> {
+  public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> & PromiseLike<void> {
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
     const close = () => {
@@ -69,10 +66,7 @@ export class ModalController {
       },
     }
   }
-  public replace<P>(
-    component: ModalComponent<P>,
-    ...[params]: keyof P extends never ? [Partial<ModalParams>?] : [Partial<ModalParams> & P]
-  ): ModalWindow<P> & PromiseLike<void> {
+  public replace<P>(component: ModalComponent<P>, ...[params]: ModalWindowParams<P>): ModalWindow<P> & PromiseLike<void> {
     dispatch(state => ({
       ...state,
       queue: state.queue.slice(0, -1)
