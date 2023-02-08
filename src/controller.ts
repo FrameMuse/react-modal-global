@@ -25,20 +25,19 @@ import { serialize } from "./utils"
 const DEFAULT_STATE: ModalContainerState = {
   active: false,
   queue: [],
-  forkedQueue: [],
+  forkedQueue: []
 }
 const DEFAULT_PARAMS: ModalParams = {
   id: 0,
   closable: true,
   weak: false,
-  fork: false,
+  fork: false
 }
 
 function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerState<P>>) {
   const lastContainer = [...containers].at(-1)
   if (lastContainer == null) {
     console.warn("ModalError: no containers were mounted.")
-
     return
   }
 
@@ -85,28 +84,18 @@ export class ModalController {
       return
     }
 
-
     dispatch<P>(state => {
-      // Make that we need it
-      if (!modalWindow.params?.weak) {
-        // Skip adding to queue if there is already the same window
-        if (state.queue.length > 0) {
-          const lastWindow = state.queue[state.queue.length - 1]
-          if ((serialize(lastWindow.params) === serialize(modalWindow.params)) && lastWindow.component === modalWindow.component) {
-            return {
-              ...state,
-              active: true,
-              queue: [modalWindow]
-            }
+      // Skip adding to queue if the window is already in the beginning of the queue.
+      if (!modalWindow.params?.weak && state.queue.length > 0) {
+        const lastWindow = state.queue[state.queue.length - 1]
+
+        const areParamsEqual = serialize(modalWindow.params) === serialize(lastWindow.params)
+        const areComponentsEqual = modalWindow.component === lastWindow.component
+        if (areParamsEqual && areComponentsEqual) {
+          return {
+            ...state,
+            active: true
           }
-        }
-      }
-      // Replace stale window
-      if (state.active === false && state.queue.length === 1) {
-        return {
-          ...state,
-          active: true,
-          queue: [modalWindow]
         }
       }
 
@@ -117,25 +106,25 @@ export class ModalController {
       }
     })
   }
-  private remove<P>(modalWindow: ModalWindow<P>) {
-    if (modalWindow.params.fork) {
+  private remove<P>(modalWindowToRemove: ModalWindow<P>) {
+    if (modalWindowToRemove.params.fork) {
       dispatch(state => {
-        const forkedQueue = state.forkedQueue.filter(mw => mw !== modalWindow)
+        const forkedQueue = state.forkedQueue.filter(mw => mw !== modalWindowToRemove)
         return { ...state, forkedQueue }
       })
       return
     }
 
     dispatch(state => {
-      const filteredQueue = state.queue.filter(mw => mw !== modalWindow)
-      const isFilteredQueueEmpty = filteredQueue.length === 0
-      if (!modalWindow.params.weak) {
-        // Hide modal without removing if it's the last window
-        if (isFilteredQueueEmpty) {
-          return { ...state, active: false }
-        }
+      const newQueue = state.queue.filter(modalWindow => modalWindow !== modalWindowToRemove)
+      const isNewQueueEmpty = newQueue.length === 0
+
+      // Hide modal without removing if it's the last window if it's not weak.
+      if (isNewQueueEmpty && !modalWindowToRemove.params.weak) {
+        return { ...state, active: false }
       }
-      return { ...state, queue: filteredQueue, active: !isFilteredQueueEmpty }
+
+      return { ...state, queue: newQueue, active: !isNewQueueEmpty }
     })
   }
   private fork<P>(modalWindow: ModalWindow<P>) {

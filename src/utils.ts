@@ -19,15 +19,6 @@ copies or substantial portions of the Software.
 import { SyntheticEvent } from "react"
 
 /**
- *
- * @returns `class1 class2`
- */
-export function classMerge(...classNames: Array<string | null | undefined>): string {
-  const space = " "
-  return classNames.filter(Boolean).join(space)
-}
-
-/**
  * Join modifiers with origin class
  * @returns `"origin-class origin-class--modifier"`
  */
@@ -75,14 +66,4 @@ export function stopPropagation(callback?: Function | null) {
 
     callback?.()
   }
-}
-
-export function inputValue(callback: Function) {
-  return (event: SyntheticEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    callback(event.currentTarget.value)
-  }
-}
-
-export function isDictionary(object: unknown): object is Record<keyof never, unknown> {
-  return object instanceof Object && object.constructor === Object
 }

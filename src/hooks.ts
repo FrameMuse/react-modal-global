@@ -22,7 +22,7 @@ import { modalContext } from "./context"
 
 export function useModalContext() {
   const context = useContext(modalContext)
-  if (!context) throw new Error("ModalError: Out of Modal context")
+  if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
 
   return context
 }
