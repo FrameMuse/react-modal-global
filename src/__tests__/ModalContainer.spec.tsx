@@ -124,17 +124,87 @@ describe("ModalContainer", () => {
     expect(modalContainerElement?.querySelector("h1")).toBeNull()
     expect(modalContainerElement).toMatchSnapshot()
   })
+
+  it("should work with same repeated modals", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample)
+    })
+
+    expect(modalContainerElement?.querySelectorAll("h1")).toHaveLength(1)
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should work with different modals", () => {
+    // act(() => {
+    //   Modal.open(PopupExample)
+    //   Modal.open(PopupExample, { test: true })
+    // })
+
+    // expect(containerComponent)
+    // expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when replaced (open)", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.replace(PopupExample, { test: true })
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
+    expect(modalContainerElement?.querySelector("#test")).not.toBeNull()
+    expect(modalContainerElement?.classList).toContain("modal--active")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when replaced (closed)", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      const modal = Modal.replace(PopupExample, { test: true })
+      modal.close()
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
+    expect(modalContainerElement?.querySelector("#test")).not.toBeNull()
+    expect(modalContainerElement?.classList).not.toContain("modal--active")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when forked", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: true, fork: true })
+    })
+
+    expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
+    expect(container?.querySelector("#test")).not.toBeNull()
+    expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
+    expect(container).toMatchSnapshot()
+  })
+
+  it("should render the correct component when forked (not closable)", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: true, fork: true, closable: false })
+    })
+
+    expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
+    expect(container?.querySelector("#test")).not.toBeNull()
+    expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
+    expect(container).toMatchSnapshot()
+  })
 })
 
 
-function PopupExample(props: { random?: boolean }) {
+function PopupExample(props: { random?: boolean, test?: string | boolean }) {
   const modal = useModalContext()
   const [random, setRandom] = useState(0)
   useEffect(() => setRandom(Date.now()), [props.random])
 
   return (
     <div>
-      {props.random && <span>{random}</span>}
+      {props.random && <span id="random">{random}</span>}
+      {props.test && <span id="test">{props.test}</span>}
       <h1>Popup Example</h1>
       <button onClick={modal.close}>Close</button>
     </div>
