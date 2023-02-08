@@ -125,6 +125,55 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
+  it("should render the correct component when closed (weak) and re-opened", () => {
+    act(() => {
+      Modal.open(PopupExample, { weak: true })
+    })
+
+    act(() => {
+      modalContainerElement?.querySelector("button")?.click()
+    })
+
+    act(() => {
+      Modal.open(PopupExample, { weak: true })
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when open multiple and closed one", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: true })
+      Modal.open(PopupExample, { test: "1" })
+      Modal.open(PopupExample, { test: "2" })
+    })
+
+    act(() => {
+      modalContainerElement?.querySelector("button")?.click()
+    })
+
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("1")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when open multiple and closed all", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: true })
+      Modal.open(PopupExample, { test: "1" })
+      Modal.open(PopupExample, { test: "2" })
+    })
+
+    act(() => {
+      Modal.closeAll()
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toBeNull()
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
   it("should work with same repeated modals", () => {
     act(() => {
       Modal.open(PopupExample)
@@ -178,6 +227,19 @@ describe("ModalContainer", () => {
 
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
     expect(container?.querySelector("#test")).not.toBeNull()
+    expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
+    expect(container).toMatchSnapshot()
+  })
+
+  it("should render the correct component when forked closed", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      const modalForked = Modal.open(PopupExample, { test: true, fork: true })
+      modalForked.close()
+    })
+
+    expect(container?.querySelectorAll(".modal__container")).toHaveLength(1)
+    expect(container?.querySelector("#test")).toBeNull()
     expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
     expect(container).toMatchSnapshot()
   })

@@ -120,6 +120,27 @@ exports[`ModalContainer should render the correct component when closed (weak) 1
 </div>
 `;
 
+exports[`ModalContainer should render the correct component when closed (weak) and re-opened 1`] = `
+<div
+  aria-hidden="false"
+  aria-modal="true"
+  class="modal modal--active"
+>
+  <div
+    class="modal__container"
+  >
+    <div>
+      <h1>
+        Popup Example
+      </h1>
+      <button>
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`ModalContainer should render the correct component when forked (not closable) 1`] = `
 <div>
   <div
@@ -201,6 +222,67 @@ exports[`ModalContainer should render the correct component when forked 1`] = `
           Close
         </button>
       </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ModalContainer should render the correct component when forked closed 1`] = `
+<div>
+  <div
+    aria-hidden="false"
+    aria-modal="true"
+    class="modal modal--active"
+  >
+    <div
+      class="modal__container"
+    >
+      <div>
+        <h1>
+          Popup Example
+        </h1>
+        <button>
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ModalContainer should render the correct component when open multiple and closed all 1`] = `
+<div
+  aria-hidden="true"
+  aria-modal="true"
+  class="modal"
+>
+  <div
+    class="modal__container"
+  />
+</div>
+`;
+
+exports[`ModalContainer should render the correct component when open multiple and closed one 1`] = `
+<div
+  aria-hidden="false"
+  aria-modal="true"
+  class="modal modal--active"
+>
+  <div
+    class="modal__container"
+  >
+    <div>
+      <span
+        id="test"
+      >
+        1
+      </span>
+      <h1>
+        Popup Example
+      </h1>
+      <button>
+        Close
+      </button>
     </div>
   </div>
 </div>
