@@ -34,6 +34,11 @@ export interface ModalContainerState<P = unknown> {
   forkedQueue: ModalWindow<P>[]
 }
 
+/**
+ * Modal container component. Renders modal windows.
+ *
+ * Can be used multiple times to render modals in different places.
+ */
 export class ModalContainer extends Component<ModalContainerProps, ModalContainerState> {
   state: ModalContainerState = {
     active: false,

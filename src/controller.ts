@@ -45,6 +45,26 @@ function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerStat
 }
 
 export class ModalController {
+  /**
+   * Opens a modal window. Infers props from the component.
+   *
+   * - If the same modal window is already in the queue, it will be ignored.
+   * - If the modal window is weak, it will be unmounted after closing.
+   * - If the modal window is forked, it will be opened over all other modals.
+   * - If the modal window is closable (be default `true`), it will be closed by clicking on the overlay.
+   * - If the modal window is not closable, it will be closed only by calling internal `close` method.
+   *
+   * @param component Modal component.
+   * @param params Modal params.
+   * @returns Modal window and `PromiseLike`.
+   *
+   * @example
+   * const modal = modalController.open(MyModal, { id: 1 })
+   * modal.closable // `true` by default
+   *
+   * modal.then(() => console.log("Modal was closed"))
+   * modal.close()
+   */
   public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> & PromiseLike<void> {
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
@@ -65,6 +85,11 @@ export class ModalController {
       },
     }
   }
+  /**
+   * Replaces the last modal window in the queue with a new one.
+   *
+   * If the queue is empty, it will be added to the queue.
+   */
   public replace<P>(component: ModalComponent<P>, ...[params]: ModalWindowParams<P>): ModalWindow<P> & PromiseLike<void> {
     dispatch(state => ({
       ...state,
@@ -72,6 +97,9 @@ export class ModalController {
     }))
     return this.open(component, params as never)
   }
+  /**
+   * Adds a modal window to the queue.
+   */
   private add<P>(modalWindow: ModalWindow<P>) {
     if (modalWindow.params.fork) {
       this.fork(modalWindow)
@@ -100,6 +128,9 @@ export class ModalController {
       }
     })
   }
+  /**
+   * Removes a modal window from the queue.
+   */
   private remove<P>(modalWindowToRemove: ModalWindow<P>) {
     if (modalWindowToRemove.params.fork) {
       dispatch(state => {
@@ -121,6 +152,11 @@ export class ModalController {
       return { ...state, queue: newQueue, active: !isNewQueueEmpty }
     })
   }
+  /**
+   * Forks a modal window and adds it to a forked queue.
+   *
+   * It means that the modal will be open over all other modals.
+   */
   private fork<P>(modalWindow: ModalWindow<P>) {
     dispatch<P>(state => {
       return {
@@ -158,6 +194,9 @@ export class ModalController {
       return state
     })
   }
+  /**
+   * Closes all modals (including forked).
+   */
   public closeAll() {
     dispatch(state => {
       state.queue.forEach(modal => modal.close())

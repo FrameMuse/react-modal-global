@@ -16,13 +16,32 @@ copies or substantial portions of the Software.
 
 */
 
-import { useContext } from "react"
+import { Component, ComponentLifecycle, createElement, ReactNode, useContext } from "react"
+import { ModalWindow } from "types"
 
 import { modalContext } from "./context"
 
-export function useModalContext() {
+/**
+ * Used inside a modal component to access the modal context (`ModalWindow`).
+ *
+ * Accepts a generic type that is used to infer the props of the modal component.
+ * It has 3 overloads:
+ * 1. `useModalContext<ModalComponent>()` - infers the props from the class component type.
+ * 2. `useModalContext<typeof ModalComponent>()` - infers the props from the function component type.
+ * 3. `useModalContext<unknown>()` - infers any type besides the above.
+ */
+export function useModalContext<T>(): ModalWindow<T extends ComponentLifecycle<infer P, unknown> | ((props: infer P) => ReactNode) ? P : T> {
   const context = useContext(modalContext)
   if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
 
-  return context
+  return context as never
 }
+
+// Tests
+class Asd extends Component<{ a: 1 }> { }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function AsdFn(props: { b: 2 }) { return createElement("div") }
+
+useModalContext<Asd>()
+useModalContext<typeof AsdFn>()
+useModalContext<{ c: 3 }>()
