@@ -31,7 +31,8 @@
     "watch": "ncc build src/index.ts -w",
     "compile": "npm run build && npm run start && npm run post-fix",
     "help": "ncc",
-    "test": "",
+    "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage *.ts",
     "post-fix": "eslint out --fix"
   },
   "repository": {
