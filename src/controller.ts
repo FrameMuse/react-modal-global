@@ -25,20 +25,19 @@ import { serialize } from "./utils"
 const DEFAULT_STATE: ModalContainerState = {
   active: false,
   queue: [],
-  forkedQueue: [],
+  forkedQueue: []
 }
 const DEFAULT_PARAMS: ModalParams = {
   id: 0,
   closable: true,
   weak: false,
-  fork: false,
+  fork: false
 }
 
 function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerState<P>>) {
   const lastContainer = [...containers].at(-1)
   if (lastContainer == null) {
     console.warn("ModalError: no containers were mounted.")
-
     return
   }
 
