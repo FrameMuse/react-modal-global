@@ -174,6 +174,34 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
+  it("should render the correct component when closed by component", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: "7" })
+      Modal.open(PopupExample, { test: "1" })
+      Modal.open(PopupExample, { test: "2" })
+
+      Modal.closeByComponent(PopupExample)
+    })
+
+    expect(modalContainerElement?.querySelector("#test")).toBeNull()
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+  it("should render the correct component when closed by id", () => {
+    act(() => {
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: true })
+      Modal.open(PopupExample, { test: "1", id: "1" })
+      Modal.open(PopupExample, { test: "2", id: "2" })
+      Modal.open(PopupExample, { test: "3", id: "2" })
+
+      Modal.closeById("2")
+    })
+
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("1")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
   it("should work with same repeated modals", () => {
     act(() => {
       Modal.open(PopupExample)

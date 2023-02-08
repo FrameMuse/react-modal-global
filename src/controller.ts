@@ -129,6 +129,35 @@ export class ModalController {
       }
     })
   }
+
+  /**
+   * Closes all modals by its component (including forked) starting from the last one.
+   */
+  public closeByComponent<P>(component: ModalComponent<P>) {
+    dispatch(state => {
+      const queue = [...state.queue.filter(modal => modal.component === component)]
+      const forkedQueue = [...state.forkedQueue.filter(modal => modal.component === component)]
+
+      queue.reverse().forEach(modal => modal.close())
+      forkedQueue.reverse().forEach(modal => modal.close())
+
+      return state
+    })
+  }
+  /**
+   * Closes all modals by its id (including forked) starting from the last one.
+   */
+  public closeById(id: ModalParams["id"]) {
+    dispatch(state => {
+      const queue = state.queue.filter(modal => modal.params.id === id)
+      const forkedQueue = state.forkedQueue.filter(modal => modal.params.id === id)
+
+      queue.forEach(modal => modal.close())
+      forkedQueue.forEach(modal => modal.close())
+
+      return state
+    })
+  }
   public closeAll() {
     dispatch(state => {
       state.queue.forEach(modal => modal.close())
