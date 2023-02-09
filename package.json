@@ -36,7 +36,7 @@
     "compile": "npm run build && npm run start && npm run post-fix",
     "help": "ncc",
     "test": "react-scripts test",
-    "test:coverage": "react-scripts test --coverage *.ts",
+    "test:coverage": "react-scripts test --coverage *",
     "post-fix": "eslint out --fix"
   },
   "repository": {
@@ -55,5 +55,10 @@
   "bugs": {
     "url": "https://github.com/FrameMuse/react-modal-global/issues"
   },
-  "homepage": "https://github.com/FrameMuse/react-modal-global#readme"
+  "homepage": "https://github.com/FrameMuse/react-modal-global#readme",
+  "jest": {
+    "testMatch": [
+      "**/?(*.)+(spec|test).ts?(x)"
+    ]
+  }
 }

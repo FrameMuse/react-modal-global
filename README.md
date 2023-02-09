@@ -1,5 +1,7 @@
 # React Modal Global
 
+[![codecov](https://codecov.io/gh/FrameMuse/react-modal-global/branch/main/graph/badge.svg?token=1FRUN6AQDA)](https://codecov.io/gh/FrameMuse/react-modal-global)
+
 Needs feedback, please contribute in GitHub Issues or leave your message on [my discord server](https://discord.gg/DCUWrRhvnt).
 
 ## Introduction
@@ -15,7 +17,7 @@ This is a package that provides modal dialogs which does similar to [`react-moda
 - Forking
 - Data preservation
 - `open` method returns `Promise`
-- 
+-
 
 - The package uses only react as a dependency.
 
@@ -75,7 +77,7 @@ function ModalComponent() {
     <>
       <h2>Title</h2>
       <p>Content text</p>
-      
+
       <button type="button" onClick={() => modal.close()}>My custom button to close modal</button>
     </>
   )
