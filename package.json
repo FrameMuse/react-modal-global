@@ -36,7 +36,7 @@
     "compile": "npm run build && npm run start && npm run post-fix",
     "help": "ncc",
     "test": "react-scripts test",
-    "test:coverage": "react-scripts test --coverage",
+    "test:coverage": "react-scripts test --coverage *",
     "post-fix": "eslint out --fix"
   },
   "repository": {
