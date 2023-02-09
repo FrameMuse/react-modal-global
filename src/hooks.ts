@@ -36,12 +36,3 @@ export function useModalContext<T>(): ModalWindow<T extends ComponentLifecycle<i
 
   return context as never
 }
-
-// Tests
-class Asd extends Component<{ a: 1 }> { }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function AsdFn(props: { b: 2 }) { return createElement("div") }
-
-useModalContext<Asd>()
-useModalContext<typeof AsdFn>()
-useModalContext<{ c: 3 }>()
