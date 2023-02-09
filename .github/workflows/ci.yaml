@@ -1,4 +1,4 @@
-name: Unit tests & ESLint & Build CI
+name: CI
 
 on:
   pull_request:
@@ -10,6 +10,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: "./coverage/clover.xml"
