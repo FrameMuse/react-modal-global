@@ -31,6 +31,9 @@ Needs feedback, please contribute in GitHub Issues or leave your message to [my 
     - [Modal Template](#modal-template)
     - [Modal layouts](#modal-layouts)
       - [If using several containers](#if-using-several-containers)
+  - [Layout concept](#layout-concept)
+    - [Description](#description)
+    - [Aria](#aria)
 
 ## Advantages
 
@@ -210,3 +213,23 @@ Instead of wrapping your modal components manually you can pass `template` attri
 ```tsx
 <ModalContainer template={PopupLayout} />
 ```
+
+
+## Layout concept
+
+### Description
+
+Layout is a component that wraps modal component and allows to customize modal look and controls (close button, header, footer, etc.).
+
+Layouts are used to create various modal types (Dialog, Popup, Drawer) and to customize modal controls.
+
+For example, you can create your own `PopupLayout` to use it in your `Popup` modals.
+
+[See example here](./examples/PopupLayout)
+
+### Aria
+
+Layouts should not have `aria-modal` attribute and `role="dialog"` because they are already set in `ModalContainer` component.
+
+
+However, you should manually add `aria-labelledby` and `aria-describedby` attributes to your layout.
