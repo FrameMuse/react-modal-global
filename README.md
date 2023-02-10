@@ -6,24 +6,64 @@ Needs feedback, please contribute in GitHub Issues or leave your message on [my 
 
 ## Introduction
 
-This is a package that provides modal dialogs which does similar to [`react-modal`](https://www.npmjs.com/package/react-modal) except that it is accessed from _anywhere_.
+This is a package that provides modal dialogs which is similar to [`react-modal`](https://www.npmjs.com/package/react-modal) but it is **global**.
 
-## Features
+## Contribute
+
+Needs feedback, please contribute in GitHub Issues or leave your message to [my discord server](https://discord.gg/DCUWrRhvnt).
+
+## Navigation
+
+- [React Modal Global](#react-modal-global)
+  - [Introduction](#introduction)
+  - [Contribute](#contribute)
+  - [Navigation](#navigation)
+  - [Advantages](#advantages)
+    - [Major advantages](#major-advantages)
+    - [Minor advantages](#minor-advantages)
+  - [Usage](#usage)
+    - [Add container](#add-container)
+    - [Create new Modal component](#create-new-modal-component)
+      - [Plain component](#plain-component)
+      - [Using `modal context`](#using-modal-context)
+    - [Modal component usage](#modal-component-usage)
+    - [Modal options](#modal-options)
+    - [Modal Template](#modal-template)
+    - [Modal layouts](#modal-layouts)
+      - [If using several containers](#if-using-several-containers)
+  - [Layout concept](#layout-concept)
+    - [Description](#description)
+    - [Aria](#aria)
+
+## Advantages
+
+### Major advantages
+
+- Allows to use modals in `useEffect` hook without creating a new component for each one by passing `props` to `open` method.
+- Allows opening modals without wrapping them in components and controlling their state.
+- Allows to use modals in non-component context (e.g. in `useEffect` hook).
+- Allows to reuse modals in different places without creating a new component for each one by passing `props` to `open` method.
+- Allows to use various modal types (Dialog, Popup, Drawer) by creating your own layout for each one (advised naming is `[Type][Name]` => `DrawerLayout`).
+- Allows customizing modal controls by extending `ModalController` class and creating your own layouts.
+- Allows to use several containers at different depths of your app (e.g. to vary templates).
+- Allows forking modals and creating "layer depth" (_in development_).
+
+### Minor advantages
 
 - Globalization - opened from anywhere (even from non-component context)
-- Multicontainers - for e.g. templates
-- Context - the data passed when openning can be accessed in the component via `useModalContext` hook
-- Stacking/Nesting
-- Forking
-- Data preservation
-- `open` method returns `Promise`
--
+- Context - data that passed in `open` method can be accessed in the component using `useModalContext` hook
+- Stacking/Nesting (as a container option).
+- Data preservation (after closing last modal, the data will be preserved and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen)
+- `open` method is `PromiseLike` (`thenable`) - you can use `await` or `then` to wait for modal closing
+- The package uses only react as a peer dependency
 
-- The package uses only react as a dependency.
+## Usage
 
-#### The main idea
+Usage may seem a bit complicated but it's actually very simple, please, be patient and read all the thing through.
 
-There is a `ModalContainer` which is a container for modal components (it usually appears in `#root` element) and modal components will appear there as you open them.
+### Add container
+
+`ModalContainer` is a container for modal components (it usually appears in the root of your app) and modal components will appear there as you open them.
 
 <details>
 <summary>Show `ModalContainer` usage example</summary>
@@ -46,11 +86,6 @@ ReactDOM.render(<App />, document.getElementById("root"))
 ```
 
 </details>
-There are other features upon this idea.
-
-## Usage
-
-Usage may seem a bit complicated, please, be patient and read all the thing throughout.
 
 ### Create new Modal component
 
@@ -78,7 +113,7 @@ function ModalComponent() {
       <h2>Title</h2>
       <p>Content text</p>
 
-      <button type="button" onClick={() => modal.close()}>My custom button to close modal</button>
+      <button type="button" onClick={modal.close}>close</button>
     </>
   )
 }
@@ -121,7 +156,6 @@ Available options
 | `id`       | Specifies id of a modal (default: `Date.now()`). In react it's used as a `key`. May be used to find and close specific modal or else.                                     |
 | `closable` | Specifies if a modal closing is controlled itself                                                                                                                         |
 | `weak`     | By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen. |
-| `fork`     | Creates a new layer for a single modal                                                                                                                                    |
 
 ### Modal Template
 
@@ -130,7 +164,6 @@ There is a multicontainers feature - you can put containers at different depths 
 Only one container will be used.
 
 The last mounted container will be used.
-
 
 ### Modal layouts
 
@@ -180,3 +213,23 @@ Instead of wrapping your modal components manually you can pass `template` attri
 ```tsx
 <ModalContainer template={PopupLayout} />
 ```
+
+
+## Layout concept
+
+### Description
+
+Layout is a component that wraps modal component and allows to customize modal look and controls (close button, header, footer, etc.).
+
+Layouts are used to create various modal types (Dialog, Popup, Drawer) and to customize modal controls.
+
+For example, you can create your own `PopupLayout` to use it in your `Popup` modals.
+
+[See example here](./examples/PopupLayout)
+
+### Aria
+
+Layouts should not have `aria-modal` attribute and `role="dialog"` because they are already set in `ModalContainer` component.
+
+
+However, you should manually add `aria-labelledby` and `aria-describedby` attributes to your layout.
