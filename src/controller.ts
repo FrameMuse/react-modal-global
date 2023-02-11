@@ -44,6 +44,11 @@ function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerStat
   lastContainer.setState(setStateAction)
 }
 
+/**
+ * Controller for opening and closing modal windows.
+ *
+ * Can be used with `ModalContainer` or with custom implementation.
+ */
 export class ModalController {
   /**
    * Opens a modal window. Infers props from the component.

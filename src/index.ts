@@ -16,6 +16,6 @@ copies or substantial portions of the Software.
 
 */
 
-export { Modal } from "./controller"
+export { Modal, ModalController } from "./controller"
 export { ModalContainer } from "./container"
 export { useModalContext } from "./hooks"
