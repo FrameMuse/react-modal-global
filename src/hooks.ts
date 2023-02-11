@@ -16,10 +16,10 @@ copies or substantial portions of the Software.
 
 */
 
-import { Component, ComponentLifecycle, createElement, ReactNode, useContext } from "react"
-import { ModalWindow } from "types"
+import { ComponentLifecycle, ReactNode, useContext } from "react"
 
 import { modalContext } from "./context"
+import { ModalWindow } from "./types"
 
 /**
  * Used inside a modal component to access the modal context (`ModalWindow`).
