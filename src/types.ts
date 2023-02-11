@@ -72,8 +72,8 @@ export interface ModalWindow<P = unknown> {
  * open(OkComponent, { id: 1 }) // OK
  * open(OkComponent) // OK
  *
- * const FailComponent = (props: { required: string }) => <div />
- * open(FailComponent, { id: 1 }) // OK
+ * const FailComponent = (props: { required: boolean }) => <div />
+ * open(FailComponent, { required: true }) // OK
  * open(FailComponent) // Error: missing required property `required`
  */
 export type ModalWindowParams<P = unknown> =
