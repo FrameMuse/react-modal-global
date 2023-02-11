@@ -1,13 +1,13 @@
 import "@testing-library/jest-dom"
 
 import { render } from "@testing-library/react"
-import { ModalController } from "controller"
-import { useModalContext } from "hooks"
 import { useEffect, useState } from "react"
 import { act } from "react-dom/test-utils"
-import { classWithModifiers } from "utils"
 
 import { ModalContainer } from "../container"
+import { ModalController } from "../controller"
+import { useModalContext } from "../hooks"
+import { classWithModifiers } from "../utils"
 
 let Modal: ModalController = new ModalController()
 let container = render(<ModalContainer />).container
@@ -210,16 +210,6 @@ describe("ModalContainer", () => {
 
     expect(modalContainerElement?.querySelectorAll("h1")).toHaveLength(1)
     expect(modalContainerElement).toMatchSnapshot()
-  })
-
-  it("should work with different modals", () => {
-    // act(() => {
-    //   Modal.open(PopupExample)
-    //   Modal.open(PopupExample, { test: true })
-    // })
-
-    // expect(containerComponent)
-    // expect(modalContainerElement).toMatchSnapshot()
   })
 
   it("should render the correct component when replaced (open)", () => {

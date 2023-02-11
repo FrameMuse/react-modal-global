@@ -1,6 +1,6 @@
-import { containers } from "container"
 import { createElement, Fragment } from "react"
 
+import { containers } from "../container"
 import { ModalController } from "../controller"
 
 describe("ModalController (without container)", () => {
