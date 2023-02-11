@@ -1,12 +1,17 @@
 # React Modal Global
 
 [![codecov](https://codecov.io/gh/FrameMuse/react-modal-global/branch/main/graph/badge.svg?token=1FRUN6AQDA)](https://codecov.io/gh/FrameMuse/react-modal-global)
+[![npm version](https://badge.fury.io/js/react-modal-global.svg)](https://badge.fury.io/js/react-modal-global)
+[![npm downloads](https://img.shields.io/npm/dm/react-modal-global.svg)](https://www.npmjs.com/package/react-modal-global)
+[![GitHub license](https://img.shields.io/github/license/FrameMuse/react-modal-global)]()
 
-Needs feedback, please contribute in GitHub Issues or leave your message on [my discord server](https://discord.gg/DCUWrRhvnt).
+[![GitHub stars](https://img.shields.io/github/stars/FrameMuse/react-modal-global)]()
+[![GitHub contributors](https://img.shields.io/github/contributors/FrameMuse/react-modal-global)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/FrameMuse/react-modal-global)]()
 
-## Introduction
+## Presentation
 
-This is a package that provides modal dialogs which is similar to [`react-modal`](https://www.npmjs.com/package/react-modal) but it is **global**.
+React modal dialogs which is similar to [`react-modal`](https://www.npmjs.com/package/react-modal) but it may be called from `useEffect`, that's why it is **global** ^_^
 
 ## Contribute
 
@@ -15,7 +20,7 @@ Needs feedback, please contribute in GitHub Issues or leave your message to [my 
 ## Navigation
 
 - [React Modal Global](#react-modal-global)
-  - [Introduction](#introduction)
+  - [Presentation](#presentation)
   - [Contribute](#contribute)
   - [Navigation](#navigation)
   - [Advantages](#advantages)
@@ -23,17 +28,23 @@ Needs feedback, please contribute in GitHub Issues or leave your message to [my 
     - [Minor advantages](#minor-advantages)
   - [Usage](#usage)
     - [Add container](#add-container)
+      - [Show `ModalContainer` usage example](#show-modalcontainer-usage-example)
     - [Create new Modal component](#create-new-modal-component)
       - [Plain component](#plain-component)
       - [Using `modal context`](#using-modal-context)
     - [Modal component usage](#modal-component-usage)
-    - [Modal options](#modal-options)
     - [Modal Template](#modal-template)
     - [Modal layouts](#modal-layouts)
       - [If using several containers](#if-using-several-containers)
   - [Layout concept](#layout-concept)
     - [Description](#description)
     - [Aria](#aria)
+  - [Modal controller](#modal-controller)
+    - [`Open`](#open)
+    - [`Close`](#close)
+      - [`CloseByComponent`](#closebycomponent)
+      - [`CloseById`](#closebyid)
+    - [Modal options](#modal-options)
 
 ## Advantages
 
@@ -65,8 +76,7 @@ Usage may seem a bit complicated but it's actually very simple, please, be patie
 
 `ModalContainer` is a container for modal components (it usually appears in the root of your app) and modal components will appear there as you open them.
 
-<details>
-<summary>Show `ModalContainer` usage example</summary>
+#### Show `ModalContainer` usage example
 
 ```tsx
 import React from "react"
@@ -84,8 +94,6 @@ function App() {
 
 ReactDOM.render(<App />, document.getElementById("root"))
 ```
-
-</details>
 
 ### Create new Modal component
 
@@ -146,17 +154,6 @@ function HomeView() {
 }
 ```
 
-### Modal options
-
-You can use options when opening a modal.
-Available options
-
-| Option     | Description                                                                                                                                                               |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`       | Specifies id of a modal (default: `Date.now()`). In react it's used as a `key`. May be used to find and close specific modal or else.                                     |
-| `closable` | Specifies if a modal closing is controlled itself                                                                                                                         |
-| `weak`     | By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen. |
-
 ### Modal Template
 
 There is a multicontainers feature - you can put containers at different depths of your app to vary templates.
@@ -169,7 +166,7 @@ The last mounted container will be used.
 
 To use various modal types (Dialog, Popup, Drawer), you create your own `layout` for each one, advised naming is [Type][Name] => `DrawerLayout`.
 
-[See example here](./examples/PopupLayout)
+[![Edit react-modal-global](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-modal-global-examples-47yoil)
 
 To create your first `Popup` modal try this
 
@@ -232,4 +229,47 @@ For example, you can create your own `PopupLayout` to use it in your `Popup` mod
 Layouts should not have `aria-modal` attribute and `role="dialog"` because they are already set in `ModalContainer` component.
 
 
-However, you should manually add `aria-labelledby` and `aria-describedby` attributes to your layout.
+You should manually add `aria-labelledby` and `aria-describedby` attributes to your layout.
+
+## Modal controller
+
+### `Open`
+
+`Modal.open` is a method that opens a modal. See [usage](#modal-component-usage) for example. See [options](#modal-options) for more details.
+
+```tsx
+Modal.open(ModalComponent, { /* options */ })
+```
+
+### `Close`
+
+There is no `Modal.close` method because it's hard to know what exactly window to close, instead you can close a modal from inside of a modal component using `useModalContext` hook.
+
+Or using `Modal.closeBy` methods.
+
+#### `CloseByComponent`
+
+`Modal.closeByComponent` is a method that closes a modal by its component. It will close all modals that use this component.
+
+```tsx
+Modal.closeByComponent(ModalComponent)
+```
+
+#### `CloseById`
+
+`Modal.closeById` is a method that closes a modal by its id. It will close all modals that have this id.
+
+```tsx
+Modal.closeById("insane-id")
+```
+
+### Modal options
+
+You can use options when opening a modal with `Modal.open()`.
+Available options
+
+| Option     | Description                                                                                                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`       | Specifies id of a modal (default: `Date.now()`). In react it's used as a `key`. May be used to find and close specific modal or else.                                     |
+| `closable` | Specifies if a modal closing is controlled itself                                                                                                                         |
+| `weak`     | By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen. |
