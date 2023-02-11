@@ -25,9 +25,18 @@ import { classWithModifiers, stopPropagation } from "./utils"
 export const containers: Set<ModalContainer> = new Set
 
 export interface ModalContainerProps {
+  /**
+   * Template for modal window.
+   */
   template?: (props: { children: ReactNode }) => ReactElement
+  /**
+   * Modal container class name. It will be used as a base for modifiers (will replace defaulted `"modal"`).
+   *
+   * @default "modal"
+   */
   className?: string
 }
+
 export interface ModalContainerState<P = unknown> {
   active: boolean
   queue: ModalWindow<P>[]
