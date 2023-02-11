@@ -212,16 +212,6 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should work with different modals", () => {
-    // act(() => {
-    //   Modal.open(PopupExample)
-    //   Modal.open(PopupExample, { test: true })
-    // })
-
-    // expect(containerComponent)
-    // expect(modalContainerElement).toMatchSnapshot()
-  })
-
   it("should render the correct component when replaced (open)", () => {
     act(() => {
       Modal.open(PopupExample)
