@@ -268,8 +268,8 @@ Modal.closeById("insane-id")
 You can use options when opening a modal with `Modal.open()`.
 Available options
 
-| Option     | Description                                                                                                                                                               |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`       | Specifies id of a modal (default: `Date.now()`). In react it's used as a `key`. May be used to find and close specific modal or else.                                     |
-| `closable` | Specifies if a modal closing is controlled itself                                                                                                                         |
-| `weak`     | By default, a last closed modal will not be removed and if same modal will be request to open, it will _restore_ previous modal but with `weak: true` it will not happen. |
+| Option     | Description |
+| ---------- | ----------  |
+| `id`       | Specifies id of a modal. In react it's used as a `key`. May be used to find and close specific modal or else. |
+| `closable` | Specifies if a modal closing is controllable internally. If `false`, it's supposed to mean that user should do a **specific** action to close. |
+| `weak`     | By default, a last closed modal will not be removed if the same modal will be requested to open. It will _restore_ previous modal but with `weak: true` it will not happen. |
