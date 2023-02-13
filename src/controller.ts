@@ -126,6 +126,15 @@ export class ModalController {
         }
       }
 
+      // Skip adding to queue if it has been closed being filled.
+      if (state.active === false && state.queue.length > 0) {
+        return {
+          ...state,
+          active: true,
+          queue: [modalWindow]
+        }
+      }
+
       return {
         ...state,
         active: true,

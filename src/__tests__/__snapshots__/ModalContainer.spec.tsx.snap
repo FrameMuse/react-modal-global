@@ -12,7 +12,7 @@ exports[`ModalContainer should have the correct class name by default 1`] = `
 </div>
 `;
 
-exports[`ModalContainer should have the correct class name when closed 1`] = `
+exports[`ModalContainer should have the correct class name when closed (not weak) 1`] = `
 <div
   aria-hidden="true"
   aria-modal="true"
@@ -323,6 +323,32 @@ exports[`ModalContainer should render the correct component when open multiple a
         id="test"
       >
         1
+      </span>
+      <h1>
+        Popup Example
+      </h1>
+      <button>
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ModalContainer should render the correct component when open multiple and closed-open-closed one 1`] = `
+<div
+  aria-hidden="true"
+  aria-modal="true"
+  class="modal"
+>
+  <div
+    class="modal__container"
+  >
+    <div>
+      <span
+        id="test"
+      >
+        2
       </span>
       <h1>
         Popup Example

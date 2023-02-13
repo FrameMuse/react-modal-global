@@ -41,7 +41,7 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should have the correct class name when closed", () => {
+  it("should have the correct class name when closed (not weak)", () => {
     act(() => {
       Modal.open(PopupExample)
     })
@@ -155,6 +155,19 @@ describe("ModalContainer", () => {
     })
 
     expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("1")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when open multiple and closed-open-closed one", () => {
+    act(() => {
+      const modal1 = Modal.open(PopupExample, { test: "1" })
+      modal1.close()
+      const modal2 = Modal.open(PopupExample, { test: "2" })
+      modal2.close()
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("2")
     expect(modalContainerElement).toMatchSnapshot()
   })
 
