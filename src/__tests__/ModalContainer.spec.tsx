@@ -63,6 +63,15 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
+  it("should render nullish component", () => {
+    act(() => {
+      Modal.open(() => null)
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toBeNull()
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
   it("should render the correct component on re-open (not weak)", () => {
     act(() => {
       Modal.open(PopupExample, { random: true })

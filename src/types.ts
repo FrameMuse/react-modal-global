@@ -25,7 +25,7 @@ import { HasRequiredKeys } from "type-fest"
 export type NoInfer<T> = [T][T extends unknown ? 0 : never]
 
 
-export type ModalComponent<P = unknown> = (props: P) => ReactElement
+export type ModalComponent<P = unknown> = ((props: P) => ReactElement | null) | (() => ReactElement | null)
 
 export interface ModalParams {
   /**
