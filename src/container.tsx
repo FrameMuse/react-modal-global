@@ -69,14 +69,19 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
 
   render() {
     const { active, queue } = this.state
-    const currentModal = queue[queue.length - 1] as (ModalWindow | undefined)
+    const currentModal = queue.at(-1)
     const onClose = currentModal?.params?.closable ? stopPropagation(currentModal.close) : undefined
     const Template = this.props.template || Fragment
+
+    const providerValue = currentModal ? {
+      ...currentModal,
+      isClosed: !active
+    } : null
     return (
       <>
         <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active}>
           <div className={this.className + "__container"} onClick={onClose}>
-            <modalContext.Provider value={currentModal || null}>
+            <modalContext.Provider value={providerValue}>
               <Template>
                 {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
               </Template>

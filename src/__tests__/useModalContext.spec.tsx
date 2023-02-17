@@ -1,9 +1,12 @@
 import { render } from "@testing-library/react"
+import { act } from "react-dom/test-utils"
 
+import { ModalContainer } from "../container"
+import { ModalController } from "../controller"
 import { useModalContext } from "../hooks"
 
 describe("useModalContext", () => {
-  it("should return the modal context", () => {
+  it("should throw error", () => {
     function ComponentWithoutModalContext() {
       useModalContext()
       return null
@@ -11,6 +14,44 @@ describe("useModalContext", () => {
 
     const renderCallback = () => render(<ComponentWithoutModalContext />)
     expectToThrow(renderCallback, /useModalContext must be used within a modalContext/)
+  })
+
+  it("should return isClosed: false", () => {
+    const Modal: ModalController = new ModalController()
+    const container = render(<ModalContainer />).container
+
+    function ComponentWithModalContext() {
+      const { isClosed } = useModalContext()
+
+      return <span>{String(isClosed)}</span>
+    }
+
+    act(() => {
+      Modal.open(ComponentWithModalContext)
+    })
+
+    const isClosed = container.querySelector("span")?.textContent
+    expect(isClosed).toBe("false")
+    expect(container).toMatchSnapshot()
+  })
+
+  it("should return isClosed: true", () => {
+    const Modal: ModalController = new ModalController()
+    const container = render(<ModalContainer />).container
+
+    function ComponentWithModalContext() {
+      const { isClosed } = useModalContext()
+
+      return <span>{String(isClosed)}</span>
+    }
+
+    act(() => {
+      Modal.open(ComponentWithModalContext).close()
+    })
+
+    const isClosed = container.querySelector("span")?.textContent
+    expect(isClosed).toBe("true")
+    expect(container).toMatchSnapshot()
   })
 })
 

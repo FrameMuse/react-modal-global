@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useModalContext should return isClosed: false 1`] = `
+<div>
+  <div
+    aria-hidden="false"
+    aria-modal="true"
+    class="modal modal--active"
+  >
+    <div
+      class="modal__container"
+    >
+      <span>
+        false
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`useModalContext should return isClosed: true 1`] = `
+<div>
+  <div
+    aria-hidden="true"
+    aria-modal="true"
+    class="modal"
+  >
+    <div
+      class="modal__container"
+    >
+      <span>
+        true
+      </span>
+    </div>
+  </div>
+</div>
+`;

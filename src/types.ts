@@ -57,7 +57,23 @@ export interface ModalParams {
 export interface ModalWindow<P = unknown> {
   component: ModalComponent<ModalParams & P>
   params: ModalParams & P
+
+  /**
+   * Removes the modal from the queue. If
+   */
   close: () => void
+  /**
+   * Indicates that the `close` method has been called.
+   */
+  isClosed: boolean
+  // /**
+  //  * Indicates that the modal is currently active.
+  //  *
+  //  * @note
+  //  *
+  //  * This is not the same as `!isClosed` because the modal may be not closed but still be in the queue.
+  //  */
+  // isActive: boolean
 }
 
 /**
