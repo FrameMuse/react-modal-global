@@ -33,23 +33,48 @@ export function classWithModifiers(originClass: string, ...modifiers: Array<stri
   return originClass + space + modifiers.join(space)
 }
 
-const getCircularReplacer = () => {
-  const seen = new WeakSet()
-  return (_key: string, value: unknown) => {
-    if (typeof value === "object" && value !== null) {
-      if (seen.has(value)) {
-        return
-      }
-      seen.add(value)
-    }
-    return value
-  }
-}
 
 export function serialize<T = unknown>(value?: T | null) {
   if (value == null) return String(value)
 
-  const serializedValue = JSON.stringify(value, getCircularReplacer())
+  function getCircularReplacer() {
+    const seen = new WeakSet()
+    return (_key: string, value: unknown) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return
+        }
+        seen.add(value)
+      }
+
+      return value
+    }
+  }
+
+  function transform(key: string, value: unknown) {
+    if (value instanceof Function) {
+      // If the value is a function, but not an arrow function,
+      // return the function as a string.
+      if (value.name === key) {
+        return value.toString()
+      }
+
+      // Otherwise, return the name of the function.
+      return value.name
+    }
+
+    return value
+  }
+
+  function replacer(key: string, value: unknown) {
+    const circularReplacer = getCircularReplacer()
+    const circularReplacedValue = circularReplacer(key, value)
+
+    const transformedValue = transform(key, circularReplacedValue)
+    return transformedValue
+  }
+
+  const serializedValue = JSON.stringify(value, replacer)
   return serializedValue
 }
 
