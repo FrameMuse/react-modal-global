@@ -66,6 +66,18 @@ exports[`ModalContainer should render 1`] = `
 </div>
 `;
 
+exports[`ModalContainer should render nullish component 1`] = `
+<div
+  aria-hidden="false"
+  aria-modal="true"
+  class="modal modal--active"
+>
+  <div
+    class="modal__container"
+  />
+</div>
+`;
+
 exports[`ModalContainer should render the correct component 1`] = `
 <div
   aria-hidden="false"
