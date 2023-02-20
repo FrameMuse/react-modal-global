@@ -15,7 +15,7 @@ React modal dialogs which is similar to [`react-modal`](https://www.npmjs.com/pa
 
 ## Contribute
 
-Needs feedback, please contribute in GitHub Issues or leave your message to [my discord server](https://discord.gg/DCUWrRhvnt).
+Needs feedback, please contribute to GitHub Issues or leave your message to [my discord server](https://discord.gg/DCUWrRhvnt).
 
 ## Navigation
 
@@ -27,8 +27,10 @@ Needs feedback, please contribute in GitHub Issues or leave your message to [my 
     - [Major advantages](#major-advantages)
     - [Minor advantages](#minor-advantages)
   - [Usage](#usage)
+    - [Playgrounds](#playgrounds)
+      - [Example of layouts useage](#example-of-layouts-useage)
+      - [Example of usage with ChakraUI (by @laurensnl)](#example-of-usage-with-chakraui-by-laurensnl)
     - [Add container](#add-container)
-      - [Show `ModalContainer` usage example](#show-modalcontainer-usage-example)
     - [Create new Modal component](#create-new-modal-component)
       - [Plain component](#plain-component)
       - [Using `modal context`](#using-modal-context)
@@ -70,13 +72,19 @@ Needs feedback, please contribute in GitHub Issues or leave your message to [my 
 
 ## Usage
 
-Usage may seem a bit complicated but it's actually very simple, please, be patient and read all the thing through.
+### Playgrounds
+
+#### Example of layouts useage
+
+[![Edit react-modal-global](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-modal-global-examples-47yoil)
+
+#### Example of usage with ChakraUI (by [@laurensnl](https://github.com/laurensnl))
+
+[![Edit react-modal-global](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/chakraui-nextjs-react-modal-global-h0g21f)
 
 ### Add container
 
 `ModalContainer` is a container for modal components (it usually appears in the root of your app) and modal components will appear there as you open them.
-
-#### Show `ModalContainer` usage example
 
 ```tsx
 import React from "react"
@@ -97,7 +105,7 @@ ReactDOM.render(<App />, document.getElementById("root"))
 
 ### Create new Modal component
 
-All it needs for creating such is a valid `JSX.Element`:
+All it needs for creating modal component is a react component factory with a valid `JSX.Element`:
 
 #### Plain component
 
@@ -114,7 +122,7 @@ function ModalComponent() {
 
 ```tsx
 function ModalComponent() {
-  const modal = useModalContext() // Getting modal context of current component
+  const modal = useModalContext() // Getting modal context of currently active component
 
   return (
     <>
@@ -132,7 +140,7 @@ function ModalComponent() {
 Note that `PopupLogin` should have its own styles to look like a popup, it is advised to use custom `PopupLayout` (Learn below).
 
 ```tsx
-import "react-modal-global/styles/modal.scss" // import default styles if should
+import "react-modal-global/styles/modal.scss" // import default styles if want
 
 import { Modal } from "react-modal-global"
 
@@ -166,7 +174,7 @@ The last mounted container will be used.
 
 To use various modal types (Dialog, Popup, Drawer), you create your own `layout` for each one, advised naming is [Type][Name] => `DrawerLayout`.
 
-[![Edit react-modal-global](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-modal-global-examples-47yoil)
+[Take a look at this example](https://codesandbox.io/s/react-modal-global-examples-47yoil)
 
 To create your first `Popup` modal try this
 
@@ -211,7 +219,6 @@ Instead of wrapping your modal components manually you can pass `template` attri
 <ModalContainer template={PopupLayout} />
 ```
 
-
 ## Layout concept
 
 ### Description
@@ -227,7 +234,6 @@ For example, you can create your own `PopupLayout` to use it in your `Popup` mod
 ### Aria
 
 Layouts should not have `aria-modal` attribute and `role="dialog"` because they are already set in `ModalContainer` component.
-
 
 You should manually add `aria-labelledby` and `aria-describedby` attributes to your layout.
 
@@ -245,7 +251,7 @@ Modal.open(ModalComponent, { /* options */ })
 
 There is no `Modal.close` method because it's hard to know what exactly window to close, instead you can close a modal from inside of a modal component using `useModalContext` hook.
 
-Or using `Modal.closeBy` methods.
+To close from outside you can use returned `close` method from `Modal.open` or `Modal.closeBy` methods
 
 #### `CloseByComponent`
 
@@ -268,8 +274,8 @@ Modal.closeById("insane-id")
 You can use options when opening a modal with `Modal.open()`.
 Available options
 
-| Option     | Description |
-| ---------- | ----------  |
-| `id`       | Specifies id of a modal. In react it's used as a `key`. May be used to find and close specific modal or else. |
-| `closable` | Specifies if a modal closing is controllable internally. If `false`, it's supposed to mean that user should do a **specific** action to close. |
+| Option     | Description                                                                                                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`       | Specifies id of a modal. In react it's used as a `key`. May be used to find and close specific modal or else.                                                               |
+| `closable` | Specifies if a modal closing is controllable internally. If `false`, it's supposed to mean that user should do a **specific** action to close.                              |
 | `weak`     | By default, a last closed modal will not be removed if the same modal will be requested to open. It will _restore_ previous modal but with `weak: true` it will not happen. |
