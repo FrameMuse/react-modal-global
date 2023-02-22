@@ -89,7 +89,7 @@ export class ModalController {
     }
 
     const params: ModalParams & P = { ...DEFAULT_PARAMS, ...modalParams as P }
-    const modal: ModalWindow<P> = { component, params, close, isClosed: false }
+    const modal: ModalWindow<P> = { component, params, close, closed: false, focused: true }
 
     this.add(modal as ModalWindow<unknown>)
 
