@@ -16,17 +16,11 @@ copies or substantial portions of the Software.
 
 */
 
-import { SetStateAction } from "react"
+import EventEmitter from "eventemitter3"
 
-import { containers, ModalContainerState } from "./container"
 import { ModalComponent, ModalParams, ModalWindow, ModalWindowParams } from "./types"
 import { serialize } from "./utils"
 
-const DEFAULT_STATE: ModalContainerState = {
-  active: false,
-  queue: [],
-  forkedQueue: []
-}
 const DEFAULT_PARAMS: ModalParams = {
   id: 0,
   closable: true,
@@ -34,14 +28,15 @@ const DEFAULT_PARAMS: ModalParams = {
   fork: false
 }
 
-function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerState<P>>) {
-  const lastContainer = [...containers].at(-1)
-  if (lastContainer == null) {
-    console.warn("ModalError: no containers were mounted.")
-    return
-  }
+export interface ModalState {
+  isOpen: boolean
+  windows: ModalWindow[]
+}
 
-  lastContainer.setState(setStateAction)
+interface Events {
+  add: [ModalWindow]
+  remove: [ModalWindow]
+  update: []
 }
 
 /**
@@ -50,6 +45,21 @@ function dispatch<P = unknown>(setStateAction: SetStateAction<ModalContainerStat
  * Can be used with `ModalContainer` or with custom implementation.
  */
 export class ModalController {
+  #isOpen = false
+  protected set isOpen(value: boolean) {
+    this.#isOpen = value
+  }
+  /**
+   * Whether any modals are shown.
+   */
+  public get isOpen(): boolean {
+    return this.#isOpen
+  }
+
+  protected windows: Set<ModalWindow> = new Set
+  protected events: EventEmitter<Events> = new EventEmitter
+
+
   /**
    * Opens a modal window. Infers props from the component.
    *
@@ -74,14 +84,14 @@ export class ModalController {
     let resolveFunction = () => { /* Noop */ }
     const promise = new Promise<void>(resolve => resolveFunction = resolve)
     const close = () => {
-      this.remove(modal)
+      this.remove(modal as ModalWindow<unknown>)
       resolveFunction()
     }
 
     const params: ModalParams & P = { ...DEFAULT_PARAMS, ...modalParams as P }
     const modal: ModalWindow<P> = { component, params, close, isClosed: false }
 
-    this.add(modal)
+    this.add(modal as ModalWindow<unknown>)
 
     return {
       ...modal,
@@ -96,127 +106,118 @@ export class ModalController {
    * If the queue is empty, it will be added to the queue.
    */
   public replace<P>(component: ModalComponent<P>, ...[params]: ModalWindowParams<P>): ModalWindow<P> & PromiseLike<void> {
-    dispatch(state => ({
-      ...state,
-      queue: state.queue.slice(0, -1)
-    }))
-    return this.open(component, params as never)
-  }
-  /**
-   * Adds a modal window to the queue.
-   */
-  private add<P>(modalWindow: ModalWindow<P>) {
-    if (modalWindow.params.fork) {
-      this.fork(modalWindow)
-      return
+    const lastWindow = [...this.windows].at(-1)
+    if (lastWindow != null) {
+      this.windows.delete(lastWindow)
     }
 
-    dispatch<P>(state => {
-      // Skip adding to queue if the window is already in the beginning of the queue.
-      if (!modalWindow.params?.weak && state.queue.length > 0) {
-        const lastWindow = state.queue[state.queue.length - 1]
+    return this.open(component, params as never)
+  }
 
-        const areParamsEqual = serialize(modalWindow.params) === serialize(lastWindow.params)
-        const areComponentsEqual = modalWindow.component === lastWindow.component
-        if (areParamsEqual && areComponentsEqual) {
-          return {
-            ...state,
-            active: true
-          }
-        }
-      }
+  /**
+   * Adds a modal window to the queue.
+   * 
+   * - Controls whether the modal is open.
+   * - Controls whether the order of windows.
+   */
+  private add(modalWindow: ModalWindow) {
+    // If there are temporary modal windows, clear.
+    if (this.isOpen === false && this.windows.size > 0) {
+      this.windows.clear()
+    }
 
-      // Skip adding to queue if it has been closed being filled.
-      if (state.active === false && state.queue.length > 0) {
-        return {
-          ...state,
-          active: true,
-          queue: [modalWindow]
-        }
-      }
-
-      return {
-        ...state,
-        active: true,
-        queue: [...state.queue, modalWindow]
-      }
-    })
+    this.isOpen = true
+    this.windows.add(modalWindow)
+    this.events.emit("add", modalWindow)
   }
   /**
    * Removes a modal window from the queue.
    */
-  private remove<P>(modalWindowToRemove: ModalWindow<P>) {
-    if (modalWindowToRemove.params.fork) {
-      dispatch(state => {
-        const forkedQueue = state.forkedQueue.filter(mw => mw !== modalWindowToRemove)
-        return { ...state, forkedQueue }
-      })
-      return
+  private remove(modalWindow: ModalWindow) {
+    if (!this.windows.has(modalWindow)) return
+
+    const isLastWindow = this.windows.size === 1
+    if (isLastWindow) {
+      this.isOpen = false
+
+      // If the modal window is weak, it will be unmounted after closing.
+      // Otherwise, skip removing to let last modal window to be in the queue.
+      if (!modalWindow.params.weak) {
+        this.events.emit("update")
+        return
+      }
     }
 
-    dispatch(state => {
-      const newQueue = state.queue.filter(modalWindow => modalWindow !== modalWindowToRemove)
-      const isNewQueueEmpty = newQueue.length === 0
-
-      // Hide modal without removing if it's the last window if it's not weak.
-      if (isNewQueueEmpty && !modalWindowToRemove.params.weak) {
-        return { ...state, active: false }
-      }
-
-      return { ...state, queue: newQueue, active: !isNewQueueEmpty }
-    })
+    this.windows.delete(modalWindow)
+    this.events.emit("remove", modalWindow)
   }
-  /**
-   * Forks a modal window and adds it to a forked queue.
-   *
-   * It means that the modal will be open over all other modals.
-   */
-  private fork<P>(modalWindow: ModalWindow<P>) {
-    dispatch<P>(state => {
-      return {
-        ...state,
-        forkedQueue: [...state.forkedQueue, modalWindow]
+
+  private findByComponent<Params>(component: ModalComponent<Params>, params?: ModalParams & Params): ModalWindow<Params>[] {
+    const foundWindows = [...this.windows].filter(modal => {
+      if (modal.component !== component) {
+        return false
       }
+
+      if (params != null) {
+        return serialize(params) === serialize(modal.params)
+      }
+
+      return true
     })
+    return foundWindows as ModalWindow<Params>[] // Assume that found windows follow the params type (`Params`).
+  }
+
+  private findById(id: ModalParams["id"]): ModalWindow[] {
+    const foundWindows = [...this.windows].filter(modal => modal.params.id === id)
+    return foundWindows
   }
 
   /**
    * Closes all modals by its component (including forked) starting from the last one.
    */
-  public closeByComponent<P>(component: ModalComponent<P>) {
-    dispatch(state => {
-      const queue = [...state.queue.filter(modal => modal.component === component)]
-      const forkedQueue = [...state.forkedQueue.filter(modal => modal.component === component)]
-
-      queue.reverse().forEach(modal => modal.close())
-      forkedQueue.reverse().forEach(modal => modal.close())
-
-      return state
-    })
+  public closeByComponent<Params>(component: ModalComponent<Params>, params?: ModalParams & Params) {
+    this.findByComponent(component, params).forEach(modal => modal.close())
   }
   /**
    * Closes all modals by its id (including forked) starting from the last one.
    */
   public closeById(id: ModalParams["id"]) {
-    dispatch(state => {
-      const queue = state.queue.filter(modal => modal.params.id === id)
-      const forkedQueue = state.forkedQueue.filter(modal => modal.params.id === id)
-
-      queue.forEach(modal => modal.close())
-      forkedQueue.forEach(modal => modal.close())
-
-      return state
-    })
+    this.findById(id).forEach(modal => modal.close())
   }
   /**
    * Closes all modals (including forked).
    */
   public closeAll() {
-    dispatch(state => {
-      state.queue.forEach(modal => modal.close())
-      return DEFAULT_STATE
-    })
+    this.isOpen = false
+    this.events.emit("update")
+    // All windows are now treated as temporary and they will be removed on the next `add`.
+  }
+
+  /**
+   * Subscribes on event.
+   * 
+   * @returns `unsubscribe` method
+   */
+  public observe(callback: (state: ModalState) => void) {
+    const listener = () => {
+      const state: ModalState = {
+        isOpen: this.isOpen,
+        windows: [...this.windows]
+      }
+      callback(state)
+    }
+
+    this.events.on("add", listener)
+    this.events.on("remove", listener)
+    this.events.on("update", listener)
+
+    return () => {
+      this.events.off("add", listener)
+      this.events.off("remove", listener)
+      this.events.off("update", listener)
+    }
   }
 }
+
 
 export const Modal = new ModalController

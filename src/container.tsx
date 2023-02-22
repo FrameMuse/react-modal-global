@@ -19,10 +19,9 @@ copies or substantial portions of the Software.
 import { Component, Fragment, ReactElement, ReactNode } from "react"
 
 import { modalContext } from "./context"
+import { ModalController } from "./controller"
 import { ModalWindow } from "./types"
 import { classWithModifiers, stopPropagation } from "./utils"
-
-export const containers: Set<ModalContainer> = new Set
 
 export interface ModalContainerProps {
   /**
@@ -35,6 +34,10 @@ export interface ModalContainerProps {
    * @default "modal"
    */
   className?: string
+  /**
+   * Modal controller. If not provided, will use default (global `Modal`) controller.
+   */
+  controller?: ModalController
 }
 
 export interface ModalContainerState<P = unknown> {
@@ -59,13 +62,13 @@ export class ModalContainer extends Component<ModalContainerProps, ModalContaine
     return this.props.className || "modal"
   }
 
-  componentDidMount(): void {
-    containers.add(this)
-  }
+  // componentDidMount(): void {
+  //   containers.add(this)
+  // }
 
-  componentWillUnmount(): void {
-    containers.delete(this)
-  }
+  // componentWillUnmount(): void {
+  //   containers.delete(this)
+  // }
 
   render() {
     const { active, queue } = this.state

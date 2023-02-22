@@ -153,7 +153,7 @@ exports[`ModalContainer should render the correct component when closed (weak) a
 </div>
 `;
 
-exports[`ModalContainer should render the correct component when closed by component 1`] = `
+exports[`ModalContainer should render the correct component when closed by component 1 1`] = `
 <div
   aria-hidden="true"
   aria-modal="true"
@@ -163,6 +163,11 @@ exports[`ModalContainer should render the correct component when closed by compo
     class="modal__container"
   >
     <div>
+      <span
+        id="test"
+      >
+        2
+      </span>
       <h1>
         Popup Example
       </h1>
@@ -171,6 +176,18 @@ exports[`ModalContainer should render the correct component when closed by compo
       </button>
     </div>
   </div>
+</div>
+`;
+
+exports[`ModalContainer should render the correct component when closed by component 2 1`] = `
+<div
+  aria-hidden="false"
+  aria-modal="true"
+  class="modal modal--active"
+>
+  <div
+    class="modal__container"
+  />
 </div>
 `;
 
@@ -211,6 +228,9 @@ exports[`ModalContainer should render the correct component when forked (not clo
       class="modal__container"
     >
       <div>
+        <span
+          id="test"
+        />
         <h1>
           Popup Example
         </h1>
@@ -254,6 +274,9 @@ exports[`ModalContainer should render the correct component when forked 1`] = `
       class="modal__container"
     >
       <div>
+        <span
+          id="test"
+        />
         <h1>
           Popup Example
         </h1>
@@ -317,7 +340,21 @@ exports[`ModalContainer should render the correct component when open multiple a
 >
   <div
     class="modal__container"
-  />
+  >
+    <div>
+      <span
+        id="test"
+      >
+        2
+      </span>
+      <h1>
+        Popup Example
+      </h1>
+      <button>
+        Close
+      </button>
+    </div>
+  </div>
 </div>
 `;
 
