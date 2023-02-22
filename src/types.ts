@@ -63,7 +63,7 @@ export interface ModalWindow<P = unknown> {
    */
   close: () => void
   /**
-   * Indicates that the `close` method has been called.
+   * Indicates that the `close` method has been called and the modal window is going to be removed.
    */
   isClosed: boolean
   // /**

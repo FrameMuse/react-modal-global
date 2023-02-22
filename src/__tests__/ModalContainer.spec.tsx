@@ -4,18 +4,18 @@ import { render } from "@testing-library/react"
 import { useEffect, useState } from "react"
 import { act } from "react-dom/test-utils"
 
-import { ModalContainer } from "../container"
+import { ModalContainer } from "../container.new"
 import { ModalController } from "../controller"
 import { useModalContext } from "../hooks"
 import { classWithModifiers } from "../utils"
 
 let Modal: ModalController = new ModalController()
-let container = render(<ModalContainer />).container
+let container = render(<ModalContainer controller={Modal} />).container
 let modalContainerElement = container.querySelector(".modal")
 
 beforeEach(() => {
   Modal = new ModalController()
-  container = render(<ModalContainer />).container
+  container = render(<ModalContainer controller={Modal} />).container
   modalContainerElement = container.querySelector(".modal")
 })
 
@@ -192,11 +192,12 @@ describe("ModalContainer", () => {
       Modal.closeAll()
     })
 
-    expect(modalContainerElement?.querySelector("h1")).toBeNull()
+    expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("2")
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should render the correct component when closed by component", () => {
+  it("should render the correct component when closed by component 1", () => {
     act(() => {
       Modal.open(PopupExample)
       Modal.open(PopupExample, { test: "7" })
@@ -206,9 +207,26 @@ describe("ModalContainer", () => {
       Modal.closeByComponent(PopupExample)
     })
 
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("2")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when closed by component 2", () => {
+    act(() => {
+      Modal.open(() => null)
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: "7" })
+      Modal.open(PopupExample, { test: "1" })
+      Modal.open(PopupExample, { test: "2" })
+
+      Modal.closeByComponent(PopupExample)
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toBeNull()
     expect(modalContainerElement?.querySelector("#test")).toBeNull()
     expect(modalContainerElement).toMatchSnapshot()
   })
+
   it("should render the correct component when closed by id", () => {
     act(() => {
       Modal.open(PopupExample)

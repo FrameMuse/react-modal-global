@@ -1,9 +1,17 @@
 import { render } from "@testing-library/react"
 import { act } from "react-dom/test-utils"
 
-import { ModalContainer } from "../container"
+import { ModalContainer } from "../container.new"
 import { ModalController } from "../controller"
 import { useModalContext } from "../hooks"
+
+let Modal: ModalController = new ModalController()
+let container = render(<ModalContainer controller={Modal} />).container
+
+beforeEach(() => {
+  Modal = new ModalController()
+  container = render(<ModalContainer controller={Modal} />).container
+})
 
 describe("useModalContext", () => {
   it("should throw error", () => {
@@ -17,40 +25,36 @@ describe("useModalContext", () => {
   })
 
   it("should return isClosed: false", () => {
-    const Modal: ModalController = new ModalController()
-    const container = render(<ModalContainer />).container
-
     function ComponentWithModalContext() {
-      const { isClosed } = useModalContext()
+      const { isClosed: closed } = useModalContext()
 
-      return <span>{String(isClosed)}</span>
+      return <span>{String(closed)}</span>
     }
 
     act(() => {
       Modal.open(ComponentWithModalContext)
     })
 
-    const isClosed = container.querySelector("span")?.textContent
-    expect(isClosed).toBe("false")
+    const closedSpan = container.querySelector("span")?.textContent
+    expect(closedSpan).toBe("false")
     expect(container).toMatchSnapshot()
   })
 
   it("should return isClosed: true", () => {
-    const Modal: ModalController = new ModalController()
-    const container = render(<ModalContainer />).container
-
     function ComponentWithModalContext() {
-      const { isClosed } = useModalContext()
+      const { isClosed: closed } = useModalContext()
 
-      return <span>{String(isClosed)}</span>
+      return <span>{String(closed)}</span>
     }
 
     act(() => {
       Modal.open(ComponentWithModalContext).close()
     })
 
-    const isClosed = container.querySelector("span")?.textContent
-    expect(isClosed).toBe("true")
+    expect(Modal.isOpen).toBe(false)
+    const closedSpan = container.querySelector("span")?.textContent
+    expect(closedSpan).toBe("true")
+    expect(container.querySelector(".modal")?.className).toBe("modal")
     expect(container).toMatchSnapshot()
   })
 })
