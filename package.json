@@ -11,6 +11,9 @@
   "peerDependencies": {
     "react": "18.x"
   },
+  "dependencies": {
+    "eventemitter3": "^5.0.0"
+  },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.27.0",
     "@rollup/plugin-typescript": "^8.3.3",
@@ -23,7 +26,6 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "eventemitter3": "^5.0.0",
     "rollup": "^2.77.0",
     "rollup-plugin-dts": "^4.2.2",
     "sass": "^1.53.0",
