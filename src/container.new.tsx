@@ -28,7 +28,8 @@ export function ModalContainer(props: ModalContainerProps) {
   // This is the only way to make the modal work with the current implementation
   const contextValue: ModalWindow | null = focusedModal ? {
     ...focusedModal,
-    isClosed: !modal.isOpen,
+    closed: !modal.isOpen,
+    focused: true
   } : null
 
   return (

@@ -24,9 +24,9 @@ describe("useModalContext", () => {
     expectToThrow(renderCallback, /useModalContext must be used within a modalContext/)
   })
 
-  it("should return isClosed: false", () => {
+  it("should return `closed`: false", () => {
     function ComponentWithModalContext() {
-      const { isClosed: closed } = useModalContext()
+      const { closed: closed } = useModalContext()
 
       return <span>{String(closed)}</span>
     }
@@ -40,9 +40,9 @@ describe("useModalContext", () => {
     expect(container).toMatchSnapshot()
   })
 
-  it("should return isClosed: true", () => {
+  it("should return `closed`: true", () => {
     function ComponentWithModalContext() {
-      const { isClosed: closed } = useModalContext()
+      const { closed: closed } = useModalContext()
 
       return <span>{String(closed)}</span>
     }

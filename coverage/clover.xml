@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1677037862849" clover="3.2.0">
-  <project timestamp="1677037862849" name="All files">
+<coverage generated="1677109566641" clover="3.2.0">
+  <project timestamp="1677109566641" name="All files">
     <metrics statements="114" coveredstatements="83" conditionals="68" coveredconditionals="36" methods="40" coveredmethods="30" elements="222" coveredelements="149" complexity="0" loc="114" ncloc="114" packages="1" files="8" classes="8"/>
     <file name="container.new.tsx" path="/home/kotto/github/react-modal-global/src/container.new.tsx">
       <metrics statements="13" coveredstatements="13" conditionals="16" coveredconditionals="15" methods="4" coveredmethods="4"/>
@@ -14,9 +14,9 @@
       <line num="24" count="62" type="stmt"/>
       <line num="25" count="62" type="cond" truecount="2" falsecount="0"/>
       <line num="29" count="62" type="cond" truecount="2" falsecount="0"/>
-      <line num="34" count="62" type="stmt"/>
-      <line num="46" count="47" type="stmt"/>
-      <line num="47" count="2" type="stmt"/>
+      <line num="35" count="62" type="stmt"/>
+      <line num="47" count="47" type="stmt"/>
+      <line num="48" count="2" type="stmt"/>
     </file>
     <file name="container.tsx" path="/home/kotto/github/react-modal-global/src/container.tsx">
       <metrics statements="10" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="4" coveredmethods="0"/>
