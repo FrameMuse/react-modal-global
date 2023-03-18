@@ -116,7 +116,7 @@ export class ModalController {
 
   /**
    * Adds a modal window to the queue.
-   * 
+   *
    * - Controls whether the modal is open.
    * - Controls whether the order of windows.
    */
@@ -195,7 +195,7 @@ export class ModalController {
 
   /**
    * Subscribes on event.
-   * 
+   *
    * @returns `unsubscribe` method
    */
   public observe(callback: (state: ModalState) => void) {
@@ -210,6 +210,8 @@ export class ModalController {
     this.events.on("add", listener)
     this.events.on("remove", listener)
     this.events.on("update", listener)
+
+    this.events.emit("update") // Emit initial state
 
     return () => {
       this.events.off("add", listener)
