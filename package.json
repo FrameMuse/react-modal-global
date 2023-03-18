@@ -12,7 +12,9 @@
     "react": "18.x"
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0"
+    "eventemitter3": "^5.0.0",
+    "lodash": "^4.17.21",
+    "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.27.0",
@@ -20,6 +22,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.4.0",
+    "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.15",
     "eslint": "^8.6.0",
     "eslint-plugin-react": "7.30.1",
