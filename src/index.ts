@@ -19,3 +19,4 @@ copies or substantial portions of the Software.
 export { Modal, ModalController } from "./controller"
 export { ModalContainer } from "./container.new"
 export { useModalContext } from "./hooks"
+export { ModalView, ModalOpen } from "./components"
