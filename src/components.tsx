@@ -124,30 +124,25 @@ interface ModalGroupProps {
 }
 
 export function ModalGroup(props: ModalGroupProps) {
-  const closedModalsRef = useRef(0)
+  const controllerRef = useRef(new ModalController)
 
   useEffect(() => {
-    return () => {
-      closedModalsRef.current = 0
-    }
+    if (controllerRef.current == null) return
+
+    const controller = controllerRef.current
+    return controller.on("remove", state => {
+      props.onClosed?.()
+
+      // If all modals are closed, call onAllClosed.
+      if (!state.isOpen) {
+        props.onAllClosed?.()
+      }
+    })
   }, [props.children])
 
   const children = props.children.map(child => {
-    function onClosed() {
-      // Count closed modals.
-      closedModalsRef.current += 1
-
-      // Call onClosed from child.
-      child.props.onClosed?.()
-
-      // Handle onClosed and onAllClosed from ModalGroup.
-      props.onClosed?.()
-      if (closedModalsRef.current >= props.children.length - 1) {
-        props.onAllClosed?.()
-      }
-    }
-
-    return cloneElement(child, { ...child.props, onClosed }, null)
+    const controller = controllerRef.current
+    return cloneElement(child, { ...child.props, controller })
   })
 
   return <>{children}</>

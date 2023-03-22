@@ -219,6 +219,22 @@ export class ModalController {
       this.events.off("update", listener)
     }
   }
+
+  public on<T extends keyof Events>(event: T, callback: (state: ModalState) => void) {
+    const listener = () => {
+      const state: ModalState = {
+        isOpen: this.isOpen,
+        windows: [...this.windows]
+      }
+      callback(state)
+    }
+
+    this.events.on(event, listener)
+
+    return () => {
+      this.events.off(event, listener)
+    }
+  }
 }
 
 
