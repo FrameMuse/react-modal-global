@@ -1,6 +1,6 @@
 {
   "name": "react-modal-global",
-  "version": "1.2.0-rc4a",
+  "version": "1.2.0-rc4b",
   "description": "Highly reusable React Modal that can be run from useEffect.",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
