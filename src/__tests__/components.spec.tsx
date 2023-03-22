@@ -32,7 +32,7 @@ describe("Components", () => {
   })
 
   test("ModalOpen", () => {
-    function Test(props: { a: 1 }) { return <div id="a">a{props.a}</div> }
+    function Test(props: { a: string }) { return <div id="a">a{props.a}</div> }
 
     const { container } = render(
       <>
@@ -40,7 +40,7 @@ describe("Components", () => {
 
         <ModalOpen
           component={Test}
-          componentProps={{ a: 1 }}
+          componentProps={{ a: "1" }}
 
           controller={Modal}
         />

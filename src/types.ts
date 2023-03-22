@@ -64,7 +64,7 @@ export interface ModalWindow<P = unknown> {
   close: () => void
   /**
    * Indicates that the `close` method has been called and the modal window is going to be removed.
-   * 
+   *
    * @default
    * false
    */
@@ -75,7 +75,7 @@ export interface ModalWindow<P = unknown> {
    * @note
    *
    * This is not the same as `!closed` because the modal may be not closed but still be in the queue.
-   * 
+   *
    * @default
    * true
    */

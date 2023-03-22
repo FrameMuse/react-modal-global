@@ -16,7 +16,8 @@ copies or substantial portions of the Software.
 
 */
 
-export { Modal, ModalController } from "./controller"
-export { ModalContainer } from "./container.new"
-export { useModalContext } from "./hooks"
-export { ModalView, ModalOpen, ModalGroup } from "./components"
+import { createContext } from "react"
+
+import { ModalWindow } from "./types"
+
+export const modalGroupContext = createContext<{ modals: Set<ModalWindow & PromiseLike<void>> }>({ modals: new Set })
