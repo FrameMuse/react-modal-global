@@ -17,8 +17,8 @@ copies or substantial portions of the Software.
 */
 
 import _ from "lodash"
-import { cloneElement, ReactElement, ReactNode, useEffect, useId } from "react"
-import { useCounter, useUnmount } from "react-use"
+import { cloneElement, ReactElement, ReactNode, useEffect, useId, useRef } from "react"
+import { useUnmount } from "react-use"
 import { SetOptional } from "type-fest"
 
 import { Modal, ModalController } from "./controller"
@@ -124,23 +124,25 @@ interface ModalGroupProps {
 }
 
 export function ModalGroup(props: ModalGroupProps) {
-  const [closedModals, { inc: increment, reset }] = useCounter(0)
+  const closedModalsRef = useRef(0)
 
   useEffect(() => {
-    return () => reset()
+    return () => {
+      closedModalsRef.current = 0
+    }
   }, [props.children])
 
   const children = props.children.map(child => {
     function onClosed() {
       // Count closed modals.
-      increment()
+      closedModalsRef.current += 1
 
       // Call onClosed from child.
       child.props.onClosed?.()
 
       // Handle onClosed and onAllClosed from ModalGroup.
       props.onClosed?.()
-      if (closedModals >= props.children.length - 1) {
+      if (closedModalsRef.current >= props.children.length - 1) {
         props.onAllClosed?.()
       }
     }
