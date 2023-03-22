@@ -140,7 +140,7 @@ export function ModalGroup(props: ModalGroupProps) {
 
       // Handle onClosed and onAllClosed from ModalGroup.
       props.onClosed?.()
-      if (closedModals === props.children.length - 1) {
+      if (closedModals === props.children.length) {
         props.onAllClosed?.()
       }
     }
