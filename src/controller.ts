@@ -191,12 +191,15 @@ export class ModalController {
     this.isOpen = false
     this.events.emit("update")
     // All windows are now treated as temporary and they will be removed on the next `add`.
+    // https://github.com/FrameMuse/react-modal-global/issues/41
   }
 
   /**
-   * Subscribes on event.
+   * Used for container component to get the current state.
    * 
-   * @returns `unsubscribe` method
+   * Observes the state and calls the callback on any changes.
+   * 
+   * @returns `unsubscribe` method to stop observing.
    */
   public observe(callback: (state: ModalState) => void) {
     const listener = () => {
@@ -206,6 +209,8 @@ export class ModalController {
       }
       callback(state)
     }
+    // Call listener to get initial state.
+    listener()
 
     this.events.on("add", listener)
     this.events.on("remove", listener)
