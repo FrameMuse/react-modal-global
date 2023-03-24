@@ -16,22 +16,37 @@ copies or substantial portions of the Software.
 
 */
 
-import { ReactElement } from "react"
+import { Component, ReactElement } from "react"
 import { HasRequiredKeys } from "type-fest"
+
+import { ModalWindow } from "./ModalWindow"
 
 /**
  * https://stackoverflow.com/questions/56687668/a-way-to-disable-type-argument-inference-in-generics
  */
 export type NoInfer<T> = [T][T extends unknown ? 0 : never]
 
+export interface ModalState {
+  isOpen: boolean
+  windows: ModalWindow[]
+}
 
-export type ModalComponent<P = unknown> = ((props: P) => ReactElement | null) | (() => ReactElement | null)
+/**
+ * A modal component can be either a function component or a class component.
+ */
+export type ModalComponent<P = unknown> =
+  // Function Component
+  | ((props: P) => ReactElement | null)
+  | (() => ReactElement | null)
+  // Class Component
+  | (new (props: P) => Component<P>)
+  | (new () => Component)
 
 export interface ModalParams {
   /**
    * _Notice:_ Modals with different ids are interpreted as different - no data preservation will not be provided.
    *
-   * @default 0
+   * @default nanoid()
    */
   id: string | number
   /**
@@ -54,33 +69,33 @@ export interface ModalParams {
   fork: boolean
 }
 
-export interface ModalWindow<P = unknown> {
-  component: ModalComponent<ModalParams & P>
-  params: ModalParams & P
+// export interface ModalWindow<P = unknown> {
+//   component: ModalComponent<ModalParams & P>
+//   params: ModalParams & P
 
-  /**
-   * Removes the modal from the queue. If
-   */
-  close: () => void
-  /**
-   * Indicates that the `close` method has been called and the modal window is going to be removed.
-   * 
-   * @default
-   * false
-   */
-  closed: boolean
-  /**
-   * Indicates that the modal is currently active.
-   *
-   * @note
-   *
-   * This is not the same as `!closed` because the modal may be not closed but still be in the queue.
-   * 
-   * @default
-   * true
-   */
-  focused: boolean
-}
+//   /**
+//    * Removes the modal from the queue. If
+//    */
+//   close: () => void
+//   /**
+//    * Indicates that the `close` method has been called and the modal window is going to be removed.
+//    * 
+//    * @default
+//    * false
+//    */
+//   closed: boolean
+//   /**
+//    * Indicates that the modal is currently active.
+//    *
+//    * @note
+//    *
+//    * This is not the same as `!closed` because the modal may be not closed but still be in the queue.
+//    * 
+//    * @default
+//    * true
+//    */
+//   focused: boolean
+// }
 
 /**
  * Gets either a tuple with required or optional parameters depending on whether `P` has any required keys.

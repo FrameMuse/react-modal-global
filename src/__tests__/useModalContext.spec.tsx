@@ -21,7 +21,7 @@ import { act } from "react-dom/test-utils"
 
 import { ModalContainer } from "../container.new"
 import { ModalController } from "../controller"
-import { useModalContext } from "../hooks"
+import { useModalWindow } from "../hooks"
 
 let Modal: ModalController = new ModalController()
 let container = render(<ModalContainer controller={Modal} />).container
@@ -34,7 +34,7 @@ beforeEach(() => {
 describe("useModalContext", () => {
   it("should throw error", () => {
     function ComponentWithoutModalContext() {
-      useModalContext()
+      useModalWindow()
       return null
     }
 
@@ -44,7 +44,7 @@ describe("useModalContext", () => {
 
   it("should return `closed`: false", () => {
     function ComponentWithModalContext() {
-      const { closed: closed } = useModalContext()
+      const { closed: closed } = useModalWindow()
 
       return <span>{String(closed)}</span>
     }
@@ -60,7 +60,7 @@ describe("useModalContext", () => {
 
   it("should return `closed`: true", () => {
     function ComponentWithModalContext() {
-      const { closed: closed } = useModalContext()
+      const { closed: closed } = useModalWindow()
 
       return <span>{String(closed)}</span>
     }

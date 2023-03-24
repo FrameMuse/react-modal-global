@@ -16,8 +16,20 @@ copies or substantial portions of the Software.
 
 */
 
-import { createContext } from "react"
+class Deffered<T> {
+  public promise: Promise<T>
+  public resolve: (value: T) => void
+  public reject: (reason: unknown) => void
 
-import { ModalWindow } from "./ModalWindow"
+  constructor() {
+    this.resolve = () => { throw new Error("Deffered.resolve is not defined") }
+    this.reject = () => { throw new Error("Deffered.reject is not defined") }
 
-export const modalContext = createContext<ModalWindow | null>(null)
+    this.promise = new Promise((resolve, reject) => {
+      this.resolve = resolve
+      this.reject = reject
+    })
+  }
+}
+
+export default Deffered

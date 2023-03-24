@@ -45,6 +45,11 @@ interface Events {
  * Can be used with `ModalContainer` or with custom implementation.
  */
 export class ModalController {
+  /**
+   * Singleton instance.
+   */
+  public static Instance = new ModalController
+
   #isOpen = false
   protected set isOpen(value: boolean) {
     this.#isOpen = value
@@ -58,7 +63,6 @@ export class ModalController {
 
   protected windows: Set<ModalWindow> = new Set
   protected events: EventEmitter<Events> = new EventEmitter
-
 
   /**
    * Opens a modal window. Infers props from the component.

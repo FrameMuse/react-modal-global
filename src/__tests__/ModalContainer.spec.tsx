@@ -24,7 +24,7 @@ import { act } from "react-dom/test-utils"
 
 import { ModalContainer } from "../container.new"
 import { ModalController } from "../controller"
-import { useModalContext } from "../hooks"
+import { useModalWindow } from "../hooks"
 import { classWithModifiers } from "../utils"
 
 let Modal: ModalController = new ModalController()
@@ -335,7 +335,7 @@ describe("ModalContainer", () => {
 
 
 function PopupExample(props: { random?: boolean, test?: string | boolean }) {
-  const modal = useModalContext()
+  const modal = useModalWindow()
   const [random, setRandom] = useState(0)
   useEffect(() => setRandom(Date.now()), [props.random])
 

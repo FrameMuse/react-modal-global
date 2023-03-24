@@ -16,23 +16,25 @@ copies or substantial portions of the Software.
 
 */
 
-import { ComponentLifecycle, ReactNode, useContext } from "react"
+import { useContext } from "react"
 
 import { modalContext } from "./context"
-import { ModalWindow } from "./types"
+import { ModalWindow } from "./ModalWindow"
+import { ModalComponent } from "./types"
 
 /**
  * Used inside a modal component to access the modal context (`ModalWindow`).
  *
  * Accepts a generic type that is used to infer the props of the modal component.
  * It has 3 overloads:
- * 1. `useModalContext<ModalComponent>()` - infers the props from the class component type.
- * 2. `useModalContext<typeof ModalComponent>()` - infers the props from the function component type.
- * 3. `useModalContext<unknown>()` - infers any type besides the above.
+ * 1. `useModalWindow<ModalComponent>()` - infers the props from the class component type.
+ * 2. `useModalWindow<typeof ModalComponent>()` - infers the props from the function component type.
+ * 3. `useModalWindow<unknown>()` - infers any type besides the above.
  */
-export function useModalContext<T>(): ModalWindow<T extends ComponentLifecycle<infer P, unknown> | ((props: infer P) => ReactNode) ? P : T> {
+export function useModalWindow<T>(): ModalWindow<T extends ModalComponent<infer Props> ? Props : T> {
   const context = useContext(modalContext)
-  if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
+  if (!context) throw new Error("ModalError: useModalWindow must be used within a modal context")
 
-  return context as never
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return context as ModalWindow<any>
 }
