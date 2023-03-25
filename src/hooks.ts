@@ -16,9 +16,10 @@ copies or substantial portions of the Software.
 
 */
 
-import { ComponentLifecycle, ReactNode, useContext } from "react"
+import { ComponentLifecycle, ReactNode, useContext, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
+import { Modal, ModalController, ModalState } from "./controller"
 import { ModalWindow } from "./types"
 
 /**
@@ -35,4 +36,21 @@ export function useModalContext<T>(): ModalWindow<T extends ComponentLifecycle<i
   if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
 
   return context as never
+}
+
+
+
+const DEFAULT_STATE: ModalState = {
+  isOpen: false,
+  windows: []
+}
+
+export function useModalState(controller: ModalController = Modal) {
+  const [modalState, setModalState] = useState(DEFAULT_STATE)
+
+  useEffect(() => {
+    return controller.observe(setModalState)
+  }, [controller])
+
+  return modalState
 }
