@@ -22,7 +22,7 @@ import { render } from "@testing-library/react"
 import { useEffect, useState } from "react"
 import { act } from "react-dom/test-utils"
 
-import { ModalContainer } from "../container.new"
+import { ModalContainer } from "../container"
 import { ModalController } from "../controller"
 import { useModalContext } from "../hooks"
 import { classWithModifiers } from "../utils"
