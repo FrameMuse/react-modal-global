@@ -19,12 +19,6 @@ copies or substantial portions of the Software.
 import { ReactElement } from "react"
 import { HasRequiredKeys } from "type-fest"
 
-/**
- * https://stackoverflow.com/questions/56687668/a-way-to-disable-type-argument-inference-in-generics
- */
-export type NoInfer<T> = [T][T extends unknown ? 0 : never]
-
-
 export type ModalComponent<P = unknown> = ((props: P) => ReactElement | null) | (() => ReactElement | null)
 
 export interface ModalParams {

@@ -16,12 +16,18 @@ copies or substantial portions of the Software.
 
 */
 
-import { Component, Fragment, ReactElement, ReactNode } from "react"
+import { Fragment, ReactElement, ReactNode, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
-import { ModalController } from "./controller"
+import { Modal, ModalController, ModalState } from "./controller"
 import { ModalWindow } from "./types"
 import { classWithModifiers, stopPropagation } from "./utils"
+
+
+const DEFAULT_STATE: ModalState = {
+  isOpen: false,
+  windows: []
+}
 
 export interface ModalContainerProps {
   /**
@@ -40,72 +46,51 @@ export interface ModalContainerProps {
   controller?: ModalController
 }
 
-export interface ModalContainerState<P = unknown> {
-  active: boolean
-  queue: ModalWindow<P>[]
-  forkedQueue: ModalWindow<P>[]
-}
-
 /**
  * Modal container component. Renders modal windows.
- *
- * Can be used multiple times to render modals in different places.
  */
-export class ModalContainer extends Component<ModalContainerProps, ModalContainerState> {
-  state: ModalContainerState = {
-    active: false,
-    queue: [],
-    forkedQueue: []
-  }
+export function ModalContainer(props: ModalContainerProps) {
+  const [modal, setModal] = useState(DEFAULT_STATE)
+  useEffect(() => {
+    const controller = props.controller || Modal
+    return controller.observe(setModal)
+  }, [props.controller])
 
-  get className(): string {
-    return this.props.className || "modal"
-  }
+  const className = props.className || "modal"
+  const Template = props.template || Fragment
 
-  // componentDidMount(): void {
-  //   containers.add(this)
-  // }
+  const focusedModal = modal.windows.at(-1)
+  const onClose = focusedModal?.params?.closable ? stopPropagation(focusedModal.close) : undefined
 
-  // componentWillUnmount(): void {
-  //   containers.delete(this)
-  // }
+  // !!! HARD CODED !!!
+  // This is the only way to make the modal work with the current implementation
+  const contextValue: ModalWindow | null = focusedModal ? {
+    ...focusedModal,
+    closed: !modal.isOpen,
+    focused: true
+  } : null
 
-  render() {
-    const { active, queue } = this.state
-    const currentModal = queue.at(-1)
-    const onClose = currentModal?.params?.closable ? stopPropagation(currentModal.close) : undefined
-    const Template = this.props.template || Fragment
+  return (
+    <>
+      <div className={classWithModifiers(className, modal.isOpen && "active")} aria-modal aria-hidden={!modal.isOpen}>
+        <div className={className + "__container"} onClick={onClose}>
+          <modalContext.Provider value={contextValue}>
+            <Template>
+              {focusedModal?.component && <focusedModal.component {...focusedModal.params} key={focusedModal?.params?.id} />}
+            </Template>
+          </modalContext.Provider>
+        </div>
+      </div>
 
-    const providerValue = currentModal ? {
-      ...currentModal,
-      isClosed: !active
-    } : null
-    return (
-      <>
-        <div className={classWithModifiers(this.className, active && "active")} aria-modal aria-hidden={!active}>
-          <div className={this.className + "__container"} onClick={onClose}>
-            <modalContext.Provider value={providerValue}>
-              <Template>
-                {currentModal?.component && <currentModal.component {...currentModal.params} key={currentModal?.params?.id} />}
-              </Template>
+      {[...modal.windows].reverse().filter(window => window.params.fork).map(modalWindow => (
+        <div className={classWithModifiers(className, "active")} aria-modal key={modalWindow.params.id}>
+          <div className={className + "__container"} onClick={modalWindow.params.closable ? stopPropagation(modalWindow.close) : undefined}>
+            <modalContext.Provider value={modalWindow}>
+              {<modalWindow.component {...modalWindow.params} />}
             </modalContext.Provider>
           </div>
         </div>
-
-        {this.renderForks()}
-      </>
-    )
-  }
-
-  renderForks() {
-    return this.state.forkedQueue.map(modal => (
-      <div className={classWithModifiers(this.className, "active")} aria-modal key={modal.params.id}>
-        <div className={this.className + "__container"} onClick={modal.params?.closable ? stopPropagation(modal.close) : undefined}>
-          <modalContext.Provider value={modal}>
-            {<modal.component {...modal.params} />}
-          </modalContext.Provider>
-        </div>
-      </div >
-    ))
-  }
+      ))}
+    </>
+  )
 }
