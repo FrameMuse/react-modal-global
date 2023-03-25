@@ -16,27 +16,39 @@ copies or substantial portions of the Software.
 
 */
 
-import { ComponentLifecycle, ReactNode, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
 import { Modal, ModalController, ModalState } from "./controller"
 import { ModalWindow } from "./types"
+
 
 /**
  * Used inside a modal component to access the modal context (`ModalWindow`).
  *
  * Accepts a generic type that is used to infer the props of the modal component.
  * It has 3 overloads:
- * 1. `useModalContext<ModalComponent>()` - infers the props from the class component type.
- * 2. `useModalContext<typeof ModalComponent>()` - infers the props from the function component type.
- * 3. `useModalContext<unknown>()` - infers any type besides the above.
+ * 1. `useModalContext<typeof ModalClassComponent>()` - infers the props from the class component type.
+ * 2. `useModalContext<typeof ModalFunctionComponent>()` - infers the props from the function component type.
+ * 3. `useModalContext<{ c: 3 }>()` - you can enter props by yourself too.
  */
-export function useModalContext<T>(): ModalWindow<T extends ComponentLifecycle<infer P, unknown> | ((props: infer P) => ReactNode) ? P : T> {
+export function useModalContext<T>(): any {
   const context = useContext(modalContext)
   if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
 
-  return context as never
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return context as ModalWindow<any>
 }
+
+// /* Type Testing */
+// class ModalClassComponent extends Component<{ a: 1 }> { }
+// // eslint-disable-next-line @typescript-eslint/no-unused-vars
+// function ModalFunctionComponent(props: { b: 2 }) { return null }
+
+// useModalContext<typeof ModalClassComponent>() // => ModalWindow<{ a: 1 }>
+// useModalContext<typeof ModalFunctionComponent>() // => ModalWindow<{ b: 2 }>
+// useModalContext<{ c: 3 }>() // => ModalWindow<{ c: 3 }>
+// useModalContext() // => ModalWindow<unknown>
 
 
 
