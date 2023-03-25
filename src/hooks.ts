@@ -16,11 +16,12 @@ copies or substantial portions of the Software.
 
 */
 
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
+import { ModalController } from "./ModalController"
 import { ModalWindow } from "./ModalWindow"
-import { ModalComponent } from "./types"
+import { ModalComponent, ModalState } from "./types"
 
 /**
  * Used inside a modal component to access the modal context (`ModalWindow`).
@@ -37,4 +38,21 @@ export function useModalWindow<T>(): ModalWindow<T extends ModalComponent<infer 
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return context as ModalWindow<any>
+}
+
+
+
+const DEFAULT_STATE: ModalState = {
+  active: false,
+  windows: []
+}
+
+export function useModalState(controller: ModalController = ModalController.Instance) {
+  const [modalState, setModalState] = useState(DEFAULT_STATE)
+
+  useEffect(() => {
+    return controller.observe(setModalState)
+  }, [controller])
+
+  return modalState
 }

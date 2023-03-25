@@ -19,7 +19,7 @@ copies or substantial portions of the Software.
 import { render } from "@testing-library/react"
 import { act } from "react-dom/test-utils"
 
-import { ModalContainer } from "../container.new"
+import { ModalContainer } from "../ModalContainer"
 import { ModalController } from "../controller"
 import { useModalWindow } from "../hooks"
 

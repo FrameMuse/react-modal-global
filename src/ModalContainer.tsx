@@ -16,24 +16,13 @@ copies or substantial portions of the Software.
 
 */
 
-import { Fragment, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
+import { useModalState } from "./hooks"
 import { ModalController } from "./ModalController"
-import { ModalComponent, ModalState } from "./types"
 import { classWithModifiers, stopPropagation } from "./utils"
 
-
-const DEFAULT_STATE: ModalState = {
-  isOpen: false,
-  windows: []
-}
-
 export interface ModalContainerProps {
-  /**
-   * Template for modal window.
-   */
-  template?: ModalComponent
   /**
    * Modal container class name. It will be used as a base for modifiers (will replace defaulted `"modal"`).
    *
@@ -47,27 +36,22 @@ export interface ModalContainerProps {
 }
 
 export function ModalContainer(props: ModalContainerProps) {
-  const [modal, setModal] = useState(DEFAULT_STATE)
-  useEffect(() => {
-    const controller = props.controller || ModalController.Instance
-    return controller.observe(setModal)
-  }, [props.controller])
+  const { active, windows } = useModalState(props.controller)
 
   const className = props.className || "modal"
-  const Template = props.template || Fragment
+
+  const modalWindow = windows.at(-1)
+  const onClose = modalWindow?.params.closable ? stopPropagation(() => modalWindow.close()) : undefined
 
   return (
-    <div className={classWithModifiers(className, modal.isOpen && "active")} aria-modal aria-hidden={!modal.isOpen}>
-      {modal.windows.map(modalWindow => (
-        <div className={className + "__container"} onClick={modalWindow.params.closable ? stopPropagation(modalWindow.close) : undefined} key={modalWindow.params.id}>
-          <Template>
-            <modalContext.Provider value={modalWindow}>
-              {/* eslint-disable-next-line @typescript-eslint/ban-types */}
-              <modalWindow.component {...modalWindow.params as {}} />
-            </modalContext.Provider>
-          </Template>
+    <div className={classWithModifiers(className, active && "active")} aria-modal aria-hidden={!active}>
+      {modalWindow && (
+        <div className={className + "__container"} onClick={onClose}>
+          <modalContext.Provider value={modalWindow || null}>
+            <modalWindow.component {...modalWindow.params} key={modalWindow.params.id} />
+          </modalContext.Provider>
         </div>
-      ))}
+      )}
     </div>
   )
 }

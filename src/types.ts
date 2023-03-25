@@ -21,13 +21,8 @@ import { HasRequiredKeys } from "type-fest"
 
 import { ModalWindow } from "./ModalWindow"
 
-/**
- * https://stackoverflow.com/questions/56687668/a-way-to-disable-type-argument-inference-in-generics
- */
-export type NoInfer<T> = [T][T extends unknown ? 0 : never]
-
 export interface ModalState {
-  isOpen: boolean
+  active: boolean
   windows: ModalWindow[]
 }
 

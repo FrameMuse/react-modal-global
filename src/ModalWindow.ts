@@ -31,6 +31,14 @@ const DEFAULT_PARAMS: ModalParams = {
 }
 
 class ModalWindow<CustomParams = unknown> {
+  /**
+   * Always uniue value. 
+   * It is different from `params.id`, `params.id` can be the same for different windows.
+   * 
+   * Usually needs for `key` prop in React Component.
+   */
+  public readonly id: string
+
   public component: ModalComponent<CustomParams>
   public params: ModalParams & CustomParams
   public closed: boolean
@@ -39,8 +47,10 @@ class ModalWindow<CustomParams = unknown> {
   private deffered: Deffered<void>
 
   constructor(component: ModalComponent<CustomParams>, ...[params]: ModalWindowParams<CustomParams>) {
+    this.id = nanoid()
+
     this.component = component
-    this.params = { ...DEFAULT_PARAMS, id: nanoid(), ...params as Partial<ModalParams> & CustomParams }
+    this.params = { ...DEFAULT_PARAMS, ...params as Partial<ModalParams> & CustomParams }
     this.closed = false
 
     this.deffered = new Deffered
@@ -64,16 +74,26 @@ class ModalWindow<CustomParams = unknown> {
   }
 
 
-  serialize(): string {
-    return serialize([this.component, this.params, this.closed])
+  compare<T>(other: ModalWindow<T>): this is ModalWindow<T> {
+    if (other.component === this.component) {
+      return serialize(other.params) === serialize(this.params)
+    }
+
+    return false
   }
 
-  static deserialize(serialized: string): ModalWindow {
-    const [component, params, closed] = JSON.parse(serialized)
+  serialize(): string {
+    return serialize([this.component, this.params])
+  }
+
+  static deserialize(serialized: string, components: ModalComponent[]): ModalWindow {
+    const [componentName, params] = JSON.parse(serialized)
+    const component = components.find(component => component.name === componentName)
+    if (component == null) {
+      throw new Error(`Component "${componentName}" not found.`)
+    }
 
     const modalWindow = new ModalWindow(component, params)
-    modalWindow.closed = closed
-
     return modalWindow
   }
 }

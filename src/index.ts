@@ -18,5 +18,5 @@ copies or substantial portions of the Software.
 
 export { ModalController } from "./ModalController"
 export { ModalWindow } from "./ModalWindow"
-export { ModalContainer } from "./container.new"
-export { useModalWindow } from "./hooks"
+export { ModalContainer } from "./ModalContainer"
+export { useModalWindow, useModalState } from "./hooks"

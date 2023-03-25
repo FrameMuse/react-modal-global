@@ -30,47 +30,61 @@ interface Events {
 class ModalController {
   public static Instance: ModalController = new ModalController
 
-  protected windows: Set<ModalWindow> = new Set
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected windows: Set<ModalWindow<any>> = new Set
   protected events: EventEmitter<Events> = new EventEmitter
 
 
-  #isOpen = false
-  protected set isOpen(value: boolean) {
-    this.#isOpen = value
+  #active = false
+  protected set active(value: boolean) {
+    this.#active = value
   }
-  public get isOpen(): boolean {
-    return this.#isOpen
+  public get active(): boolean {
+    return this.#active
   }
 
   public hide() {
-    this.isOpen = false
+    this.active = false
     this.events.emit("update")
   }
   public show() {
-    this.isOpen = true
+    this.active = true
     this.events.emit("update")
   }
 
 
   public open<P>(component: ModalComponent<P>, ...modalParams: ModalWindowParams<P>): ModalWindow<P> {
+    if (this.active === false && this.windows.size > 0) {
+      this.windows.clear()
+    }
+
+    this.active = true
+
+
     const modalWindow = new ModalWindow(component, ...modalParams)
     modalWindow.controller = this
+    modalWindow.then(() => this.close(modalWindow as ModalWindow))
 
-    this.windows.add(modalWindow as ModalWindow)
+    this.windows.add(modalWindow)
     this.events.emit("add", modalWindow as ModalWindow)
 
     return modalWindow
   }
 
   public close(modalWindow: ModalWindow) {
-    this.windows.delete(modalWindow)
+    if (this.windows.size <= 1) {
+      this.active = false
+    }
+    if (this.windows.size > 1) {
+      this.windows.delete(modalWindow)
+    }
+
     this.events.emit("remove", modalWindow)
   }
 
   public closeAll() {
     this.windows.forEach(modalWindow => this.close(modalWindow))
   }
-
 
   public on<T extends keyof Events>(event: T, listener: (...args: Events[T]) => void) {
     this.events.on(event, listener)
@@ -82,7 +96,7 @@ class ModalController {
   public observe(callback: (state: ModalState) => void) {
     const listener = () => {
       const state: ModalState = {
-        isOpen: this.isOpen,
+        active: this.active,
         windows: [...this.windows]
       }
       callback(state)
