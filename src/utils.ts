@@ -83,7 +83,7 @@ export function serialize<T = unknown>(value?: T | null) {
  * @param callback any function
  * @returns mouse event handler
  */
-export function stopPropagation(callback?: Function | null) {
+export function stopPropagation(callback?: (() => void) | null) {
   return ({ target, currentTarget }: Event | SyntheticEvent) => {
     if (target instanceof Element && currentTarget instanceof Element) {
       if (target !== currentTarget) return
