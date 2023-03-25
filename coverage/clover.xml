@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1679783448411" clover="3.2.0">
-  <project timestamp="1679783448411" name="All files">
-    <metrics statements="105" coveredstatements="84" conditionals="54" coveredconditionals="36" methods="36" coveredmethods="30" elements="195" coveredelements="150" complexity="0" loc="105" ncloc="105" packages="1" files="7" classes="7"/>
+<coverage generated="1679786905577" clover="3.2.0">
+  <project timestamp="1679786905577" name="All files">
+    <metrics statements="106" coveredstatements="85" conditionals="53" coveredconditionals="35" methods="37" coveredmethods="31" elements="196" coveredelements="151" complexity="0" loc="106" ncloc="106" packages="1" files="7" classes="7"/>
     <file name="container.tsx" path="/home/kotto/github/react-modal-global/src/container.tsx">
-      <metrics statements="13" coveredstatements="13" conditionals="16" coveredconditionals="15" methods="4" coveredmethods="4"/>
-      <line num="27" count="2" type="stmt"/>
-      <line num="53" count="90" type="stmt"/>
+      <metrics statements="9" coveredstatements="9" conditionals="14" coveredconditionals="14" methods="3" coveredmethods="3"/>
+      <line num="49" count="90" type="stmt"/>
+      <line num="51" count="90" type="cond" truecount="2" falsecount="0"/>
+      <line num="52" count="90" type="cond" truecount="2" falsecount="0"/>
       <line num="54" count="90" type="stmt"/>
-      <line num="55" count="28" type="cond" truecount="1" falsecount="1"/>
-      <line num="56" count="28" type="stmt"/>
+      <line num="55" count="90" type="cond" truecount="2" falsecount="0"/>
       <line num="59" count="90" type="cond" truecount="2" falsecount="0"/>
-      <line num="60" count="90" type="cond" truecount="2" falsecount="0"/>
-      <line num="62" count="90" type="stmt"/>
-      <line num="63" count="90" type="cond" truecount="2" falsecount="0"/>
-      <line num="67" count="90" type="cond" truecount="2" falsecount="0"/>
-      <line num="73" count="90" type="stmt"/>
-      <line num="85" count="47" type="stmt"/>
-      <line num="86" count="2" type="stmt"/>
+      <line num="65" count="90" type="stmt"/>
+      <line num="77" count="47" type="stmt"/>
+      <line num="78" count="2" type="stmt"/>
     </file>
     <file name="context.ts" path="/home/kotto/github/react-modal-global/src/context.ts">
       <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -85,10 +81,15 @@
       <line num="228" count="3" type="stmt"/>
     </file>
     <file name="hooks.ts" path="/home/kotto/github/react-modal-global/src/hooks.ts">
-      <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-      <line num="34" count="59" type="stmt"/>
-      <line num="35" count="58" type="cond" truecount="2" falsecount="0"/>
-      <line num="37" count="54" type="stmt"/>
+      <metrics statements="8" coveredstatements="8" conditionals="3" coveredconditionals="2" methods="3" coveredmethods="3"/>
+      <line num="35" count="59" type="stmt"/>
+      <line num="36" count="58" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="54" type="stmt"/>
+      <line num="43" count="2" type="stmt"/>
+      <line num="49" count="90" type="stmt"/>
+      <line num="51" count="90" type="stmt"/>
+      <line num="52" count="28" type="stmt"/>
+      <line num="55" count="90" type="stmt"/>
     </file>
     <file name="index.ts" path="/home/kotto/github/react-modal-global/src/index.ts">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
