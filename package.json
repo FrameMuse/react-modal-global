@@ -35,12 +35,10 @@
   },
   "scripts": {
     "build": "rollup --config",
-    "watch": "ncc build src/index.ts -w",
-    "compile": "npm run build && npm run start && npm run post-fix",
-    "help": "ncc",
+    "reinstall": "rimraf node_moduless && npm ci --silent",
     "test": "react-scripts test",
-    "test:coverage": "react-scripts test --coverage *",
-    "post-fix": "eslint out --fix"
+    "test:coverage": "npm test -- --coverage *",
+    "prepublish": "rimraf build && npm run build"
   },
   "repository": {
     "type": "git",
