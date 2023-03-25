@@ -54,11 +54,11 @@ export function ModalContainer(props: ModalContainerProps) {
     <>
       <div className={classWithModifiers(className, modal.isOpen && "active")} aria-modal aria-hidden={!modal.isOpen}>
         <div className={className + "__container"} onClick={onClose}>
-          <Template>
-            <modalContext.Provider value={contextValue}>
+          <modalContext.Provider value={contextValue}>
+            <Template>
               {focusedModal?.component && <focusedModal.component {...focusedModal.params} key={focusedModal?.params?.id} />}
-            </modalContext.Provider>
-          </Template>
+            </Template>
+          </modalContext.Provider>
         </div>
       </div>
 
