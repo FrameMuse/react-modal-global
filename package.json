@@ -1,6 +1,6 @@
 {
   "name": "react-modal-global",
-  "version": "2023.3.25-experimental-1",
+  "version": "2023.3.25-experimental-31",
   "description": "Highly reusable React Modal that can be run from useEffect.",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
@@ -36,12 +36,8 @@
   },
   "scripts": {
     "build": "rollup --config",
-    "watch": "ncc build src/index.ts -w",
-    "compile": "npm run build && npm run start && npm run post-fix",
-    "help": "ncc",
     "test": "react-scripts test",
-    "test:coverage": "react-scripts test --coverage *",
-    "post-fix": "eslint out --fix"
+    "test:coverage": "react-scripts test --coverage *"
   },
   "repository": {
     "type": "git",
