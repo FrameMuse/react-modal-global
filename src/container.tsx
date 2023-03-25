@@ -16,18 +16,14 @@ copies or substantial portions of the Software.
 
 */
 
-import { Fragment, ReactElement, ReactNode, useEffect, useState } from "react"
+import { Fragment, ReactElement, ReactNode } from "react"
 
 import { modalContext } from "./context"
-import { Modal, ModalController, ModalState } from "./controller"
+import { ModalController } from "./controller"
+import { useModalState } from "./hooks"
 import { ModalWindow } from "./types"
 import { classWithModifiers, stopPropagation } from "./utils"
 
-
-const DEFAULT_STATE: ModalState = {
-  isOpen: false,
-  windows: []
-}
 
 export interface ModalContainerProps {
   /**
@@ -50,11 +46,7 @@ export interface ModalContainerProps {
  * Modal container component. Renders modal windows.
  */
 export function ModalContainer(props: ModalContainerProps) {
-  const [modal, setModal] = useState(DEFAULT_STATE)
-  useEffect(() => {
-    const controller = props.controller || Modal
-    return controller.observe(setModal)
-  }, [props.controller])
+  const modal = useModalState(props.controller)
 
   const className = props.className || "modal"
   const Template = props.template || Fragment
