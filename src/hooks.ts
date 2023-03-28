@@ -20,7 +20,7 @@ import { useContext, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
 import { Modal, ModalController, ModalState } from "./controller"
-import { ModalWindow } from "./types"
+import { ModalComponent, ModalWindow } from "./types"
 
 
 /**
@@ -32,10 +32,12 @@ import { ModalWindow } from "./types"
  * 2. `useModalContext<typeof ModalFunctionComponent>()` - infers the props from the function component type.
  * 3. `useModalContext<{ c: 3 }>()` - you can enter props by yourself too.
  */
-export function useModalContext<T>(): any {
+export function useModalContext<T>(): ModalWindow<T extends ModalComponent<infer Props> ? Props : T> {
   const context = useContext(modalContext)
   if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
 
+  // It's safe to case to `any` here because the context is always set to a `ModalWindow`
+  // and the arbitrary type `T` is difened by the user.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return context as ModalWindow<any>
 }
