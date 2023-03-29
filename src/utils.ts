@@ -55,13 +55,11 @@ export function serialize<T = unknown>(value?: T | null) {
 
   function transform(key: string, value: unknown) {
     if (value instanceof Function) {
-      // If the value is a function, but not an arrow function,
-      // return the function as a string.
-      if (value.name === key) {
+      // If function is anonymous, return its string representation.
+      if (value.name === key || value.name.length === 0) {
         return value.toString()
       }
 
-      // Otherwise, return the name of the function.
       return value.name
     }
 
@@ -81,7 +79,7 @@ export function serialize<T = unknown>(value?: T | null) {
 }
 
 export function serializeWindow(component: ModalComponent<never>, params: ModalParams): string {
-  return serialize([component, params])
+  return serialize({ component, params })
 }
 
 /**
