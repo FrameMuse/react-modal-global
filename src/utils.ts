@@ -18,6 +18,8 @@ copies or substantial portions of the Software.
 
 import { SyntheticEvent } from "react"
 
+import { ModalComponent, ModalParams } from "./types"
+
 /**
  * Join modifiers with origin class
  * @returns `"origin-class origin-class--modifier"`
@@ -76,6 +78,10 @@ export function serialize<T = unknown>(value?: T | null) {
 
   const serializedValue = JSON.stringify(value, replacer)
   return serializedValue
+}
+
+export function serializeWindow(component: ModalComponent<never>, params: ModalParams): string {
+  return serialize([component, params])
 }
 
 /**
