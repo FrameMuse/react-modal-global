@@ -84,4 +84,41 @@ describe("ModalController (with container)", () => {
     expect(onfulfilled).toHaveBeenCalled()
     expect(onrejected).not.toHaveBeenCalled()
   })
+
+  describe("ModalWindow id", () => {
+    it("should have `id`", () => {
+      const controller = new ModalController()
+      const modal = controller.open(() => createElement(Fragment))
+
+      expect(modal.id).toBeDefined()
+      expect(modal.id).toHaveLength(36)
+    })
+
+    it("should be unique", () => {
+      const controller = new ModalController()
+
+      const modal1 = controller.open(() => null)
+      const modal2 = controller.open(() => createElement(Fragment))
+      expect(modal1.id).not.toBe(modal2.id)
+
+
+      function Test() { return null }
+      const modal3 = controller.open(Test, { id: "test1" })
+      const modal4 = controller.open(Test, { id: "test2" })
+      expect(modal3.id).not.toBe(modal4.id)
+    })
+
+    it("should be consistent", () => {
+      const controller = new ModalController()
+
+      const modal1 = controller.open(() => null)
+      const modal2 = controller.open(() => null)
+      expect(modal1.id).toBe(modal2.id)
+
+      function Test() { return null }
+      const modal3 = controller.open(Test, { id: "test" })
+      const modal4 = controller.open(Test, { id: "test" })
+      expect(modal3.id).toBe(modal4.id)
+    })
+  })
 })

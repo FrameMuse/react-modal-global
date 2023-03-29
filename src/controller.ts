@@ -17,9 +17,12 @@ copies or substantial portions of the Software.
 */
 
 import EventEmitter from "eventemitter3"
+import { v5 as uuidv5 } from "uuid"
 
 import { ModalComponent, ModalParams, ModalWindow, ModalWindowParams } from "./types"
-import { serialize } from "./utils"
+import { serialize, serializeWindow } from "./utils"
+
+const MODAL_UUID_NAMESPACE = "48c89dcc-92d8-5d98-9842-81954e142ee2"
 
 const DEFAULT_PARAMS: ModalParams = {
   id: 0,
@@ -89,7 +92,8 @@ export class ModalController {
     }
 
     const params: ModalParams & P = { ...DEFAULT_PARAMS, ...modalParams as P }
-    const modal: ModalWindow<P> = { component, params, close, closed: false, focused: true }
+    const id = uuidv5(serializeWindow(component, params), MODAL_UUID_NAMESPACE)
+    const modal: ModalWindow<P> = { id, component, params, close, closed: false, focused: true }
 
     this.add(modal as ModalWindow<unknown>)
 

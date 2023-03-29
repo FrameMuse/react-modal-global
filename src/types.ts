@@ -56,6 +56,17 @@ export interface ModalParams {
 }
 
 export interface ModalWindow<P = unknown> {
+  /**
+   * Unique id of the modal window.
+   * If two modals have the same id, they will be treated as the same modal.
+   * 
+   * This is usually used in `key` prop for React components.
+   * 
+   * @note
+   * This is not the same as `params.id` because `id` is unique for each modal window.
+   */
+  readonly id: string
+
   component: ModalComponent<ModalParams & P>
   params: ModalParams & P
 
