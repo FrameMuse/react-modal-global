@@ -53,7 +53,7 @@ class ModalController {
   }
 
 
-  public open<P>(component: ModalComponent<P>, ...modalParams: ModalWindowParams<P>): ModalWindow<P> {
+  public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     if (this.active === false && this.windows.size > 0) {
       this.windows.clear()
     }
@@ -61,7 +61,8 @@ class ModalController {
     this.active = true
 
 
-    const modalWindow = new ModalWindow(component, ...modalParams)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const modalWindow = new ModalWindow(component, modalParams!, this)
     modalWindow.controller = this
     modalWindow.then(() => this.close(modalWindow as ModalWindow))
 

@@ -20,7 +20,7 @@ import { nanoid } from "nanoid"
 
 import Deffered from "./Deffered"
 import { ModalController } from "./ModalController"
-import { ModalComponent, ModalParams, ModalWindowParams } from "./types"
+import { ModalComponent, ModalParams } from "./types"
 import { serialize } from "./utils"
 
 const DEFAULT_PARAMS: ModalParams = {
@@ -43,16 +43,17 @@ class ModalWindow<CustomParams = unknown> {
   public params: ModalParams & CustomParams
   public closed: boolean
 
-  public controller?: ModalController
+  public controller: ModalController
   private deffered: Deffered<void>
 
-  constructor(component: ModalComponent<CustomParams>, ...[params]: ModalWindowParams<CustomParams>) {
+  constructor(component: ModalComponent<CustomParams>, params: Partial<ModalParams> & CustomParams, controller: ModalController) {
     this.id = nanoid()
 
     this.component = component
-    this.params = { ...DEFAULT_PARAMS, ...params as Partial<ModalParams> & CustomParams }
+    this.params = { ...DEFAULT_PARAMS, ...params }
     this.closed = false
 
+    this.controller = controller
     this.deffered = new Deffered
   }
 
@@ -66,7 +67,7 @@ class ModalWindow<CustomParams = unknown> {
    * Can be used to wait for the modal to be closed before performing some action.
    * 
    * @example
-   * const modal = await modalController.open(PopupHello, { title: "Hello" })
+   * await Modal.open(PopupHello, { title: "Hello" })
    * doAnyAction()
    */
   then(onfulfilled?: ((value: void) => void | PromiseLike<void>) | undefined | null, onrejected?: ((reason: unknown) => void | PromiseLike<void>) | undefined | null): PromiseLike<void> {
@@ -74,27 +75,16 @@ class ModalWindow<CustomParams = unknown> {
   }
 
 
-  compare<T>(other: ModalWindow<T>): this is ModalWindow<T> {
-    if (other.component === this.component) {
-      return serialize(other.params) === serialize(this.params)
+  compare<T>(other: ModalWindow<T>): this is typeof other {
+    if (other.component !== this.component) {
+      return false
     }
 
-    return false
-  }
-
-  serialize(): string {
-    return serialize([this.component, this.params])
-  }
-
-  static deserialize(serialized: string, components: ModalComponent[]): ModalWindow {
-    const [componentName, params] = JSON.parse(serialized)
-    const component = components.find(component => component.name === componentName)
-    if (component == null) {
-      throw new Error(`Component "${componentName}" not found.`)
+    if (serialize(other.params) !== serialize(this.params)) {
+      return false
     }
 
-    const modalWindow = new ModalWindow(component, params)
-    return modalWindow
+    return true
   }
 }
 
