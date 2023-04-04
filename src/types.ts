@@ -39,29 +39,40 @@ export type ModalComponent<P = unknown> =
 
 export interface ModalParams {
   /**
-   * _Notice:_ Modals with different ids are interpreted as different - no data preservation will not be provided.
-   *
-   * @default nanoid()
+   * Usually used to close the modal by `closeById` method.
+   * @default -1
    */
   id: string | number
   /**
    * Whether to enable built-in closing mechanisms.
+   * 
+   * - `ESC` key
+   * - `click` on the overlay
    *
    * @default true
    */
   closable: boolean
-  /**
-   * Whether to keep mounted modal until a new one is oped.
-   *
-   * @default false
-   */
+  /** @deprecated */
   weak: boolean
   /**
-   * Whether to open a new modal as a standalone. Each fork will be one layer above previous.
-   *
-   * @default false
-   */
+   * Use `layer` instead.
+   * @deprecated
+  */
   fork: boolean
+  /**
+   * Forks the modal window to a new layer.
+   * 
+   * @default 0
+   */
+  layer: number | ("lowest" | "highest")
+  /**
+   * Keep all open modals mounted until the last one is closed.
+   */
+  keepMounted: boolean
+  /**
+   * *Usually* used to set the `aria-label` attribute.
+   */
+  label: string
 }
 
 // export interface ModalWindow<P = unknown> {

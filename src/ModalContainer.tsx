@@ -20,6 +20,7 @@ copies or substantial portions of the Software.
 import { modalContext } from "./context"
 import { useModalState } from "./hooks"
 import { ModalController } from "./ModalController"
+import { ModalWindow } from "./ModalWindow"
 import { classWithModifiers, stopPropagation } from "./utils"
 
 export interface ModalContainerProps {
@@ -40,18 +41,54 @@ export function ModalContainer(props: ModalContainerProps) {
 
   const className = props.className || "modal"
 
-  const modalWindow = windows.at(-1)
-  const onClose = modalWindow?.params.closable ? stopPropagation(() => modalWindow.close()) : undefined
+  // Group windows into its layers. 
+  const layers = windows.reduce((layers, window) => {
+    if (window.params.layer === "highest") {
+      // It's not `layers.length - 1` because we need to push it AFTER the last item.
+      window.params.layer = layers.length
+    }
+
+    if (window.params.layer === "lowest") {
+      window.params.layer = 0
+    }
+
+    const layer = layers[window.params.layer] || []
+    layer.push(window)
+
+    layers[window.params.layer] = layer
+
+    return layers
+  }, [] as ModalWindow[][])
 
   return (
     <div className={classWithModifiers(className, active && "active")} aria-modal aria-hidden={!active}>
-      {modalWindow && (
-        <div className={className + "__container"} onClick={onClose}>
-          <modalContext.Provider value={modalWindow || null}>
-            <modalWindow.component {...modalWindow.params} key={modalWindow.params.id} />
-          </modalContext.Provider>
-        </div>
-      )}
+      {layers.map(windows => (
+        <>
+          {windows.map(modalWindow => {
+            if (modalWindow == null) {
+              return null
+            }
+
+            function ASD() {
+              function onClose() {
+                if (!modalWindow.params.closable) return
+                stopPropagation(modalWindow.close)
+              }
+
+
+              return (
+                <div className={classWithModifiers(className + "__container",)} onClick={onClose}>
+                  <modalContext.Provider value={modalWindow}>
+                    <modalWindow.component {...modalWindow.params} key={modalWindow.id} />
+                  </modalContext.Provider>
+                </div>
+              )
+            }
+
+            return <ASD key={modalWindow.id} />
+          })}
+        </>
+      ))}
     </div>
   )
 }

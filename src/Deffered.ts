@@ -18,13 +18,10 @@ copies or substantial portions of the Software.
 
 class Deffered<T> {
   public promise: Promise<T>
-  public resolve: (value: T) => void
-  public reject: (reason: unknown) => void
+  public resolve!: (value: T) => void
+  public reject!: (reason: unknown) => void
 
   constructor() {
-    this.resolve = () => { throw new Error("Deffered.resolve is not defined") }
-    this.reject = () => { throw new Error("Deffered.reject is not defined") }
-
     this.promise = new Promise((resolve, reject) => {
       this.resolve = resolve
       this.reject = reject

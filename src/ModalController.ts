@@ -18,21 +18,20 @@ copies or substantial portions of the Software.
 
 import EventEmitter from "eventemitter3"
 
-import { ModalWindow } from "./ModalWindow"
-import { ModalComponent, ModalState, ModalWindowParams } from "./types"
+import { ModalWindow, ModalWindowAny } from "./ModalWindow"
+import { ModalComponent, ModalParams, ModalState, ModalWindowParams } from "./types"
 
-interface Events {
-  add: [ModalWindow]
-  remove: [ModalWindow]
+interface ModalControllerEvents {
+  add: [ModalWindowAny]
+  remove: [ModalWindowAny]
   update: []
 }
 
 class ModalController {
   public static Instance: ModalController = new ModalController
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  protected windows: Set<ModalWindow<any>> = new Set
-  protected events: EventEmitter<Events> = new EventEmitter
+  protected windows: Set<ModalWindowAny> = new Set
+  protected events: EventEmitter<ModalControllerEvents> = new EventEmitter
 
 
   #active = false
@@ -42,6 +41,7 @@ class ModalController {
   public get active(): boolean {
     return this.#active
   }
+
 
   public hide() {
     this.active = false
@@ -54,25 +54,48 @@ class ModalController {
 
 
   public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
+    // `modalParams` still can be undefined, but we can't check it here.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const modalWindow = new ModalWindow(component, modalParams!)
+    modalWindow.on("close", () => {
+      this.close(modalWindow)
+    })
+
+
+    // Skip adding to queue if the window is already in the beginning of the queue.
+    const lastWindow = [...this.windows].at(-1)
+    if (lastWindow?.id === modalWindow.id) {
+      this.active = true
+      this.events.emit("update")
+
+      return lastWindow
+    }
+    // If there are temporary modal windows, clear.
     if (this.active === false && this.windows.size > 0) {
       this.windows.clear()
     }
 
+
     this.active = true
 
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const modalWindow = new ModalWindow(component, modalParams!, this)
-    modalWindow.controller = this
-    modalWindow.then(() => this.close(modalWindow as ModalWindow))
-
     this.windows.add(modalWindow)
-    this.events.emit("add", modalWindow as ModalWindow)
+    this.events.emit("add", modalWindow)
 
     return modalWindow
   }
 
-  public close(modalWindow: ModalWindow) {
+  public replace<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
+    const lastWindow = [...this.windows].at(-1)
+    if (lastWindow != null) {
+      this.windows.delete(lastWindow)
+    }
+
+    // `modalParams` still can be undefined, but we can't check it here.
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.open(component, modalParams!)
+  }
+
+  public close(modalWindow: ModalWindowAny) {
     if (this.windows.size <= 1) {
       this.active = false
     }
@@ -83,11 +106,33 @@ class ModalController {
     this.events.emit("remove", modalWindow)
   }
 
+  public closeById(id: ModalParams["id"]) {
+    const modalWindows = [...this.windows].filter(modalWindow => modalWindow.params.id === id)
+    modalWindows.forEach(modalWindow => this.close(modalWindow))
+  }
+
+  public closeByComponent<P>(component: ModalComponent<P>, params?: P) {
+    const modalWindows = [...this.windows].filter(modalWindow => {
+      if (modalWindow.component !== component) {
+        return false
+      }
+
+      if (params != null) {
+        if (modalWindow.params.params !== params) {
+          return false
+        }
+      }
+
+      return true
+    })
+    modalWindows.forEach(modalWindow => this.close(modalWindow))
+  }
+
   public closeAll() {
     this.windows.forEach(modalWindow => this.close(modalWindow))
   }
 
-  public on<T extends keyof Events>(event: T, listener: (...args: Events[T]) => void) {
+  public on<T extends keyof ModalControllerEvents>(event: T, listener: (...args: ModalControllerEvents[T]) => void) {
     this.events.on(event, listener)
 
     return () => {

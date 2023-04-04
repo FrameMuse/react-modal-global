@@ -18,6 +18,7 @@ copies or substantial portions of the Software.
 
 import { SyntheticEvent } from "react"
 
+
 /**
  * Join modifiers with origin class
  * @returns `"origin-class origin-class--modifier"`
@@ -53,28 +54,29 @@ export function serialize<T = unknown>(value?: T | null) {
 
   function transform(key: string, value: unknown) {
     if (value instanceof Function) {
-      // If the value is a function, but not an arrow function,
-      // return the function as a string.
-      if (value.name === key) {
+      // If function is anonymous, return its string representation.
+      if (value.name === key || value.name.length === 0) {
         return value.toString()
       }
 
-      // Otherwise, return the name of the function.
       return value.name
     }
 
     return value
   }
 
-  function replacer(key: string, value: unknown) {
+  function replacer() {
     const circularReplacer = getCircularReplacer()
-    const circularReplacedValue = circularReplacer(key, value)
 
-    const transformedValue = transform(key, circularReplacedValue)
-    return transformedValue
+    return (key: string, value: unknown) => {
+      const transformedValue = transform(key, value)
+
+      const circularReplacedValue = circularReplacer(key, transformedValue)
+      return circularReplacedValue
+    }
   }
 
-  const serializedValue = JSON.stringify(value, replacer)
+  const serializedValue = JSON.stringify(value, replacer())
   return serializedValue
 }
 
@@ -83,7 +85,7 @@ export function serialize<T = unknown>(value?: T | null) {
  * @param callback any function
  * @returns mouse event handler
  */
-export function stopPropagation(callback?: Function | null) {
+export function stopPropagation(callback?: (() => void) | null) {
   return ({ target, currentTarget }: Event | SyntheticEvent) => {
     if (target instanceof Element && currentTarget instanceof Element) {
       if (target !== currentTarget) return
@@ -92,3 +94,22 @@ export function stopPropagation(callback?: Function | null) {
     callback?.()
   }
 }
+
+/**
+ * Helps prevent error logs blowing up as a result of expecting an error to be thrown,
+ * when using a library (such as enzyme)
+ *
+ * @param func Function that you would normally pass to `expect(func).toThrow()`
+ */
+export const expectToThrow = (func: () => unknown, error?: JestToErrorArg): void => {
+  // Even though the error is caught, it still gets printed to the console
+  // so we mock that out to avoid the wall of red text.
+  const spy = jest.spyOn(console, "error")
+  spy.mockImplementation(() => void 0)
+
+  expect(func).toThrow(error)
+
+  spy.mockRestore()
+}
+
+type JestToErrorArg = Parameters<jest.Matchers<unknown, () => unknown>["toThrow"]>[0];
