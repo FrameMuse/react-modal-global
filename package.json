@@ -1,6 +1,6 @@
 {
   "name": "react-modal-global",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Highly reusable React Modal that can be run from useEffect.",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "eventemitter3": "^5.0.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "type-fest": "^3.5.5"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.27.0",
@@ -32,7 +33,6 @@
     "rollup-plugin-dts": "^4.2.2",
     "sass": "^1.53.0",
     "tslib": "^2.4.0",
-    "type-fest": "^3.5.5",
     "typescript": "^4.9.5"
   },
   "scripts": {
