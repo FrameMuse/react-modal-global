@@ -49,7 +49,12 @@
   "keywords": [
     "react",
     "modal",
+    "global",
+    "dynamic",
+    "component",
     "popup",
+    "drawer",
+    "dialog",
     "ts",
     "typescript"
   ],
