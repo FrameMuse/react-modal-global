@@ -13,8 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        with:
-          node-version: stable
       - run: npm ci
 
   test:
@@ -23,8 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-        with:
-          node-version: stable
       - run: npm run test:coverage
       - run: npm run build
 
