@@ -38,18 +38,6 @@ So I decided to create my own package that will solve all these problems.
 
 I insipered a lot from packages like [react-toastify](https://npmjs.com/package/react-toastify) and [react-alert](https://npmjs.com/package/react-alert).
 
-
-## Advantages
-
-### Major advantages
-
-- Allows to use modals in `useEffect` hook without creating a new component for each one by passing `props` to `open` method.
-- Allows opening modals without wrapping them in components and controlling their state.
-- Allows to use modals in non-component context (e.g. in `useEffect` hook).
-- Allows to reuse modals in different places without creating a new component for each one by passing `props` to `open` method.
-- Allows to use various modal types (Dialog, Popup, Drawer) by creating your own layout for each one (advised naming is `[Type][Name]` => `DrawerLayout`).
-- Allows forking modals and creating "layer depth" (_in development_).
-
 ## Playgrounds
 | Title | Playground |
 | --- | --- |
