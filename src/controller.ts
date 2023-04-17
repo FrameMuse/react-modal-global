@@ -125,6 +125,14 @@ export class ModalController {
    * - Controls whether the order of windows.
    */
   private add(modalWindow: ModalWindow) {
+    // Skip adding to queue if the window is already in the beginning of the queue.
+    const lastWindow = [...this.windows].at(-1)
+    if (lastWindow?.id === modalWindow.id) {
+      this.isOpen = true
+      this.events.emit("update")
+      return
+    }
+
     // If there are temporary modal windows, clear.
     if (this.isOpen === false && this.windows.size > 0) {
       this.windows.clear()
