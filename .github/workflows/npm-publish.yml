@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
         version:
-          description: 'Under which version to publish current source code (without prefix `v`)'
+          description: 'Publishing Version'
           type: input
           required: false
 
@@ -25,7 +25,7 @@ jobs:
       - run: npm test
 
   publish-npm-current:
-    if: $VERSION == ''
+    if: "!contains($VERSION, '.')"
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +40,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
   
   publish-npm-specific:
-    if: $VERSION != ''
+    if: "contains($VERSION, '.')"
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -50,6 +50,6 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
       - run: npm ci
-      - run: npm publish
+      - run: "npm publish react-modal-global@$VERSION"
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
