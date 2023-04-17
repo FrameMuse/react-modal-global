@@ -126,6 +126,20 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).not.toEqual(savedElement)
   })
 
+  it("should render the correct component when open the same window and closed", () => {
+    act(() => {
+      Modal.open(PopupExample, { test: "2" })
+      Modal.open(PopupExample, { test: "2" })
+    })
+
+    act(() => {
+      modalContainerElement?.querySelector("button")?.click()
+    })
+
+    expect(modalContainerElement?.className).toBe("modal")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
   it("should render the correct component when closed (not weak)", () => {
     act(() => {
       Modal.open(PopupExample)

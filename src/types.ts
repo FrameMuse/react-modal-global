@@ -16,7 +16,7 @@ copies or substantial portions of the Software.
 
 */
 
-import { ReactElement } from "react"
+import { Component, ReactElement } from "react"
 import { HasRequiredKeys } from "type-fest"
 
 /**
@@ -26,7 +26,9 @@ export type ModalComponent<P = unknown> =
   // Function Component
   | ((props: P) => ReactElement | null)
   | (() => ReactElement | null)
-
+  // Class Component
+  | (new (props: P) => Component)
+  | (new () => Component)
 
 export interface ModalParams {
   /**
