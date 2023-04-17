@@ -7,6 +7,11 @@ on:
   release:
     types: [released]
   workflow_dispatch:
+    inputs:
+          version:
+            description: 'Version'
+            type: input
+            required: false
 
 jobs:
   build:
@@ -17,9 +22,12 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
+      - run: |
+          echo "Version: ${{inputs.version}}"
+          echo "Versiona: ${{inputs.versiona}}"
 
   publish-current:
-    if: ${{inputs.versiona}} == 1
+    if: "${{inputs.versiona}} == 'gg'"
     needs: build
     runs-on: ubuntu-latest
     steps:
