@@ -20,5 +20,5 @@ export { Modal, ModalController } from "./controller"
 export { ModalContainer } from "./container"
 export { useModalContext, useModalState } from "./hooks"
 
-export { default as DrawerLayout } from "./layouts/DrawerLayout/DrawerLayout"
-export { default as PopupLayout } from "./layouts/PopupLayout/PopupLayout"
+export { default as DrawerLayout } from "./layouts/DrawerLayout"
+export { default as PopupLayout } from "./layouts/PopupLayout"

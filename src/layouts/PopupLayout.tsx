@@ -16,36 +16,34 @@ copies or substantial portions of the Software.
 
 */
 
-import "./DrawerLayout.css"
-
 import { ReactNode } from "react"
 
-import { useModalContext } from "../../hooks"
+import { useModalContext } from "../hooks"
 
-interface DrawerLayoutProps {
+interface PopupLayoutProps {
   width?: string;
   children: ReactNode;
 }
 
-function DrawerLayout(props: DrawerLayoutProps) {
+function PopupLayout(props: PopupLayoutProps) {
   const modal = useModalContext()
 
   return (
-    <div className="drawer-layout" style={{ "--drawer-width": props.width }}>
-      <div className="drawer-layout__container">
+    <div className="popup-layout" style={{ "--popup-width": props.width }}>
+      <div className="popup-layout__container">
         {modal.params.closable && (
           <button
-            className="drawer-layout__close"
+            className="popup-layout__close"
             type="button"
             onClick={modal.close}
           >
             &#9587;
           </button>
         )}
-        <div className="drawer-layout__inner">{props.children}</div>
+        <div className="popup-layout__inner">{props.children}</div>
       </div>
     </div>
   )
 }
 
-export default DrawerLayout
+export default PopupLayout

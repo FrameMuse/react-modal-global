@@ -16,6 +16,51 @@ copies or substantial portions of the Software.
 
 */
 
+/* Drawer Layout */
+
+.drawer-layout {
+  position: relative;
+
+  padding: 3.5em 2em;
+  background: white;
+
+  height: 100%;
+  min-width: 20em;
+  max-width: 50vw;
+
+  margin-left: auto;
+  overflow: auto;
+  overflow: overlay;
+  overscroll-behavior: contain;
+
+  color: #333;
+  box-shadow: 0px 0px 20px 10px rgba(black, 0.1);
+  cursor: initial;
+
+  transition: 250ms ease right;
+  right: -5em;
+
+}
+
+.modal--active .drawer-layout {
+  top: 0em;
+}
+
+.drawer-layout__close {
+  margin-left: auto;
+
+  position: absolute;
+  top: 1.25em;
+  right: 1.25em;
+}
+
+.drawer-layout__container {
+  display: grid;
+  gap: 2.5em;
+}
+
+/* Popup Layout */
+
 .popup-layout {
   position: relative;
 
