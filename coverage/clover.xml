@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1679787979361" clover="3.2.0">
-  <project timestamp="1679787979361" name="All files">
-    <metrics statements="106" coveredstatements="85" conditionals="53" coveredconditionals="35" methods="37" coveredmethods="31" elements="196" coveredelements="151" complexity="0" loc="106" ncloc="106" packages="1" files="7" classes="7"/>
+<coverage generated="1680075298485" clover="3.2.0">
+  <project timestamp="1680075298486" name="All files">
+    <metrics statements="109" coveredstatements="106" conditionals="55" coveredconditionals="47" methods="38" coveredmethods="37" elements="202" coveredelements="190" complexity="0" loc="109" ncloc="109" packages="1" files="7" classes="7"/>
     <file name="container.tsx" path="/home/kotto/github/react-modal-global/src/container.tsx">
       <metrics statements="9" coveredstatements="9" conditionals="14" coveredconditionals="14" methods="3" coveredmethods="3"/>
       <line num="49" count="90" type="stmt"/>
@@ -19,77 +19,79 @@
       <line num="23" count="2" type="stmt"/>
     </file>
     <file name="controller.ts" path="/home/kotto/github/react-modal-global/src/controller.ts">
-      <metrics statements="59" coveredstatements="58" conditionals="16" coveredconditionals="13" methods="22" coveredmethods="21"/>
-      <line num="24" count="3" type="stmt"/>
-      <line num="48" count="38" type="stmt"/>
-      <line num="50" count="68" type="stmt"/>
-      <line num="56" count="158" type="stmt"/>
-      <line num="59" count="38" type="stmt"/>
-      <line num="60" count="38" type="stmt"/>
-      <line num="84" count="54" type="stmt"/>
-      <line num="85" count="54" type="stmt"/>
-      <line num="86" count="54" type="stmt"/>
-      <line num="87" count="24" type="stmt"/>
-      <line num="88" count="24" type="stmt"/>
-      <line num="91" count="54" type="stmt"/>
-      <line num="92" count="54" type="stmt"/>
-      <line num="94" count="54" type="stmt"/>
-      <line num="96" count="54" type="stmt"/>
-      <line num="99" count="2" type="stmt"/>
-      <line num="109" count="2" type="stmt"/>
-      <line num="110" count="2" type="cond" truecount="1" falsecount="1"/>
-      <line num="111" count="2" type="stmt"/>
-      <line num="114" count="2" type="stmt"/>
-      <line num="125" count="54" type="cond" truecount="4" falsecount="0"/>
-      <line num="126" count="2" type="stmt"/>
-      <line num="129" count="54" type="stmt"/>
-      <line num="130" count="54" type="stmt"/>
-      <line num="131" count="54" type="stmt"/>
-      <line num="137" count="24" type="cond" truecount="1" falsecount="1"/>
-      <line num="139" count="24" type="stmt"/>
-      <line num="140" count="24" type="cond" truecount="2" falsecount="0"/>
-      <line num="141" count="13" type="stmt"/>
-      <line num="145" count="13" type="cond" truecount="2" falsecount="0"/>
-      <line num="146" count="10" type="stmt"/>
-      <line num="147" count="10" type="stmt"/>
-      <line num="151" count="14" type="stmt"/>
-      <line num="152" count="14" type="stmt"/>
-      <line num="156" count="2" type="stmt"/>
-      <line num="157" count="9" type="cond" truecount="2" falsecount="0"/>
-      <line num="158" count="1" type="stmt"/>
-      <line num="161" count="8" type="cond" truecount="1" falsecount="1"/>
-      <line num="162" count="0" type="stmt"/>
-      <line num="165" count="8" type="stmt"/>
-      <line num="167" count="2" type="stmt"/>
-      <line num="171" count="5" type="stmt"/>
-      <line num="172" count="1" type="stmt"/>
-      <line num="179" count="8" type="stmt"/>
-      <line num="185" count="2" type="stmt"/>
-      <line num="191" count="1" type="stmt"/>
-      <line num="192" count="1" type="stmt"/>
-      <line num="205" count="28" type="stmt"/>
-      <line num="206" count="101" type="stmt"/>
+      <metrics statements="61" coveredstatements="60" conditionals="16" coveredconditionals="13" methods="22" coveredmethods="21"/>
+      <line num="25" count="3" type="stmt"/>
+      <line num="27" count="3" type="stmt"/>
+      <line num="51" count="44" type="stmt"/>
+      <line num="53" count="77" type="stmt"/>
+      <line num="59" count="167" type="stmt"/>
+      <line num="62" count="44" type="stmt"/>
+      <line num="63" count="44" type="stmt"/>
+      <line num="87" count="63" type="stmt"/>
+      <line num="88" count="63" type="stmt"/>
+      <line num="89" count="63" type="stmt"/>
+      <line num="90" count="24" type="stmt"/>
+      <line num="91" count="24" type="stmt"/>
+      <line num="94" count="63" type="stmt"/>
+      <line num="95" count="63" type="stmt"/>
+      <line num="96" count="63" type="stmt"/>
+      <line num="98" count="63" type="stmt"/>
+      <line num="100" count="63" type="stmt"/>
+      <line num="103" count="2" type="stmt"/>
+      <line num="113" count="2" type="stmt"/>
+      <line num="114" count="2" type="cond" truecount="1" falsecount="1"/>
+      <line num="115" count="2" type="stmt"/>
+      <line num="118" count="2" type="stmt"/>
+      <line num="129" count="63" type="cond" truecount="4" falsecount="0"/>
+      <line num="130" count="2" type="stmt"/>
+      <line num="133" count="63" type="stmt"/>
+      <line num="134" count="63" type="stmt"/>
+      <line num="135" count="63" type="stmt"/>
+      <line num="141" count="24" type="cond" truecount="1" falsecount="1"/>
+      <line num="143" count="24" type="stmt"/>
+      <line num="144" count="24" type="cond" truecount="2" falsecount="0"/>
+      <line num="145" count="13" type="stmt"/>
+      <line num="149" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="150" count="10" type="stmt"/>
+      <line num="151" count="10" type="stmt"/>
+      <line num="155" count="14" type="stmt"/>
+      <line num="156" count="14" type="stmt"/>
+      <line num="160" count="2" type="stmt"/>
+      <line num="161" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="162" count="1" type="stmt"/>
+      <line num="165" count="8" type="cond" truecount="1" falsecount="1"/>
+      <line num="166" count="0" type="stmt"/>
+      <line num="169" count="8" type="stmt"/>
+      <line num="171" count="2" type="stmt"/>
+      <line num="175" count="5" type="stmt"/>
+      <line num="176" count="1" type="stmt"/>
+      <line num="183" count="8" type="stmt"/>
+      <line num="189" count="2" type="stmt"/>
+      <line num="195" count="1" type="stmt"/>
+      <line num="196" count="1" type="stmt"/>
+      <line num="209" count="28" type="stmt"/>
       <line num="210" count="101" type="stmt"/>
-      <line num="213" count="28" type="stmt"/>
-      <line num="215" count="28" type="stmt"/>
-      <line num="216" count="28" type="stmt"/>
+      <line num="214" count="101" type="stmt"/>
       <line num="217" count="28" type="stmt"/>
       <line num="219" count="28" type="stmt"/>
       <line num="220" count="28" type="stmt"/>
       <line num="221" count="28" type="stmt"/>
-      <line num="222" count="28" type="stmt"/>
-      <line num="228" count="3" type="stmt"/>
+      <line num="223" count="28" type="stmt"/>
+      <line num="224" count="28" type="stmt"/>
+      <line num="225" count="28" type="stmt"/>
+      <line num="226" count="28" type="stmt"/>
+      <line num="232" count="3" type="stmt"/>
     </file>
     <file name="hooks.ts" path="/home/kotto/github/react-modal-global/src/hooks.ts">
       <metrics statements="8" coveredstatements="8" conditionals="3" coveredconditionals="2" methods="3" coveredmethods="3"/>
       <line num="36" count="59" type="stmt"/>
       <line num="37" count="58" type="cond" truecount="2" falsecount="0"/>
-      <line num="40" count="54" type="stmt"/>
-      <line num="55" count="2" type="stmt"/>
-      <line num="61" count="90" type="stmt"/>
+      <line num="42" count="54" type="stmt"/>
+      <line num="57" count="2" type="stmt"/>
       <line num="63" count="90" type="stmt"/>
-      <line num="64" count="28" type="stmt"/>
-      <line num="67" count="90" type="stmt"/>
+      <line num="65" count="90" type="stmt"/>
+      <line num="66" count="28" type="stmt"/>
+      <line num="69" count="90" type="stmt"/>
     </file>
     <file name="index.ts" path="/home/kotto/github/react-modal-global/src/index.ts">
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -98,36 +100,37 @@
       <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
     </file>
     <file name="utils.ts" path="/home/kotto/github/react-modal-global/src/utils.ts">
-      <metrics statements="29" coveredstatements="9" conditionals="20" coveredconditionals="6" methods="9" coveredmethods="4"/>
-      <line num="26" count="94" type="stmt"/>
-      <line num="27" count="94" type="cond" truecount="2" falsecount="0"/>
-      <line num="29" count="27" type="stmt"/>
-      <line num="30" count="27" type="stmt"/>
+      <metrics statements="30" coveredstatements="28" conditionals="22" coveredconditionals="18" methods="10" coveredmethods="10"/>
+      <line num="28" count="94" type="stmt"/>
+      <line num="29" count="94" type="cond" truecount="2" falsecount="0"/>
+      <line num="31" count="27" type="stmt"/>
       <line num="32" count="27" type="stmt"/>
-      <line num="33" count="27" type="stmt"/>
-      <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="41" count="0" type="stmt"/>
-      <line num="42" count="0" type="stmt"/>
-      <line num="43" count="0" type="cond" truecount="0" falsecount="4"/>
-      <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="45" count="0" type="stmt"/>
+      <line num="34" count="27" type="stmt"/>
+      <line num="35" count="27" type="stmt"/>
+      <line num="40" count="63" type="cond" truecount="1" falsecount="1"/>
+      <line num="43" count="468" type="stmt"/>
+      <line num="44" count="468" type="stmt"/>
+      <line num="45" count="468" type="cond" truecount="4" falsecount="0"/>
+      <line num="46" count="126" type="cond" truecount="1" falsecount="1"/>
       <line num="47" count="0" type="stmt"/>
-      <line num="50" count="0" type="stmt"/>
-      <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="59" count="0" type="stmt"/>
-      <line num="63" count="0" type="stmt"/>
-      <line num="66" count="0" type="stmt"/>
-      <line num="70" count="0" type="stmt"/>
-      <line num="71" count="0" type="stmt"/>
-      <line num="73" count="0" type="stmt"/>
-      <line num="74" count="0" type="stmt"/>
-      <line num="77" count="0" type="stmt"/>
-      <line num="78" count="0" type="stmt"/>
-      <line num="87" count="31" type="stmt"/>
-      <line num="88" count="7" type="cond" truecount="3" falsecount="1"/>
-      <line num="89" count="7" type="cond" truecount="1" falsecount="1"/>
-      <line num="92" count="0" type="stmt"/>
+      <line num="49" count="126" type="stmt"/>
+      <line num="52" count="468" type="stmt"/>
+      <line num="57" count="468" type="cond" truecount="2" falsecount="0"/>
+      <line num="59" count="63" type="cond" truecount="4" falsecount="0"/>
+      <line num="60" count="11" type="stmt"/>
+      <line num="63" count="52" type="stmt"/>
+      <line num="66" count="405" type="stmt"/>
+      <line num="70" count="468" type="stmt"/>
+      <line num="71" count="468" type="stmt"/>
+      <line num="73" count="468" type="stmt"/>
+      <line num="74" count="468" type="stmt"/>
+      <line num="77" count="63" type="stmt"/>
+      <line num="78" count="63" type="stmt"/>
+      <line num="82" count="63" type="stmt"/>
+      <line num="91" count="31" type="stmt"/>
+      <line num="92" count="7" type="cond" truecount="3" falsecount="1"/>
+      <line num="93" count="7" type="cond" truecount="1" falsecount="1"/>
+      <line num="96" count="0" type="stmt"/>
     </file>
   </project>
 </coverage>
