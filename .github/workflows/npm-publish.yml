@@ -27,7 +27,7 @@ jobs:
           echo "Versiona: ${{inputs.versiona}}"
 
   publish-current:
-    if: "${{inputs.versiona}} == 'gg'"
+    if: "!contains(${{inputs.versiona}}, '.')"
     needs: build
     runs-on: ubuntu-latest
     steps:
