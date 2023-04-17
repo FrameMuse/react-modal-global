@@ -1,0 +1,104 @@
+/*
+
+MIT License
+
+Copyright (c) 2023 Valery Zinchenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+*/
+
+/* Drawer Layout */
+
+.drawer-layout {
+  position: relative;
+
+  padding: 3.5em 2em;
+  background: white;
+
+  height: 100%;
+  min-width: 20em;
+  max-width: 50vw;
+
+  margin-left: auto;
+  overflow: auto;
+  overflow: overlay;
+  overscroll-behavior: contain;
+
+  color: #333;
+  box-shadow: 0px 0px 20px 10px rgba(black, 0.1);
+  cursor: initial;
+
+  transition: 250ms ease right;
+  right: -5em;
+
+}
+
+.modal--active .drawer-layout {
+  right: 0em;
+}
+
+.drawer-layout__close {
+  margin-left: auto;
+
+  position: absolute;
+  top: 1.25em;
+  right: 1.25em;
+}
+
+.drawer-layout__container {
+  display: grid;
+  gap: 2.5em;
+}
+
+/* Popup Layout */
+
+.popup-layout {
+  position: relative;
+
+  padding: 2em;
+  background: white;
+  border-radius: 1em;
+
+  min-width: 20em;
+  max-width: 75vw;
+
+  max-height: 90vh;
+
+  margin: auto;
+  overflow: auto;
+  overflow: overlay;
+  overscroll-behavior: contain;
+
+  color: #333;
+  box-shadow: 0px 0px 20px 10px rgba(black, 0.1);
+  cursor: initial;
+
+  transition: 250ms ease top;
+  top: -2.5em;
+}
+
+.modal--active .popup-layout {
+  top: 0em;
+}
+
+.popup-layout__close {
+  margin-left: auto;
+
+  position: absolute;
+  top: 1.25em;
+  right: 1.5em;
+}
+
+.popup-layout__container {
+  display: grid;
+  gap: 2.5em;
+}
