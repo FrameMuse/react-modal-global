@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layouts DrawerLayout should render 1`] = `
+<div
+  aria-hidden="false"
+  aria-modal="true"
+  class="modal modal--active"
+>
+  <div
+    class="modal__container"
+  >
+    <div
+      class="drawer-layout"
+    >
+      <div
+        class="drawer-layout__container"
+      >
+        <button
+          class="drawer-layout__close"
+          type="button"
+        >
+          ╳
+        </button>
+        <div
+          class="drawer-layout__inner"
+        >
+          123
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Layouts PopupLayout should render 1`] = `
+<div
+  aria-hidden="false"
+  aria-modal="true"
+  class="modal modal--active"
+>
+  <div
+    class="modal__container"
+  >
+    <div
+      class="popup-layout"
+    >
+      <div
+        class="popup-layout__container"
+      >
+        <button
+          class="popup-layout__close"
+          type="button"
+        >
+          ╳
+        </button>
+        <div
+          class="popup-layout__inner"
+        >
+          123
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
