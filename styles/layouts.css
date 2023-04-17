@@ -43,7 +43,7 @@ copies or substantial portions of the Software.
 }
 
 .modal--active .drawer-layout {
-  top: 0em;
+  right: 0em;
 }
 
 .drawer-layout__close {
