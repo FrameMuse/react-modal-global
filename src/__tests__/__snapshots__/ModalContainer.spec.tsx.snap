@@ -164,11 +164,11 @@ exports[`ModalContainer should render the correct component when closed 1`] = `
 </div>
 `;
 
-exports[`ModalContainer should render the correct component when closed by component 1 1`] = `
+exports[`ModalContainer should render the correct component when closed by component 1`] = `
 <div
-  aria-hidden="true"
+  aria-hidden="false"
   aria-modal="true"
-  class="modal"
+  class="modal modal--active"
 >
   <div
     class="modal__container"
@@ -177,7 +177,7 @@ exports[`ModalContainer should render the correct component when closed by compo
       <span
         id="test"
       >
-        2
+        1
       </span>
       <h1>
         Popup Example
@@ -190,7 +190,7 @@ exports[`ModalContainer should render the correct component when closed by compo
 </div>
 `;
 
-exports[`ModalContainer should render the correct component when closed by component 2 1`] = `
+exports[`ModalContainer should render the correct component when closed by component 2`] = `
 <div
   aria-hidden="false"
   aria-modal="true"
@@ -198,7 +198,13 @@ exports[`ModalContainer should render the correct component when closed by compo
 >
   <div
     class="modal__container"
-  />
+  >
+    <span
+      id="puk"
+    >
+      2
+    </span>
+  </div>
 </div>
 `;
 

@@ -41,54 +41,39 @@ export function ModalContainer(props: ModalContainerProps) {
 
   const className = props.className || "modal"
 
-  // Group windows into its layers. 
-  const layers = windows.reduce((layers, window) => {
-    if (window.params.layer === "highest") {
-      // It's not `layers.length - 1` because we need to push it AFTER the last item.
-      window.params.layer = layers.length
+  // Group windows by layers.
+  const layerOrderedWindows: ModalWindow[] = windows.reduceRight((layers, modalWindow) => {
+    modalWindow.focused = false
+
+    const layerWindow = layers[modalWindow.params.layer]
+    if (layerWindow == null) {
+      layers[modalWindow.params.layer] = modalWindow
     }
-
-    if (window.params.layer === "lowest") {
-      window.params.layer = 0
-    }
-
-    const layer = layers[window.params.layer] || []
-    layer.push(window)
-
-    layers[window.params.layer] = layer
 
     return layers
-  }, [] as ModalWindow[][])
+  }, [] as ModalWindow[])
+  // Focus last window in the last layer.
+  const lastWindow = layerOrderedWindows.at(-1)
+  if (lastWindow) {
+    lastWindow.focused = true
+  }
 
   return (
     <div className={classWithModifiers(className, active && "active")} aria-modal aria-hidden={!active}>
-      {layers.map(windows => (
-        <>
-          {windows.map(modalWindow => {
-            if (modalWindow == null) {
-              return null
-            }
+      {layerOrderedWindows.map(modalWindow => {
+        function onClose() {
+          if (!modalWindow.params.closable) return
+          stopPropagation(modalWindow.close)
+        }
 
-            function ASD() {
-              function onClose() {
-                if (!modalWindow.params.closable) return
-                stopPropagation(modalWindow.close)
-              }
-
-
-              return (
-                <div className={classWithModifiers(className + "__container",)} onClick={onClose}>
-                  <modalContext.Provider value={modalWindow}>
-                    <modalWindow.component {...modalWindow.params} key={modalWindow.id} />
-                  </modalContext.Provider>
-                </div>
-              )
-            }
-
-            return <ASD key={modalWindow.id} />
-          })}
-        </>
-      ))}
+        return (
+          <div className={classWithModifiers(className + "__container")} onClick={onClose} key={modalWindow.id}>
+            <modalContext.Provider value={modalWindow}>
+              <modalWindow.component {...modalWindow.params} key={modalWindow.id} />
+            </modalContext.Provider>
+          </div>
+        )
+      })}
     </div>
   )
 }

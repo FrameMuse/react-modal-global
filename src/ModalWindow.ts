@@ -16,23 +16,12 @@ copies or substantial portions of the Software.
 
 */
 
-import { v5 as uuidv5 } from "uuid"
-
-const MODAL_UUID_NAMESPACE = "48c89dcc-92d8-5d98-9842-81954e142ee2"
-
-import EventEmitter from "eventemitter3"
 
 import Deffered from "./Deffered"
-import { ModalComponent, ModalParams } from "./types"
-import { serialize } from "./utils"
+import { ModalComponent, ModalDefaultParams } from "./types"
+import { hash } from "./utils"
 
-interface ModalWindowEvents {
-  open: []
-  close: []
-
-}
-
-const DEFAULT_PARAMS: ModalParams = {
+const DEFAULT_PARAMS: ModalDefaultParams = {
   id: -1,
   closable: true,
   keepMounted: false,
@@ -43,7 +32,7 @@ const DEFAULT_PARAMS: ModalParams = {
   fork: false
 }
 
-class ModalWindow<CustomParams = unknown> {
+export class ModalWindow<CustomParams = unknown> {
   /**
    * Unique id of the modal window.
    * If two modals have the same id, they will be treated as the same modal.
@@ -53,27 +42,26 @@ class ModalWindow<CustomParams = unknown> {
    * @note
    * This is not the same as `params.id` because `id` is unique for each modal window.
    */
-  public readonly id: string
+  public readonly id: number
 
   public component: ModalComponent<CustomParams>
-  public params: ModalParams & CustomParams
-  public closed: boolean
+  public params: ModalDefaultParams & CustomParams
 
-  protected events: EventEmitter<ModalWindowEvents>
+  public closed: boolean
+  public focused: boolean
+
   private deffered: Deffered<void>
 
-  constructor(component: ModalComponent<CustomParams>, params: Partial<ModalParams> & CustomParams) {
+  constructor(component: ModalComponent<CustomParams>, params: Partial<ModalDefaultParams> & CustomParams) {
+    this.id = hash({ component, params })
+
     this.component = component
     this.params = { ...DEFAULT_PARAMS, ...params }
-    // Generate id after params and component are set.
-    this.id = uuidv5(this.serialize(), MODAL_UUID_NAMESPACE)
 
     this.closed = false
+    this.focused = true
 
-    this.events = new EventEmitter
     this.deffered = new Deffered
-
-    this.events.emit("open")
   }
 
   /**
@@ -89,8 +77,6 @@ class ModalWindow<CustomParams = unknown> {
   close = () => {
     this.closed = true
     this.deffered.resolve()
-
-    this.events.emit("close")
   }
 
 
@@ -104,15 +90,6 @@ class ModalWindow<CustomParams = unknown> {
   then(onfulfilled?: ((value: void) => void | PromiseLike<void>) | undefined | null, onrejected?: ((reason: unknown) => void | PromiseLike<void>) | undefined | null): PromiseLike<void> {
     return this.deffered.promise.then(onfulfilled, onrejected)
   }
-
-  serialize() {
-    const { component, params } = this
-    return serialize({ component, params })
-  }
-
-  on<K extends keyof ModalWindowEvents>(event: K, listener: (...args: ModalWindowEvents[K]) => void) {
-    return this.events.on(event, listener)
-  }
 }
 
 /**
@@ -122,5 +99,3 @@ class ModalWindow<CustomParams = unknown> {
 */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ModalWindowAny = ModalWindow<any>
-
-export { ModalWindow }

@@ -37,7 +37,7 @@ export type ModalComponent<P = unknown> =
   | (new (props: P) => Component<P>)
   | (new () => Component)
 
-export interface ModalParams {
+export interface ModalDefaultParams {
   /**
    * Usually used to close the modal by `closeById` method.
    * @default -1
@@ -64,7 +64,7 @@ export interface ModalParams {
    * 
    * @default 0
    */
-  layer: number | ("lowest" | "highest")
+  layer: number
   /**
    * Keep all open modals mounted until the last one is closed.
    */
@@ -119,5 +119,5 @@ export interface ModalParams {
  * open(FailComponent, { required: true }) // OK
  * open(FailComponent) // Error: missing required property `required`
  */
-export type ModalWindowParams<P = unknown> =
-  HasRequiredKeys<NonNullable<P>> extends true ? [Partial<ModalParams> & P] : [(Partial<ModalParams> & P)?]
+export type ModalParamsTuple<P = unknown> =
+  HasRequiredKeys<NonNullable<P>> extends true ? [Partial<ModalDefaultParams> & P] : [(Partial<ModalDefaultParams> & P)?]

@@ -169,33 +169,22 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should render the correct component when closed by component 1", () => {
+  it("should render the correct component when closed by component", () => {
     act(() => {
       Modal.open(PopupExample)
       Modal.open(PopupExample, { test: "7" })
+      Modal.open(() => <span id="puk">2</span>)
       Modal.open(PopupExample, { test: "1" })
-      Modal.open(PopupExample, { test: "2" })
-
-      Modal.closeByComponent(PopupExample)
     })
 
-    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("2")
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("1")
     expect(modalContainerElement).toMatchSnapshot()
-  })
 
-  it("should render the correct component when closed by component 2", () => {
     act(() => {
-      Modal.open(() => null)
-      Modal.open(PopupExample)
-      Modal.open(PopupExample, { test: "7" })
-      Modal.open(PopupExample, { test: "1" })
-      Modal.open(PopupExample, { test: "2" })
-
       Modal.closeByComponent(PopupExample)
     })
 
-    expect(modalContainerElement?.querySelector("h1")).toBeNull()
-    expect(modalContainerElement?.querySelector("#test")).toBeNull()
+    expect(modalContainerElement?.querySelector("#puk")).toHaveTextContent("2")
     expect(modalContainerElement).toMatchSnapshot()
   })
 

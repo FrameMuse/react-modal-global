@@ -99,17 +99,49 @@ export function stopPropagation(callback?: (() => void) | null) {
  * Helps prevent error logs blowing up as a result of expecting an error to be thrown,
  * when using a library (such as enzyme)
  *
- * @param func Function that you would normally pass to `expect(func).toThrow()`
+ * @param fn Function that you would normally pass to `expect(func).toThrow()`
  */
-export const expectToThrow = (func: () => unknown, error?: JestToErrorArg): void => {
+export function expectToThrow(fn: () => unknown, error?: Parameters<jest.Matchers["toThrow"]>[0]): void {
   // Even though the error is caught, it still gets printed to the console
   // so we mock that out to avoid the wall of red text.
   const spy = jest.spyOn(console, "error")
   spy.mockImplementation(() => void 0)
 
-  expect(func).toThrow(error)
+  expect(fn).toThrow(error)
 
   spy.mockRestore()
 }
 
-type JestToErrorArg = Parameters<jest.Matchers<unknown, () => unknown>["toThrow"]>[0];
+/**
+ * 53-bit hash function.
+ * 
+ * https://stackoverflow.com/a/52171480/12468111
+ */
+function cyrb53(string: string, seed = 0) {
+  let h1 = 0xdeadbeef ^ seed
+  let h2 = 0x41c6ce57 ^ seed
+
+  for (let i = 0, char; i < string.length; i++) {
+    char = string.charCodeAt(i)
+
+    h1 = Math.imul(h1 ^ char, 2654435761)
+    h2 = Math.imul(h2 ^ char, 1597334677)
+  }
+
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507)
+  h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909)
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507)
+  h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909)
+
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0)
+}
+
+/**
+ * Hashes value by serializing it and passing it to `cyrb53`.
+ * 
+ * Used to generate ids.
+ */
+export function hash(value: unknown) {
+  const serializedObject = serialize(value)
+  return cyrb53(serializedObject)
+}
