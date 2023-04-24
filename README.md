@@ -28,15 +28,15 @@
 
 ## Motivation
 
-I was looking for a way to use modals in `useEffect` hook without creating a new component for each one by passing `props` to `open` method. I found a lot of packages that allow to use modals in non-component context, but they all have some disadvantages:
+I was looking for a way to use modals in `useEffect` hook without creating a new component for each one by passing `props` to `open` method. I found a lot of packages with different features, but they all have some disadvantages:
 
 - They are not global (you can't open them from anywhere)
 - They are not context-aware (you can't pass data to them)
 - They are not queueing-aware (you can't open several modals at once)
 
-So I decided to create my own package that will solve all these problems.
+So I decided to create my own package that will solve all these problems at once.
 
-I insipered a lot from packages like [react-toastify](https://npmjs.com/package/react-toastify) and [react-alert](https://npmjs.com/package/react-alert).
+I was insipered a lot by packages like [react-toastify](https://npmjs.com/package/react-toastify) and [react-modal](https://npmjs.com/package/react-modal).
 
 ## Playgrounds
 | Title | Playground |
