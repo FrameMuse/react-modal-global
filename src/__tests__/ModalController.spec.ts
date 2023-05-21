@@ -90,7 +90,7 @@ describe("ModalController (with container)", () => {
       const modal = controller.open(() => createElement(Fragment))
 
       expect(modal.id).toBeDefined()
-      expect(modal.id).toHaveLength(36)
+      expect(typeof modal.id).toBe("number")
     })
 
     it("should be unique", () => {

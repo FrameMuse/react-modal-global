@@ -19,89 +19,17 @@ copies or substantial portions of the Software.
 import EventEmitter from "eventemitter3"
 
 import { ModalWindow, ModalWindowAny } from "./ModalWindow"
-import { ModalComponent, ModalDefaultParams, ModalParamsTuple, ModalState } from "./types"
+import { ModalComponent, ModalParams, ModalState, ModalWindowParams } from "./types"
 
 interface ModalControllerEvents {
   add: [ModalWindowAny]
   remove: [ModalWindowAny]
-  focus: [ModalWindowAny],
   update: []
 }
 
-class ModalWindowSet {
-  private windows: Set<ModalWindowAny> = new Set
-  private layers: Map<number, Set<ModalWindowAny>> = new Map
-
-
-  private addToLayer(modalWindow: ModalWindowAny, layer: number) {
-    if (this.layers.has(layer) === false) {
-      this.layers.set(layer, new Set)
-    }
-
-    this.layers.get(layer)?.add(modalWindow)
-  }
-
-  private removeFromLayer(modalWindow: ModalWindowAny, layer: number) {
-    const layerSet = this.layers.get(layer)
-    if (!layerSet) return
-
-    layerSet.delete(modalWindow)
-    if (layerSet.size === 0) {
-      this.layers.delete(layer)
-    }
-  }
-
-
-  public add(modalWindow: ModalWindowAny) {
-    this.windows.add(modalWindow)
-    this.addToLayer(modalWindow, modalWindow.params.layer)
-  }
-
-  public delete(modalWindow: ModalWindowAny) {
-    this.windows.delete(modalWindow)
-    this.removeFromLayer(modalWindow, modalWindow.params.layer)
-  }
-
-  public clear() {
-    this.windows.clear()
-    this.layers.clear()
-  }
-
-  // public clearTemporary() {}
-
-  public at(index: number, layer?: number): ModalWindowAny | undefined {
-    if (layer != null) {
-      return [...this.layers.get(layer) ?? []].at(index)
-    }
-
-    return [...this.windows].at(index)
-  }
-
-  public getTopWindow(layer?: number): ModalWindowAny | undefined {
-    if (layer != null) {
-      return [...this.layers.get(layer) ?? []].at(-1)
-    }
-
-    return [...this.windows].at(-1)
-  }
-
-  public getTopLayer(): number {
-    return Math.max(...this.layers.keys())
-  }
-
-  public get size() {
-    return this.windows.size
-  }
-}
-
 class ModalController {
-  public static Instance: ModalController = new ModalController
-
   protected windows: Set<ModalWindowAny> = new Set
-  protected layers: Map<number, ModalWindowAny> = new Map
   protected events: EventEmitter<ModalControllerEvents> = new EventEmitter
-
-  protected focusedWindow: ModalWindowAny | null = null
 
 
   #active = false
@@ -111,30 +39,35 @@ class ModalController {
   public get active(): boolean {
     return this.#active
   }
+
+
   public hide() {
+    if (this.active === false) return
+
     this.active = false
     this.events.emit("update")
   }
   public show() {
+    if (this.active === true) return
+
     this.active = true
     this.events.emit("update")
   }
 
 
-  public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalParamsTuple<P>): ModalWindow<P> {
+  public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     // `modalParams` still can be undefined, but we can't check it here.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const modalWindow = new ModalWindow(component, modalParams!)
-    modalWindow.then(() => {
-      this.close(modalWindow)
-    })
+    // Using `on` instead of `then` since `then` will only be executed on the next event loop iteration.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop.
+    modalWindow.on("close", () => this.close(modalWindow))
 
 
     // Skip adding to queue if the window is already in the beginning of the queue.
     const lastWindow = [...this.windows].at(-1)
     if (lastWindow?.id === modalWindow.id) {
-      this.active = true
-      this.events.emit("update")
+      this.show()
 
       return lastWindow
     }
@@ -142,17 +75,16 @@ class ModalController {
     if (this.active === false && this.windows.size > 0) {
       this.windows.clear()
     }
+    this.windows.add(modalWindow)
 
 
     this.active = true
-
-    this.windows.add(modalWindow)
     this.events.emit("add", modalWindow)
 
     return modalWindow
   }
 
-  public replace<P>(component: ModalComponent<P>, ...[modalParams]: ModalParamsTuple<P>): ModalWindow<P> {
+  public replace<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     const lastWindow = [...this.windows].at(-1)
     if (lastWindow != null) {
       this.windows.delete(lastWindow)
@@ -163,18 +95,21 @@ class ModalController {
     return this.open(component, modalParams!)
   }
 
-  public close(modalWindow: ModalWindowAny) {
-    if (this.windows.size <= 1) {
-      this.active = false
-    }
-    if (this.windows.size > 1) {
-      this.windows.delete(modalWindow)
+  public close(modalWindow: ModalWindowAny): void {
+    if (this.windows.size === 0) return
+    if (!this.windows.has(modalWindow)) return
+
+    if (this.windows.size === 1) {
+      this.hide()
+
+      return
     }
 
+    this.windows.delete(modalWindow)
     this.events.emit("remove", modalWindow)
   }
 
-  public closeById(id: ModalDefaultParams["id"]) {
+  public closeById(id: ModalParams["id"]) {
     const modalWindows = [...this.windows].filter(modalWindow => modalWindow.params.id === id)
     modalWindows.forEach(modalWindow => this.close(modalWindow))
   }

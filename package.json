@@ -1,6 +1,6 @@
 {
   "name": "react-modal-global",
-  "version": "2023.04.01-experimental-1",
+  "version": "2023.05.21-experimental-2",
   "description": "Highly reusable React Modal that can be run from useEffect.",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
@@ -9,12 +9,10 @@
     "styles"
   ],
   "peerDependencies": {
-    "react": "^18.2.0"
+    "react": ">=18.0.0"
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0",
-    "lodash": "^4.17.21",
-    "uuid": "^9.0.0"
+    "eventemitter3": "^5.0.0"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.27.0",
@@ -22,7 +20,6 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.4.0",
-    "@types/lodash": "^4.14.192",
     "@types/uuid": "^9.0.1",
     "eslint": "^8.6.0",
     "eslint-plugin-react": "7.30.1",

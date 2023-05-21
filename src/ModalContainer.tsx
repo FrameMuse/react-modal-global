@@ -33,17 +33,17 @@ export interface ModalContainerProps {
   /**
    * Modal controller. If not provided, will use default (global `Modal`) controller.
    */
-  controller?: ModalController
+  controller: ModalController
 }
 
 export function ModalContainer(props: ModalContainerProps) {
   const { active, windows } = useModalState(props.controller)
 
-  const className = props.className || "modal"
+  const className = props.className ?? "modal"
 
   // Group windows by layers.
   const layerOrderedWindows: ModalWindow[] = windows.reduceRight((layers, modalWindow) => {
-    modalWindow.focused = false
+    // modalWindow.focused = false
 
     const layerWindow = layers[modalWindow.params.layer]
     if (layerWindow == null) {
@@ -53,21 +53,21 @@ export function ModalContainer(props: ModalContainerProps) {
     return layers
   }, [] as ModalWindow[])
   // Focus last window in the last layer.
-  const lastWindow = layerOrderedWindows.at(-1)
-  if (lastWindow) {
-    lastWindow.focused = true
-  }
+  // const lastWindow = layerOrderedWindows.at(-1)
+  // if (lastWindow) {
+  //   lastWindow.focused = true
+  // }
 
   return (
     <div className={classWithModifiers(className, active && "active")} aria-modal aria-hidden={!active}>
       {layerOrderedWindows.map(modalWindow => {
         function onClose() {
           if (!modalWindow.params.closable) return
-          stopPropagation(modalWindow.close)
+          modalWindow.close()
         }
 
         return (
-          <div className={classWithModifiers(className + "__container")} onClick={onClose} key={modalWindow.id}>
+          <div className={classWithModifiers(className + "__container")} onClick={stopPropagation(onClose)} key={modalWindow.id}>
             <modalContext.Provider value={modalWindow}>
               <modalWindow.component {...modalWindow.params} key={modalWindow.id} />
             </modalContext.Provider>

@@ -37,7 +37,7 @@ export type ModalComponent<P = unknown> =
   | (new (props: P) => Component<P>)
   | (new () => Component)
 
-export interface ModalDefaultParams {
+export interface ModalParams {
   /**
    * Usually used to close the modal by `closeById` method.
    * @default -1
@@ -52,7 +52,17 @@ export interface ModalDefaultParams {
    * @default true
    */
   closable: boolean
-  /** @deprecated */
+  /**
+   * Use `id` parameter with unique value instead.
+   * @example
+   * Modal.open(Component, { id: 1 })
+   * @example
+   * Modal.open(Component, { id: 2 })
+   * @example
+   * Modal.open(Component, { id: Date.now() })
+   * 
+   * @deprecated
+  */
   weak: boolean
   /**
    * Use `layer` instead.
@@ -119,5 +129,5 @@ export interface ModalDefaultParams {
  * open(FailComponent, { required: true }) // OK
  * open(FailComponent) // Error: missing required property `required`
  */
-export type ModalParamsTuple<P = unknown> =
-  HasRequiredKeys<NonNullable<P>> extends true ? [Partial<ModalDefaultParams> & P] : [(Partial<ModalDefaultParams> & P)?]
+export type ModalWindowParams<P = unknown> =
+  HasRequiredKeys<NonNullable<P>> extends true ? [Partial<ModalParams> & P] : [(Partial<ModalParams> & P)?]

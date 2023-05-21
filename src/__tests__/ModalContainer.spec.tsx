@@ -25,7 +25,7 @@ import { act } from "react-dom/test-utils"
 import { useModalWindow } from "../hooks"
 import { ModalContainer } from "../ModalContainer"
 import { ModalController } from "../ModalController"
-import { classWithModifiers } from "../utils"
+import { classWithModifiers, elementClick } from "../utils"
 
 let Modal: ModalController = new ModalController()
 let container = render(<ModalContainer controller={Modal} />).container
@@ -90,6 +90,52 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
+  it("should close on overlay click", () => {
+    act(() => {
+      Modal.open(PopupExample)
+    })
+
+    act(() => {
+      // Overlay (container) click.
+      expect(elementClick(modalContainerElement?.querySelector(".modal__container"))).toBe(true)
+    })
+
+    expect(Modal.active).toBe(false)
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should not close if `closable` is `false`", () => {
+    act(() => {
+      Modal.open(PopupExample, { closable: false })
+    })
+
+    act(() => {
+      // Overlay (container) click.
+      expect(elementClick(modalContainerElement?.querySelector(".modal__container"))).toBe(true)
+    })
+
+    expect(Modal.active).toBe(true)
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component on re-open", () => {
+    act(() => {
+      Modal.open(PopupExample, { random: true })
+    })
+
+    const savedElement = modalContainerElement?.cloneNode(true)
+
+    act(() => {
+      modalContainerElement?.querySelector("button")?.click()
+    })
+
+    act(() => {
+      Modal.open(PopupExample, { random: true })
+    })
+
+    expect(modalContainerElement).toEqual(savedElement)
+  })
+
   it("should render the correct component on re-open", () => {
     act(() => {
       Modal.open(PopupExample, { test: "1" })
@@ -108,6 +154,22 @@ describe("ModalContainer", () => {
 
     expect(modalContainerElement).toMatchSnapshot()
     expect(modalContainerElement).toEqual(savedElement)
+  })
+
+  it("should render the correct component when open the same window and closed", () => {
+    act(() => {
+      Modal.open(PopupExample, { test: "2" })
+      Modal.open(PopupExample, { test: "2" })
+    })
+
+    act(() => {
+      modalContainerElement?.querySelector("button")?.click()
+    })
+
+    // Modal should be closed after first closure.
+    expect(Modal.active).toBe(false)
+    expect(modalContainerElement?.className).toBe("modal")
+    expect(modalContainerElement).toMatchSnapshot()
   })
 
   it("should render the correct component when closed", () => {
@@ -169,22 +231,33 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should render the correct component when closed by component", () => {
+  it("should render the correct component when closed by component 1", () => {
     act(() => {
       Modal.open(PopupExample)
       Modal.open(PopupExample, { test: "7" })
-      Modal.open(() => <span id="puk">2</span>)
       Modal.open(PopupExample, { test: "1" })
-    })
+      Modal.open(PopupExample, { test: "2" })
 
-    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("1")
-    expect(modalContainerElement).toMatchSnapshot()
-
-    act(() => {
       Modal.closeByComponent(PopupExample)
     })
 
-    expect(modalContainerElement?.querySelector("#puk")).toHaveTextContent("2")
+    expect(modalContainerElement?.querySelector("#test")).toHaveTextContent("2")
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component when closed by component 2", () => {
+    act(() => {
+      Modal.open(() => null)
+      Modal.open(PopupExample)
+      Modal.open(PopupExample, { test: "7" })
+      Modal.open(PopupExample, { test: "1" })
+      Modal.open(PopupExample, { test: "2" })
+
+      Modal.closeByComponent(PopupExample)
+    })
+
+    expect(modalContainerElement?.querySelector("h1")).toBeNull()
+    expect(modalContainerElement?.querySelector("#test")).toBeNull()
     expect(modalContainerElement).toMatchSnapshot()
   })
 
@@ -244,6 +317,7 @@ describe("ModalContainer", () => {
       Modal.open(PopupExample, { test: true, layer: 1 })
     })
 
+    expect(container?.querySelectorAll("h1")).toHaveLength(2)
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
     expect(container?.querySelector("#test")).not.toBeNull()
     expect(container).toMatchSnapshot()
@@ -256,6 +330,7 @@ describe("ModalContainer", () => {
       modalForked.close()
     })
 
+    expect(container?.querySelectorAll("h1")).toHaveLength(1)
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(1)
     expect(container?.querySelector("#test")).toBeNull()
     expect(container).toMatchSnapshot()
@@ -267,6 +342,7 @@ describe("ModalContainer", () => {
       Modal.open(PopupExample, { test: true, layer: 1, closable: false })
     })
 
+    expect(container?.querySelectorAll("h1")).toHaveLength(2)
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
     expect(container?.querySelector("#test")).not.toBeNull()
     expect(container).toMatchSnapshot()

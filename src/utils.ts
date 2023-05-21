@@ -117,7 +117,7 @@ export function expectToThrow(fn: () => unknown, error?: Parameters<jest.Matcher
  * 
  * https://stackoverflow.com/a/52171480/12468111
  */
-function cyrb53(string: string, seed = 0) {
+export function cyrb53(string: string, seed = 0) {
   let h1 = 0xdeadbeef ^ seed
   let h2 = 0x41c6ce57 ^ seed
 
@@ -136,12 +136,10 @@ function cyrb53(string: string, seed = 0) {
   return 4294967296 * (2097151 & h2) + (h1 >>> 0)
 }
 
-/**
- * Hashes value by serializing it and passing it to `cyrb53`.
- * 
- * Used to generate ids.
- */
-export function hash(value: unknown) {
-  const serializedObject = serialize(value)
-  return cyrb53(serializedObject)
+export function elementClick(element?: Element | null): boolean {
+  if (!(element instanceof HTMLElement)) return false
+
+  element.click()
+
+  return true
 }
