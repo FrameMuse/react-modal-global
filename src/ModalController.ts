@@ -19,7 +19,8 @@ copies or substantial portions of the Software.
 import EventEmitter from "eventemitter3"
 
 import { ModalWindow, ModalWindowAny } from "./ModalWindow"
-import { ModalComponent, ModalParams, ModalState, ModalWindowParams } from "./types"
+import { ExternalStore, ModalComponent, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
+
 
 interface ModalControllerEvents {
   add: [ModalWindowAny]
@@ -27,10 +28,13 @@ interface ModalControllerEvents {
   update: []
 }
 
-class ModalController {
+class ModalController implements ExternalStore<ModalSnapshot> {
   protected windows: Set<ModalWindowAny> = new Set
   protected events: EventEmitter<ModalControllerEvents> = new EventEmitter
 
+  constructor() {
+    this.subscribe(() => this.refreshSnapshot())
+  }
 
   #active = false
   protected set active(value: boolean) {
@@ -204,25 +208,26 @@ class ModalController {
    * 
    * @returns `unsubscribe` method to stop observing.
    */
-  public observe(callback: (state: ModalState) => void) {
-    const listener = () => {
-      const state: ModalState = {
-        active: this.active,
-        windows: [...this.windows]
-      }
-      callback(state)
-    }
-    // Call listener to get initial state.
-    listener()
-
-    this.events.on("add", listener)
-    this.events.on("remove", listener)
-    this.events.on("update", listener)
+  public subscribe(callback: () => void) {
+    this.events.on("add", callback)
+    this.events.on("remove", callback)
+    this.events.on("update", callback)
 
     return () => {
-      this.events.off("add", listener)
-      this.events.off("remove", listener)
-      this.events.off("update", listener)
+      this.events.off("add", callback)
+      this.events.off("remove", callback)
+      this.events.off("update", callback)
+    }
+  }
+  public getSnapshot(): ModalSnapshot {
+    return this.#snapshot
+  }
+
+  #snapshot: ModalSnapshot = { active: this.active, windows: [] }
+  private refreshSnapshot(): void {
+    this.#snapshot = {
+      active: this.active,
+      windows: [...this.windows]
     }
   }
 }

@@ -18,7 +18,7 @@ copies or substantial portions of the Software.
 
 
 import { modalContext } from "./context"
-import { useModalState } from "./hooks"
+import { useModalSnapshot } from "./hooks"
 import { ModalController } from "./ModalController"
 import { ModalWindow } from "./ModalWindow"
 import { classWithModifiers, stopPropagation } from "./utils"
@@ -42,7 +42,7 @@ export interface ModalContainerProps {
 }
 
 export function ModalContainer(props: ModalContainerProps) {
-  const { active, windows } = useModalState(props.controller)
+  const { active, windows } = useModalSnapshot(props.controller)
 
   const className = props.className ?? "modal"
 

@@ -16,12 +16,12 @@ copies or substantial portions of the Software.
 
 */
 
-import { useContext, useEffect, useState } from "react"
+import { useContext, useSyncExternalStore } from "react"
 
 import { modalContext } from "./context"
 import { ModalController } from "./ModalController"
 import { ModalWindow } from "./ModalWindow"
-import { ModalComponent, ModalState } from "./types"
+import { ModalComponent, ModalSnapshot } from "./types"
 
 /**
  * Used inside a modal component to access the modal context (`ModalWindow`).
@@ -44,20 +44,14 @@ export function useModalWindow<T>(): ModalWindow<T extends ModalComponent<infer 
 
 
 
-const DEFAULT_STATE: ModalState = {
-  active: false,
-  windows: []
-}
-
 /**
- * Provides access to modal state and listens to updates.
+ * Shorthand for `useSyncExternalStore`.
  */
-export function useModalState(controller: ModalController): ModalState {
-  const [modalState, setModalState] = useState(DEFAULT_STATE)
+export function useModalSnapshot(controller: ModalController): ModalSnapshot {
+  const snapshot = useSyncExternalStore(
+    controller.subscribe.bind(controller),
+    controller.getSnapshot.bind(controller),
+  )
 
-  useEffect(() => {
-    return controller.observe(setModalState)
-  }, [controller])
-
-  return modalState
+  return snapshot
 }
