@@ -19,12 +19,12 @@
 
 - 🌍 Can be used in `useEffect` hook or any other global scope
 - 💧 [Reactish](#open-as-it-is) - Open modals `Modal.open(ModalComponent, { id: "2" })` as you would render components `<ModalComponent id="2" />`
-- 🪢 [Context](#using-modal-context) - you can access params passed to `open` method in the modal component via `useModalContext` hook
+- 🪢 [Context](#using-modal-context) - you can access params passed to `open` method in the modal component via `useModalWindow` hook
 - 🔃 [Queueing](#queueing) - you can open several modals at once
 - ✅ [Data preservation](#data-preservation) - data will persist after closing last modal and if same modal will be request to open, it will be restored
 - 📚 [Layouts](#modal-layouts) - you can create your own layouts for each modal type (Dialog, Popup, Drawer).
 - 🎛️ [Customization](#modal-controller) - you can extend `ModalController` class and create your behavior
-- 🦑 [Forking](#layer-depth) - you can fork modals and create "layer depth" (_in development_)
+- 🦑 [Forking](#layer-depth) - you can fork modals and create "layer depth"
 
 ## Motivation
 
@@ -50,6 +50,16 @@ I was insipered a lot by packages like [react-toastify](https://npmjs.com/packag
 
 Please follow steps below to use this package in your project.
 
+### Create `Modal`
+
+To start you need to create `Modal`. `ModalController` controls behaviour of the modals and is used in `ModalContainer`.
+
+```tsx
+import { ModalController } from "react-modal-global"
+
+export const Modal = new ModalController()
+```
+
 ### Add container
 
 `ModalContainer` is a display container for modal components (it should be placed in the root), modal components will appear here as you open them.
@@ -59,11 +69,14 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { ModalContainer } from "react-modal-global"
 
+import Modal from "./Modal" // Your modal.
+
 function App() {
   return (
     <>
       {/* ... Other components ... */}
-      <ModalContainer />
+      {/* It's better if `ModalContainer` goes after all other components */}
+      <ModalContainer controller={Modal} /> 
     </>
   )
 }
@@ -78,12 +91,13 @@ Notice that you have to have styles to keep modal closed, otherwise modal will n
 You can write your own styles or use provided be the library by importing it
 
 ```tsx
-import "react-modal-global/styles/modal.scss"
+import "react-modal-global/styles/modal.scss" // Imports essential styles for `ModalContainer`.
+import "react-modal-global/styles/layouts.scss" // Imports optional styles for `PopupLayout` and `DrawerLayout`.
 ```
 
 ### Create new Modal component
 
-Modal component is actually a React component, however this should be  exactly component not an element.
+Modal component is actually a React component. Note that this should be exactly component factory not an element.
 
 #### React component
 
@@ -105,11 +119,11 @@ class ModalComponent extends Component {
 
 This allows a component to access modal window context inside it to see what props were passed in `open` method.
 
-This also can be used to close modal window from inside (e.g. close on button click).
+This also can be used to close modal window from inside (e.g. close on button click). Or you can listen to `close` event and run a cleanup function.
 
 ```tsx
 function ModalComponent() {
-  const modal = useModalContext() // Getting modal context of currently focused component
+  const modal = useModalWindow() // Getting modal context of a modal window related to this component.
 
   return (
     <>
@@ -162,7 +176,7 @@ function HomeView() {
 
 #### Open as it is
 
-Although you can create your own layout (i.e. component) to pass `title`, `description` and other required/optional props, to what you are used to. This library encourages using only component and its props to open modals as just how you would use it in a tree.
+Although you can create your own layout (i.e. component) to pass `title`, `description` and other required/optional props. This library encourages using only component and its props to open modals as just how you would use it in a tree.
 
 So instead of
 ```ts
@@ -176,7 +190,6 @@ Include them in the component itself. Of course you will need to create more com
 
 ```ts
 Modal.open(PopupLogin)
-```
 ```
 
 Or you can create types of your modal components and pass them to `open` method.
@@ -200,12 +213,12 @@ To create your first `Popup` modal try this
 
 ```tsx
 import { FormEvent } from "react"
-import { useModalContext } from "react-modal-global"
+import { useModalWindow } from "react-modal-global"
 
 import PopupLayout from "../modal/layouts/PopupLayout/PopupLayout"
 
 function PopupMyFirst() {
-  const modal = useModalContext()
+  const modal = useModalWindow()
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -236,7 +249,7 @@ export default PopupMyFirst
 Instead of wrapping your modal components manually you can pass `template` attribute to `ModalContainer`, for example, `PopupLayout`
 
 ```tsx
-<ModalContainer template={PopupLayout} />
+<ModalContainer controller={Modal} template={PopupLayout} />
 ```
 
 ## Layout concept
@@ -263,30 +276,40 @@ You should manually add `aria-labelledby` and `aria-describedby` attributes to y
 
 `Modal.open` is a method that opens a modal. See [usage](#modal-component-usage) for example. See [options](#modal-options) for more details.
 
-```tsx
+```ts
 Modal.open(ModalComponent, { /* options */ })
 ```
 
 ### `Close`
 
-There is no `Modal.close` method because it's hard to know what exactly window to close, instead you can close a modal from inside of a modal component using `useModalContext` hook.
+#### `close`
 
-To close from outside you can use returned `close` method from `Modal.open` or `Modal.closeBy` methods
+`Modal.close` is a method that closes a modal by its instance. This will only close one modal, since any duplicates are filtered.
 
-#### `CloseByComponent`
+```ts
+Modal.close(ModalWindow)
+```
+
+#### `closeByComponent`
 
 `Modal.closeByComponent` is a method that closes a modal by its component. It will close all modals that use this component.
 
-```tsx
+```ts
 Modal.closeByComponent(ModalComponent)
 ```
 
-#### `CloseById`
+#### `closeById`
 
 `Modal.closeById` is a method that closes a modal by its id. It will close all modals that have this id.
 
-```tsx
+```ts
 Modal.closeById("insane-id")
+```
+
+Since all modal ids are set to `-1` **by default**, you can close all modals that don't have a custom `id`
+
+```ts
+Modal.closeById(-1)
 ```
 
 ### Modal options
@@ -298,7 +321,8 @@ Available options
 | --- | --- |
 | `id` | Specifies id of a modal. In react it's used as a `key`. May be used to find and close specific modal or else. |
 | `closable` | Specifies if a modal closing is controllable internally. If `false`, it's supposed to mean that user should do a **specific** action to close. |
-| `weak` | By default, a last closed modal will not be removed if the same modal will be requested to open. It will _restore_ previous modal but with `weak: true` it will not happen. |
+| `label` | Specifies `aria-label`. |
+| `layer` | Specifies how modals should overlap. |
 
 ## Modal container
 
@@ -322,8 +346,6 @@ It also works with `Modal.replace` method, which can replace props with new ones
 
 ### Layer depth
 
-**---This Feature is still in development---**
-
 Sometimes you need to open a modal on top of another modal, for example, you have a modal with a login form, and you want to open another modal with a phone confirmation on top of it but keeping the login form visible and state preserved.
 
 This is where `layer` depth comes in handy.
@@ -334,18 +356,17 @@ Modal.open(ModalComponent, {
 })
 ```
 
-Note that `layer` depth is not a z-index, it's just a number that specifies the depth of a modal, it's used to determine which modal should be opened on top of another, which may be overriden by focusing another modal.
+Note that `layer` depth is not really a z-index, it's just a number that specifies the depth of a modal, it's used to determine which modal should be opened on top of another.
 
 ---
 
-It's in early development and accessable in [@experimental](https://www.npmjs.com/package/react-modal-global/v/experimental) branch.
 Please consider contributing to this feature, I will be happy to see your PRs or just a [feedback](#contribute).
 
 ## Other modal ideas
 
 There are more than one way to create modals in React.
 
-Two the most popular are "React Tree Modal" and "General Consumer Modal" (this is how I named it).
+Two the most popular are "React Tree Modal" and "Common Consumer Modal" (this is how I call it).
 
 ### React Tree Modal
 
@@ -353,9 +374,9 @@ This is mostly known in React community, it's a modal that is rendered in a tree
 
 But this way has some problems, one of them is that you have to create a component, which will control your modal state (open, closed) every time for every modal, and it's not convenient.
 
-### General Consumer Modal
+### Common Consumer Modal
 
-This is an approach just consumes `title` and `description` props and renders them in a general container.
+This is an approach just consumes "`title` and `description`" or "`header` and `body`" props and renders them in a common container.
 
 This approach lacks of flexibility, but it's easier to use.
 There also may be problems 
