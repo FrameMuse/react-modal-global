@@ -21,7 +21,12 @@ import { HasRequiredKeys } from "type-fest"
 
 import { ModalWindow } from "./ModalWindow"
 
-export interface ModalState {
+export interface ExternalStore<T> {
+  subscribe(callback: () => void): () => void
+  getSnapshot(): T
+}
+
+export interface ModalSnapshot {
   active: boolean
   windows: ModalWindow[]
 }
