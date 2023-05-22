@@ -94,22 +94,21 @@ class ModalController {
     modalWindow.on("close", () => this.close(modalWindow))
 
 
-    // Skip adding to queue if the window is already in the beginning of the queue.
-    const lastWindow = [...this.windows].at(-1)
-    if (lastWindow?.id === modalWindow.id) {
-      this.show()
-
-      return lastWindow
+    // Skip adding to queue if the window is already the last modal.
+    if (this.active) {
+      const lastWindow = [...this.windows].at(-1)
+      if (lastWindow?.id === modalWindow.id) {
+        return lastWindow
+      }
     }
     // If there are temporary modal windows, clear.
-    if (this.active === false && this.windows.size > 0) {
+    if (this.windows.size > 0 && !this.active) {
       this.windows.clear()
     }
     this.windows.add(modalWindow)
-
-
-    this.active = true
     this.events.emit("add", modalWindow)
+
+    this.show()
 
     return modalWindow
   }
