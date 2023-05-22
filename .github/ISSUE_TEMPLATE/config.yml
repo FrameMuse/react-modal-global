@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Feature Request
+    url: https://github.com/FrameMuse/react-modal-global/discussions/categories/ideas
+    about: Please suggest ideas for this project. Use discussions instead of issues.
+  - name: Ask a question / Ask for help
+    url: https://github.com/FrameMuse/react-modal-global/discussions/categories/q-a
+    about: Please ask and answer questions here. Use discussions instead of issues.
+  - name: Community Chat
+    url: https://discord.com/invite/DCUWrRhvnt
+    about: Please join our Discord server to chat with the community.
