@@ -1,6 +1,6 @@
 {
   "name": "react-modal-global",
-  "version": "1.2.3",
+  "version": "2023.05.22-experimental-2",
   "description": "Highly reusable React Modal that can be run from useEffect.",
   "main": "dist/index.ts",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "styles"
   ],
   "peerDependencies": {
-    "react": "18.x"
+    "react": ">=18.0.0"
   },
   "dependencies": {
     "eventemitter3": "^5.0.0",
@@ -22,7 +22,6 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.4.0",
-    "@types/react": "^18.0.15",
     "@types/uuid": "^9.0.1",
     "eslint": "^8.6.0",
     "eslint-plugin-react": "7.32.2",
@@ -37,7 +36,6 @@
   },
   "scripts": {
     "build": "rollup --config",
-    "reinstall": "rimraf node_moduless && npm ci --silent",
     "test": "react-scripts test",
     "test:coverage": "npm test -- --coverage *",
     "prepublish": "rimraf build && npm run build"

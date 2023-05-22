@@ -55,4 +55,3 @@ jobs:
             npm publish react-modal-global@${{inputs.version}}
           env:
             NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-

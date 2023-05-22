@@ -22,10 +22,10 @@ import { render } from "@testing-library/react"
 import { useEffect, useState } from "react"
 import { act } from "react-dom/test-utils"
 
-import { ModalContainer } from "../container"
-import { ModalController } from "../controller"
-import { useModalContext } from "../hooks"
-import { classWithModifiers } from "../utils"
+import { useModalWindow } from "../hooks"
+import { ModalContainer } from "../ModalContainer"
+import { ModalController } from "../ModalController"
+import { classWithModifiers, elementClick } from "../utils"
 
 let Modal: ModalController = new ModalController()
 let container = render(<ModalContainer controller={Modal} />).container
@@ -59,7 +59,7 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should have the correct class name when closed (not weak)", () => {
+  it("should have the correct class name when closed", () => {
     act(() => {
       Modal.open(PopupExample)
     })
@@ -90,7 +90,35 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should render the correct component on re-open (not weak)", () => {
+  it("should close on overlay click", () => {
+    act(() => {
+      Modal.open(PopupExample)
+    })
+
+    act(() => {
+      // Overlay (container) click.
+      expect(elementClick(modalContainerElement?.querySelector(".modal__container"))).toBe(true)
+    })
+
+    expect(Modal.active).toBe(false)
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should not close if `closable` is `false`", () => {
+    act(() => {
+      Modal.open(PopupExample, { closable: false })
+    })
+
+    act(() => {
+      // Overlay (container) click.
+      expect(elementClick(modalContainerElement?.querySelector(".modal__container"))).toBe(true)
+    })
+
+    expect(Modal.active).toBe(true)
+    expect(modalContainerElement).toMatchSnapshot()
+  })
+
+  it("should render the correct component on re-open", () => {
     act(() => {
       Modal.open(PopupExample, { random: true })
     })
@@ -108,22 +136,24 @@ describe("ModalContainer", () => {
     expect(modalContainerElement).toEqual(savedElement)
   })
 
-  it("should render the correct component on re-open (weak)", () => {
+  it("should render the correct component on re-open", () => {
     act(() => {
-      Modal.open(PopupExample, { random: true, weak: true })
+      Modal.open(PopupExample, { test: "1" })
     })
 
     const savedElement = modalContainerElement?.cloneNode(true)
+    expect(savedElement).toMatchSnapshot()
 
     act(() => {
       modalContainerElement?.querySelector("button")?.click()
     })
 
     act(() => {
-      Modal.open(PopupExample, { random: true, weak: true })
+      Modal.open(PopupExample, { test: "1" })
     })
 
-    expect(modalContainerElement).not.toEqual(savedElement)
+    expect(modalContainerElement).toMatchSnapshot()
+    expect(modalContainerElement).toEqual(savedElement)
   })
 
   it("should render the correct component when open the same window and closed", () => {
@@ -136,47 +166,19 @@ describe("ModalContainer", () => {
       modalContainerElement?.querySelector("button")?.click()
     })
 
+    // Modal should be closed after first closure.
+    expect(Modal.active).toBe(false)
     expect(modalContainerElement?.className).toBe("modal")
     expect(modalContainerElement).toMatchSnapshot()
   })
 
-  it("should render the correct component when closed (not weak)", () => {
+  it("should render the correct component when closed", () => {
     act(() => {
       Modal.open(PopupExample)
     })
 
     act(() => {
       modalContainerElement?.querySelector("button")?.click()
-    })
-
-    expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
-    expect(modalContainerElement).toMatchSnapshot()
-  })
-
-  it("should render the correct component when closed (weak)", () => {
-    act(() => {
-      Modal.open(PopupExample, { weak: true })
-    })
-
-    act(() => {
-      modalContainerElement?.querySelector("button")?.click()
-    })
-
-    expect(modalContainerElement?.querySelector("h1")).toBeNull()
-    expect(modalContainerElement).toMatchSnapshot()
-  })
-
-  it("should render the correct component when closed (weak) and re-opened", () => {
-    act(() => {
-      Modal.open(PopupExample, { weak: true })
-    })
-
-    act(() => {
-      modalContainerElement?.querySelector("button")?.click()
-    })
-
-    act(() => {
-      Modal.open(PopupExample, { weak: true })
     })
 
     expect(modalContainerElement?.querySelector("h1")).toHaveTextContent("Popup Example")
@@ -312,44 +314,44 @@ describe("ModalContainer", () => {
   it("should render the correct component when forked", () => {
     act(() => {
       Modal.open(PopupExample)
-      Modal.open(PopupExample, { test: true, fork: true })
+      Modal.open(PopupExample, { test: true, layer: 1 })
     })
 
+    expect(container?.querySelectorAll("h1")).toHaveLength(2)
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
     expect(container?.querySelector("#test")).not.toBeNull()
-    expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
     expect(container).toMatchSnapshot()
   })
 
   it("should render the correct component when forked closed", () => {
     act(() => {
       Modal.open(PopupExample)
-      const modalForked = Modal.open(PopupExample, { test: true, fork: true })
+      const modalForked = Modal.open(PopupExample, { test: true, layer: 1 })
       modalForked.close()
     })
 
+    expect(container?.querySelectorAll("h1")).toHaveLength(1)
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(1)
     expect(container?.querySelector("#test")).toBeNull()
-    expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
     expect(container).toMatchSnapshot()
   })
 
   it("should render the correct component when forked (not closable)", () => {
     act(() => {
       Modal.open(PopupExample)
-      Modal.open(PopupExample, { test: true, fork: true, closable: false })
+      Modal.open(PopupExample, { test: true, layer: 1, closable: false })
     })
 
+    expect(container?.querySelectorAll("h1")).toHaveLength(2)
     expect(container?.querySelectorAll(".modal__container")).toHaveLength(2)
     expect(container?.querySelector("#test")).not.toBeNull()
-    expect([...container?.children || []].every(child => child.classList.contains("modal--active"))).toBe(true)
     expect(container).toMatchSnapshot()
   })
 })
 
 
 function PopupExample(props: { random?: boolean, test?: string | boolean }) {
-  const modal = useModalContext()
+  const modal = useModalWindow()
   const [random, setRandom] = useState(0)
   useEffect(() => setRandom(Date.now()), [props.random])
 

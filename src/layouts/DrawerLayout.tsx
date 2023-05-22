@@ -18,7 +18,7 @@ copies or substantial portions of the Software.
 
 import { ReactNode } from "react"
 
-import { useModalContext } from "../hooks"
+import { useModalWindow } from "../hooks"
 
 interface DrawerLayoutProps {
   width?: string;
@@ -26,7 +26,7 @@ interface DrawerLayoutProps {
 }
 
 function DrawerLayout(props: DrawerLayoutProps) {
-  const modal = useModalContext()
+  const modal = useModalWindow()
 
   return (
     <div className="drawer-layout" style={{ "--drawer-width": props.width }}>

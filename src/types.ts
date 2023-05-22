@@ -19,6 +19,13 @@ copies or substantial portions of the Software.
 import { Component, ReactElement } from "react"
 import { HasRequiredKeys } from "type-fest"
 
+import { ModalWindow } from "./ModalWindow"
+
+export interface ModalState {
+  active: boolean
+  windows: ModalWindow[]
+}
+
 /**
  * A modal component can be either a function component or a class component.
  */
@@ -27,73 +34,55 @@ export type ModalComponent<P = unknown> =
   | ((props: P) => ReactElement | null)
   | (() => ReactElement | null)
   // Class Component
-  | (new (props: P) => Component)
+  | (new (props: P) => Component<P>)
   | (new () => Component)
 
 export interface ModalParams {
   /**
-   * _Notice:_ Modals with different ids are interpreted as different - no data preservation will not be provided.
-   *
-   * @default 0
+   * Usually used to close the modal by `closeById` method.
+   * @default -1
    */
   id: string | number
   /**
    * Whether to enable built-in closing mechanisms.
+   * 
+   * - `ESC` key
+   * - `click` on the overlay
    *
    * @default true
    */
   closable: boolean
   /**
-   * Whether to keep mounted modal until a new one is oped.
-   *
-   * @default false
-   */
+   * Use `id` parameter with unique value instead.
+   * @example
+   * Modal.open(Component, { id: 1 })
+   * @example
+   * Modal.open(Component, { id: 2 })
+   * @example
+   * Modal.open(Component, { id: Date.now() })
+   * 
+   * @deprecated
+  */
   weak: boolean
   /**
-   * Whether to open a new modal as a standalone. Each fork will be one layer above previous.
-   *
-   * @default false
-   */
+   * Use `layer` instead.
+   * @deprecated
+  */
   fork: boolean
-}
-
-export interface ModalWindow<P = unknown> {
   /**
-   * Unique id of the modal window.
-   * If two modals have the same id, they will be treated as the same modal.
+   * Forks the modal window to a new layer.
    * 
-   * This is usually used in `key` prop for React components.
-   * 
-   * @note
-   * This is not the same as `params.id` because `id` is unique for each modal window.
+   * @default 0
    */
-  readonly id: string
-
-  component: ModalComponent<ModalParams & P>
-  params: ModalParams & P
-
+  layer: number
   /**
-   * Removes the modal from the queue. If
+   * Keep all open modals mounted until the last one is closed.
    */
-  close: () => void
+  keepMounted: boolean
   /**
-   * Indicates that the `close` method has been called and the modal window is going to be removed.
-   * 
-   * @default
-   * false
+   * *Usually* used to set the `aria-label` attribute.
    */
-  closed: boolean
-  /**
-   * Indicates that the modal is currently active.
-   *
-   * @note
-   *
-   * This is not the same as `!closed` because the modal may be not closed but still be in the queue.
-   * 
-   * @default
-   * true
-   */
-  focused: boolean
+  label: string
 }
 
 /**

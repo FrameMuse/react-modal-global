@@ -18,7 +18,7 @@ copies or substantial portions of the Software.
 
 import { ReactNode } from "react"
 
-import { useModalContext } from "../hooks"
+import { useModalWindow } from "../hooks"
 
 interface PopupLayoutProps {
   width?: string;
@@ -26,7 +26,7 @@ interface PopupLayoutProps {
 }
 
 function PopupLayout(props: PopupLayoutProps) {
-  const modal = useModalContext()
+  const modal = useModalWindow()
 
   return (
     <div className="popup-layout" style={{ "--popup-width": props.width }}>

@@ -19,22 +19,22 @@ copies or substantial portions of the Software.
 import { useContext, useEffect, useState } from "react"
 
 import { modalContext } from "./context"
-import { Modal, ModalController, ModalState } from "./controller"
-import { ModalComponent, ModalWindow } from "./types"
-
+import { ModalController } from "./ModalController"
+import { ModalWindow } from "./ModalWindow"
+import { ModalComponent, ModalState } from "./types"
 
 /**
  * Used inside a modal component to access the modal context (`ModalWindow`).
  *
  * Accepts a generic type that is used to infer the props of the modal component.
  * It has 3 overloads:
- * 1. `useModalContext<typeof ModalClassComponent>()` - infers the props from the class component type.
- * 2. `useModalContext<typeof ModalFunctionComponent>()` - infers the props from the function component type.
- * 3. `useModalContext<{ c: 3 }>()` - you can enter props by yourself too.
+ * 1. `useModalWindow<typeof ModalClassComponent>()` - infers the props from the class component type.
+ * 2. `useModalWindow<typeof ModalFunctionComponent>()` - infers the props from the function component type.
+ * 3. `useModalWindow<{ c: 3 }>()` - you can enter props by yourself too.
  */
-export function useModalContext<T>(): ModalWindow<T extends ModalComponent<infer Props> ? Props : T> {
+export function useModalWindow<T>(): ModalWindow<T extends ModalComponent<infer Props> ? Props : T> {
   const context = useContext(modalContext)
-  if (!context) throw new Error("ModalError: useModalContext must be used within a modalContext")
+  if (!context) throw new Error(`ModalError: ${useModalWindow.name} must be used within a modal context.`)
 
   // It's safe to case to `any` here because the context is always set to a `ModalWindow`
   // and the arbitrary type `T` is difened by the user.
@@ -42,24 +42,17 @@ export function useModalContext<T>(): ModalWindow<T extends ModalComponent<infer
   return context as ModalWindow<any>
 }
 
-// /* Type Testing */
-// class ModalClassComponent extends Component<{ a: 1 }> { }
-// // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// function ModalFunctionComponent(props: { b: 2 }) { return null }
-
-// useModalContext<typeof ModalClassComponent>() // => ModalWindow<{ a: 1 }>
-// useModalContext<typeof ModalFunctionComponent>() // => ModalWindow<{ b: 2 }>
-// useModalContext<{ c: 3 }>() // => ModalWindow<{ c: 3 }>
-// useModalContext() // => ModalWindow<unknown>
-
 
 
 const DEFAULT_STATE: ModalState = {
-  isOpen: false,
+  active: false,
   windows: []
 }
 
-export function useModalState(controller: ModalController = Modal) {
+/**
+ * Provides access to modal state and listens to updates.
+ */
+export function useModalState(controller: ModalController): ModalState {
   const [modalState, setModalState] = useState(DEFAULT_STATE)
 
   useEffect(() => {
