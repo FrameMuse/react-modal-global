@@ -27,19 +27,6 @@ beforeEach(() => {
   Modal = new ModalController()
 })
 
-// describe("ModalController (without container)", () => {
-//   test("no containers were mounted", async () => {
-//     const consoleWarnMock = jest.spyOn(console, "warn").mockImplementation()
-
-//     const controller = new ModalController()
-//     controller.open(() => createElement(Fragment))
-
-//     expect(containers.size).toBe(0)
-//     expect(consoleWarnMock).toHaveBeenCalledWith("ModalError: no containers were mounted.")
-
-//     consoleWarnMock.mockRestore()
-//   })
-// })
 describe("ModalController (with container)", () => {
   it("should have `active` true when open", () => {
     act(() => {

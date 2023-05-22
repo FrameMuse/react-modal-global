@@ -355,9 +355,6 @@ function PopupExample(props: { random?: boolean, test?: string | boolean }) {
   const [random, setRandom] = useState(0)
   useEffect(() => setRandom(Date.now()), [props.random])
 
-  // const modalState = useModalState(Modal)
-  // useEffect(() => console.log(modalState), [modalState])
-
   return (
     <div>
       {props.random && <span id="random">{random}</span>}

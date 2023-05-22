@@ -48,8 +48,6 @@ export function ModalContainer(props: ModalContainerProps) {
 
   // Group windows by layers.
   const layerOrderedWindows: ModalWindow[] = windows.reduceRight((layers, modalWindow) => {
-    // modalWindow.focused = false
-
     const layerWindow = layers[modalWindow.params.layer]
     if (layerWindow == null) {
       layers[modalWindow.params.layer] = modalWindow
@@ -57,11 +55,6 @@ export function ModalContainer(props: ModalContainerProps) {
 
     return layers
   }, [] as ModalWindow[])
-  // Focus last window in the last layer.
-  // const lastWindow = layerOrderedWindows.at(-1)
-  // if (lastWindow) {
-  //   lastWindow.focused = true
-  // }
 
   return (
     <div className={classWithModifiers(className, active && "active")} aria-modal aria-hidden={!active}>
