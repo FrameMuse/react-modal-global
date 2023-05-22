@@ -41,12 +41,18 @@ class ModalController {
   }
 
 
+  /**
+   * Hides modal without touching any modals.
+   */
   public hide() {
     if (this.active === false) return
 
     this.active = false
     this.events.emit("update")
   }
+  /**
+   * Shows modal without touching any modals.
+   */
   public show() {
     if (this.active === true) return
 
@@ -54,7 +60,31 @@ class ModalController {
     this.events.emit("update")
   }
 
-
+  /**
+   * Opens a modal window. Infers props from the component.
+   *
+   * - If the same modal window is already in the queue, it will be ignored.
+   * - If the modal window is weak, it will be unmounted after closing.
+   * - If the modal window is forked, it will be opened over all other modals.
+   * - If the modal window is closable (be default `true`), it will be closed by clicking on the overlay.
+   * - If the modal window is not closable, it will be closed only by calling internal `close` method.
+   *
+   * @param component Modal component.
+   * @param params Modal params.
+   * @returns Modal window and `PromiseLike`.
+   *
+   * @example
+   * await Modal.open(MyModal, { id: 1 })
+   * console.log("Modal was closed")
+   * 
+   * @example
+   * const modal = Modal.open(MyModal, { id: 1 })
+   * modal.then(() => console.log("Modal was closed"))
+   * 
+   * @example
+   * const modal = Modal.open(MyModal, { id: 1 })
+   * modal.on("close", () => console.log("Modal was closed"))
+   */
   public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     // `modalParams` still can be undefined, but we can't check it here.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -84,6 +114,11 @@ class ModalController {
     return modalWindow
   }
 
+  /**
+   * Replaces the last modal window in the queue with a new one.
+   *
+   * If the queue is empty, it will work the same as `open` method.
+   */
   public replace<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     const lastWindow = [...this.windows].at(-1)
     if (lastWindow != null) {
@@ -95,6 +130,9 @@ class ModalController {
     return this.open(component, modalParams!)
   }
 
+  /**
+   * Closes modal by its instance.
+   */
   public close(modalWindow: ModalWindowAny): void {
     if (this.windows.size === 0) return
     if (!this.windows.has(modalWindow)) return
@@ -109,11 +147,17 @@ class ModalController {
     this.events.emit("remove", modalWindow)
   }
 
+  /**
+   * Closes all modals, which have this `id`.
+   */
   public closeById(id: ModalParams["id"]) {
     const modalWindows = [...this.windows].filter(modalWindow => modalWindow.params.id === id)
     modalWindows.forEach(modalWindow => this.close(modalWindow))
   }
 
+  /**
+   * Closes all modals, which have this `component`. Additionally it will seek for `params` if given (compares by `===`).
+   */
   public closeByComponent<P>(component: ModalComponent<P>, params?: P) {
     const modalWindows = [...this.windows].filter(modalWindow => {
       if (modalWindow.component !== component) {
@@ -131,10 +175,21 @@ class ModalController {
     modalWindows.forEach(modalWindow => this.close(modalWindow))
   }
 
+  /**
+   * Closes all modals.
+   */
   public closeAll() {
     this.windows.forEach(modalWindow => this.close(modalWindow))
   }
 
+  /**
+   * Subscribes to `event` with `listener`.
+   * 
+   * @example
+   * Modal.on("close", () => { })
+   * 
+   * @returns `unsubscribe` method
+   */
   public on<T extends keyof ModalControllerEvents>(event: T, listener: (...args: ModalControllerEvents[T]) => void) {
     this.events.on(event, listener)
 
@@ -142,6 +197,14 @@ class ModalController {
       this.events.off(event, listener)
     }
   }
+
+  /**
+   * Used for container component to get the current state.
+   * 
+   * Observes the state and calls the callback on any changes.
+   * 
+   * @returns `unsubscribe` method to stop observing.
+   */
   public observe(callback: (state: ModalState) => void) {
     const listener = () => {
       const state: ModalState = {

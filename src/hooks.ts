@@ -49,7 +49,10 @@ const DEFAULT_STATE: ModalState = {
   windows: []
 }
 
-export function useModalState(controller: ModalController) {
+/**
+ * Provides access to modal state and listens to updates.
+ */
+export function useModalState(controller: ModalController): ModalState {
   const [modalState, setModalState] = useState(DEFAULT_STATE)
 
   useEffect(() => {

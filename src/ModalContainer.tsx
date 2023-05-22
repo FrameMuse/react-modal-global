@@ -31,7 +31,12 @@ export interface ModalContainerProps {
    */
   className?: string
   /**
-   * Modal controller. If not provided, will use default (global `Modal`) controller.
+   * Create a new `ModalController` instance and pass it to this prop.
+   * 
+   * @example
+   * const Modal = new ModalController()
+   * 
+   * <ModalContainer controller={Modal} />
    */
   controller: ModalController
 }

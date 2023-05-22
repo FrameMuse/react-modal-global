@@ -60,6 +60,12 @@ class ModalWindow<CustomParams = unknown> {
 
   public component: ModalComponent<CustomParams>
   public params: ModalParams & CustomParams
+  /**
+   * Indicates that the `close` method has been called and the modal window is going to be removed.
+   * 
+   * @default
+   * false
+   */
   public closed: boolean
 
   protected events: EventEmitter<ModalWindowEvents>
@@ -84,7 +90,7 @@ class ModalWindow<CustomParams = unknown> {
    * Closes the modal window.
    * 
    * @note
-   * This is arrow function to prevent `this` from being lost. You can use it without `bind`.
+   * This is an arrow function, which prevents `this` from being lost - You can use it without `bind`.
    * 
    * @example
    * const modal = Modal.open(PopupHello, { title: "Hello" })
@@ -99,7 +105,7 @@ class ModalWindow<CustomParams = unknown> {
 
 
   /**
-   * Can be used to wait for the modal to be closed before performing some action.
+   * Can be used to wait for the modal to be closed before performing an action.
    * 
    * @example
    * await Modal.open(PopupHello, { title: "Hello" })
@@ -108,8 +114,22 @@ class ModalWindow<CustomParams = unknown> {
   then(onfulfilled?: ((value: void) => void | PromiseLike<void>) | undefined | null, onrejected?: ((reason: unknown) => void | PromiseLike<void>) | undefined | null): PromiseLike<void> {
     return this.deffered.promise.then(onfulfilled, onrejected)
   }
+  /**
+   * Subscribes to `event` with `listener`.
+   * @example
+   * const modal = Modal.open(PopupHello, { title: "Hello" })
+   * modal.on("close", () => { })
+   * 
+   * @note If you want to do something on close, you can use await directly on this instance. For details see `then` method in `ModalWindow`.
+   * 
+   * @returns `unsubscribe` method
+   */
   on<K extends keyof ModalWindowEvents>(event: K, listener: (...args: ModalWindowEvents[K]) => void) {
-    return this.events.on(event, listener)
+    this.events.on(event, listener)
+
+    return () => {
+      this.events.off(event, listener)
+    }
   }
 }
 
