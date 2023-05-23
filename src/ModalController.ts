@@ -122,7 +122,7 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
   }
   public openNamed<
     Name extends keyof Config["components"],
-    P extends ModalComponentProps<Config["components"][Name]>
+    P extends ModalComponentProps<NonNullable<Config["components"]>[Name]>
   >(componentName: Name, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     const component = this.getNamedComponent<P>(componentName)
 
@@ -145,7 +145,7 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
 
   public replaceNamed<
     Name extends keyof Config["components"],
-    P extends ModalComponentProps<Config["components"][Name]>
+    P extends ModalComponentProps<NonNullable<Config["components"]>[Name]>
   >(componentName: Name, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     const component = this.getNamedComponent<P>(componentName)
 
