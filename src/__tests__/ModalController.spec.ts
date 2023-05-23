@@ -116,6 +116,7 @@ describe("ModalController (with container)", () => {
         closable: false,
         keepMounted: true,
         layer: 2,
+        layout: undefined,
         label: "TEST",
 
         weak: true,

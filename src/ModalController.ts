@@ -17,6 +17,7 @@ copies or substantial portions of the Software.
 */
 
 import EventEmitter from "eventemitter3"
+import { Fragment, ReactNode } from "react"
 
 import { ModalWindow, ModalWindowAny } from "./ModalWindow"
 import { ExternalStore, MODAL_WINDOW_PARAMS_EXPLANATION, ModalComponent, ModalComponentProps, ModalNamedComponents, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
@@ -28,10 +29,14 @@ interface ModalControllerEvents {
   update: []
 }
 
-interface ModalControllerConfig<Components extends ModalNamedComponents = ModalNamedComponents> {
+interface ModalControllerConfig<
+  Layouts extends ModalNamedComponents = ModalNamedComponents,
+  Components extends ModalNamedComponents = ModalNamedComponents
+> {
+  layouts: Layouts
   components: Components
 
-  defaultParams: Partial<ModalParams>
+  defaultParams: Partial<ModalParams<keyof Layouts>>
 }
 
 class ModalController<Config extends Partial<ModalControllerConfig> = ModalControllerConfig> implements ExternalStore<ModalSnapshot> {
@@ -96,7 +101,7 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
    * modal.on("close", () => console.log("Modal was closed"))
    */
   public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
-    const modalWindow = new ModalWindow(component, { ...this.config?.defaultParams, ...modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P> })
+    const modalWindow = new ModalWindow<P>(component, { ...this.config?.defaultParams, ...modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P> })
     // Using `on` instead of `then` since `then` will only be executed on the next event loop iteration.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop.
     modalWindow.on("close", () => this.close(modalWindow))
@@ -217,6 +222,15 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
     }
 
     return this.config.components[componentName]
+  }
+
+  public getLayout(layoutName: NonNullable<Config["defaultParams"]>["layout"]): ModalComponent<{ children: ReactNode }> {
+    if (layoutName == null) return Fragment
+
+    if (this.config == null) return Fragment
+    if (this.config.layouts == null) return Fragment
+
+    return this.config?.layouts[layoutName]
   }
 
 
