@@ -28,11 +28,15 @@ interface ModalControllerEvents {
   update: []
 }
 
-class ModalController implements ExternalStore<ModalSnapshot> {
+interface ModalControllerConfig {
+  defaultParams: Partial<ModalParams>
+}
+
+class ModalController<Config extends ModalControllerConfig = ModalControllerConfig> implements ExternalStore<ModalSnapshot> {
   protected windows: Set<ModalWindowAny> = new Set
   protected events: EventEmitter<ModalControllerEvents> = new EventEmitter
 
-  constructor() {
+  constructor(private config?: Config) {
     this.subscribe(() => this.refreshSnapshot())
   }
 
@@ -92,7 +96,7 @@ class ModalController implements ExternalStore<ModalSnapshot> {
   public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
     // `modalParams` still can be undefined, but we can't check it here.
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const modalWindow = new ModalWindow(component, modalParams!)
+    const modalWindow = new ModalWindow(component, { ...this.config?.defaultParams, ...modalParams! })
     // Using `on` instead of `then` since `then` will only be executed on the next event loop iteration.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop.
     modalWindow.on("close", () => this.close(modalWindow))
