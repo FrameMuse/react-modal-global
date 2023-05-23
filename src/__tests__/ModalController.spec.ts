@@ -20,6 +20,7 @@ import { createElement, Fragment } from "react"
 import { act } from "react-dom/test-utils"
 
 import { ModalController } from "../ModalController"
+import { ModalParams } from "../types"
 
 let Modal: ModalController = new ModalController()
 
@@ -105,6 +106,25 @@ describe("ModalController (with container)", () => {
       const modal3 = controller.open(Test, { id: "test" })
       const modal4 = controller.open(Test, { id: "test" })
       expect(modal3.id).toBe(modal4.id)
+    })
+  })
+
+  describe("ModalController Config", () => {
+    it("should apply `defaultParams`", () => {
+      const defaultParams: ModalParams = {
+        id: 1,
+        closable: false,
+        keepMounted: true,
+        layer: 2,
+        label: "TEST",
+
+        weak: true,
+        fork: true
+      }
+      const controller = new ModalController({ defaultParams })
+      const modal = controller.open(() => createElement(Fragment))
+
+      expect(modal.params).toStrictEqual(defaultParams)
     })
   })
 })
