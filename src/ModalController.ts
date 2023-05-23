@@ -19,7 +19,7 @@ copies or substantial portions of the Software.
 import EventEmitter from "eventemitter3"
 
 import { ModalWindow, ModalWindowAny } from "./ModalWindow"
-import { ExternalStore, ModalComponent, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
+import { ExternalStore, MODAL_WINDOW_PARAMS_EXPLANATION, ModalComponent, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
 
 
 interface ModalControllerEvents {
@@ -94,9 +94,7 @@ class ModalController<Config extends ModalControllerConfig = ModalControllerConf
    * modal.on("close", () => console.log("Modal was closed"))
    */
   public open<P>(component: ModalComponent<P>, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
-    // `modalParams` still can be undefined, but we can't check it here.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const modalWindow = new ModalWindow(component, { ...this.config?.defaultParams, ...modalParams! })
+    const modalWindow = new ModalWindow(component, { ...this.config?.defaultParams, ...modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P> })
     // Using `on` instead of `then` since `then` will only be executed on the next event loop iteration.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop.
     modalWindow.on("close", () => this.close(modalWindow))
@@ -132,9 +130,7 @@ class ModalController<Config extends ModalControllerConfig = ModalControllerConf
       this.windows.delete(lastWindow)
     }
 
-    // `modalParams` still can be undefined, but we can't check it here.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.open(component, modalParams!)
+    return this.open(component, modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P>)
   }
 
   /**

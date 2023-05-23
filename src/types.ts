@@ -108,3 +108,11 @@ export interface ModalParams {
  */
 export type ModalWindowParams<P = unknown> =
   HasRequiredKeys<NonNullable<P>> extends true ? [Partial<ModalParams> & P] : [(Partial<ModalParams> & P)?]
+
+/**
+ * This is intented to fix errors related to passing `ModalWindowParams` to spreaded array of `ModalWindowParams`.
+ * 
+ * Removes `undefined` from `ModalWindowParams`, otherwise it will show `"'P' could be instantiated with an arbitrary type..."` error.
+ * Even though it's ok to pass `undefined` and arbitrary type there.
+ */
+export type MODAL_WINDOW_PARAMS_EXPLANATION<P> = Partial<ModalParams> & P
