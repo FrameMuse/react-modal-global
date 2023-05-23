@@ -19,7 +19,7 @@ copies or substantial portions of the Software.
 import EventEmitter from "eventemitter3"
 
 import { ModalWindow, ModalWindowAny } from "./ModalWindow"
-import { ExternalStore, MODAL_WINDOW_PARAMS_EXPLANATION, ModalComponent, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
+import { ExternalStore, MODAL_WINDOW_PARAMS_EXPLANATION, ModalComponent, ModalComponentProps, ModalNamedComponents, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
 
 
 interface ModalControllerEvents {
@@ -28,11 +28,13 @@ interface ModalControllerEvents {
   update: []
 }
 
-interface ModalControllerConfig {
+interface ModalControllerConfig<Components extends ModalNamedComponents = ModalNamedComponents> {
+  components: Components
+
   defaultParams: Partial<ModalParams>
 }
 
-class ModalController<Config extends ModalControllerConfig = ModalControllerConfig> implements ExternalStore<ModalSnapshot> {
+class ModalController<Config extends Partial<ModalControllerConfig> = ModalControllerConfig> implements ExternalStore<ModalSnapshot> {
   protected windows: Set<ModalWindowAny> = new Set
   protected events: EventEmitter<ModalControllerEvents> = new EventEmitter
 
@@ -118,6 +120,14 @@ class ModalController<Config extends ModalControllerConfig = ModalControllerConf
 
     return modalWindow
   }
+  public openNamed<
+    Name extends keyof Config["components"],
+    P extends ModalComponentProps<Config["components"][Name]>
+  >(componentName: Name, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
+    const component = this.getNamedComponent<P>(componentName)
+
+    return this.open(component, modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P>)
+  }
 
   /**
    * Replaces the last modal window in the queue with a new one.
@@ -131,6 +141,15 @@ class ModalController<Config extends ModalControllerConfig = ModalControllerConf
     }
 
     return this.open(component, modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P>)
+  }
+
+  public replaceNamed<
+    Name extends keyof Config["components"],
+    P extends ModalComponentProps<Config["components"][Name]>
+  >(componentName: Name, ...[modalParams]: ModalWindowParams<P>): ModalWindow<P> {
+    const component = this.getNamedComponent<P>(componentName)
+
+    return this.replace(component, modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P>)
   }
 
   /**
@@ -184,6 +203,23 @@ class ModalController<Config extends ModalControllerConfig = ModalControllerConf
   public closeAll() {
     this.windows.forEach(modalWindow => this.close(modalWindow))
   }
+
+  private getNamedComponent<P>(componentName: keyof Config["components"]): ModalComponent<P> {
+    // Error cause.
+    const cause = { config: this.config, componentName }
+
+    if (this.config == null) {
+      throw new Error("ModalController `config` is not defined.", { cause })
+    }
+
+    if (this.config.components == null) {
+      throw new Error("ModalController `config.components` is not defined.", { cause })
+    }
+
+    return this.config.components[componentName]
+  }
+
+
 
   /**
    * Subscribes to `event` with `listener`.

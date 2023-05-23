@@ -16,7 +16,7 @@ copies or substantial portions of the Software.
 
 */
 
-import { createElement, Fragment } from "react"
+import { createElement, Fragment, lazy } from "react"
 import { act } from "react-dom/test-utils"
 
 import { ModalController } from "../ModalController"
@@ -125,6 +125,46 @@ describe("ModalController (with container)", () => {
       const modal = controller.open(() => createElement(Fragment))
 
       expect(modal.params).toStrictEqual(defaultParams)
+    })
+
+    it("openNamed", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      function Test1(props: { a: 1 }) { return null }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      function Test2(props: { b?: 2 }) { return createElement("a") }
+
+      const controller = new ModalController({
+        components: {
+          test1: Test1,
+          test2: Test2,
+          lazied: lazy(async () => ({ default: (await import("../ModalContainer")).ModalContainer }))
+        }
+      })
+
+      controller.openNamed("test1", { a: 1 })
+      controller.openNamed("test2")
+      controller.openNamed("test2", { b: 2 })
+      controller.openNamed("lazied", { controller: new ModalController })
+    })
+
+    it("replaceNamed", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      function Test1(props: { a: 1 }) { return null }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      function Test2(props: { b?: 2 }) { return createElement("a") }
+
+      const controller = new ModalController({
+        components: {
+          test1: Test1,
+          test2: Test2,
+          lazied: lazy(async () => ({ default: (await import("../ModalContainer")).ModalContainer }))
+        }
+      })
+
+      controller.replaceNamed("test1", { a: 1 })
+      controller.replaceNamed("test2")
+      controller.replaceNamed("test2", { b: 2 })
+      controller.replaceNamed("lazied", { controller: new ModalController })
     })
   })
 })
