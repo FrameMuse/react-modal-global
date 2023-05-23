@@ -16,9 +16,9 @@ copies or substantial portions of the Software.
 
 */
 
-import { ComponentProps, JSXElementConstructor } from "react"
+import { ComponentProps, ExoticComponent, JSXElementConstructor } from "react"
 import { HasRequiredKeys } from "type-fest"
-import { IsAny } from "type-fest/source/internal"
+import { IsAny } from "type-fest/source/is-any"
 
 import { ModalWindow } from "./ModalWindow"
 
@@ -35,7 +35,7 @@ export interface ModalSnapshot {
 /**
  * A modal component can be either a function component or a class component.
  */
-export type ModalComponent<P = unknown> = JSXElementConstructor<P>
+export type ModalComponent<P = unknown> = JSXElementConstructor<P> | ExoticComponent<P>
 export type ModalComponentProps<T extends ModalComponent> = IsAny<ComponentProps<T>> extends true ? never : ComponentProps<T>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
