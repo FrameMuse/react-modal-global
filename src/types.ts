@@ -41,7 +41,7 @@ export type ModalComponentProps<T extends ModalComponent> = IsAny<ComponentProps
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ModalNamedComponents = Record<keyof never, ModalComponent<any>>
 
-export interface ModalParams {
+export interface ModalParams<Layout extends keyof never = never> {
   /**
    * Usually used to close the modal by `closeById` method.
    * @default -1
@@ -79,6 +79,19 @@ export interface ModalParams {
    * @default 0
    */
   layer: number
+  /**
+   * You can apply one of defined layouts.
+   * 
+   * @example
+   * const Modal = new ModalController({
+   *   layouts: {
+   *     dialog: DialogLayout
+   *   }
+   * })
+   * 
+   * Modal.open(Component, { layout: "dialog" })
+   */
+  layout: Layout | undefined
   /**
    * Keep all open modals mounted until the last one is closed.
    */

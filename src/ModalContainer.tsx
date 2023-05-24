@@ -64,10 +64,14 @@ export function ModalContainer(props: ModalContainerProps) {
           modalWindow.close()
         }
 
+        const Layout = props.controller.getLayout(modalWindow.params.layout)
+
         return (
           <div className={classWithModifiers(className + "__container")} onClick={stopPropagation(onClose)} key={modalWindow.id}>
             <modalContext.Provider value={modalWindow}>
-              <modalWindow.component {...modalWindow.params} key={modalWindow.id} />
+              <Layout>
+                <modalWindow.component {...modalWindow.params} key={modalWindow.id} />
+              </Layout>
             </modalContext.Provider>
           </div>
         )

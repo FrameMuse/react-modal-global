@@ -34,6 +34,7 @@ const DEFAULT_PARAMS: ModalParams = {
   closable: true,
   keepMounted: false,
   layer: 0,
+  layout: undefined,
   label: "Content is unknown. Bad guy didn't set a label.",
 
   weak: false,
