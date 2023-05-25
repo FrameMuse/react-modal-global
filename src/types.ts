@@ -16,70 +16,77 @@ copies or substantial portions of the Software.
 
 */
 
-import { ReactElement } from "react"
+import { ComponentProps, ExoticComponent, JSXElementConstructor } from "react"
 import { HasRequiredKeys } from "type-fest"
+import { IsAny } from "type-fest/source/is-any"
+
+import { ModalWindow } from "./ModalWindow"
+
+export interface ExternalStore<T> {
+  subscribe(callback: () => void): () => void
+  getSnapshot(): T
+}
+
+export interface ModalSnapshot {
+  active: boolean
+  windows: ModalWindow[]
+}
 
 /**
- * https://stackoverflow.com/questions/56687668/a-way-to-disable-type-argument-inference-in-generics
+ * A modal component can be either a function component or a class component.
  */
-export type NoInfer<T> = [T][T extends unknown ? 0 : never]
+export type ModalComponent<P = unknown> = JSXElementConstructor<P> | ExoticComponent<P>
+export type ModalComponentProps<T extends ModalComponent> = IsAny<ComponentProps<T>> extends true ? never : ComponentProps<T>
 
-
-export type ModalComponent<P = unknown> = ((props: P) => ReactElement | null) | (() => ReactElement | null)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ModalNamedComponents = Record<keyof never, ModalComponent<any>>
 
 export interface ModalParams {
   /**
-   * _Notice:_ Modals with different ids are interpreted as different - no data preservation will not be provided.
-   *
-   * @default 0
+   * Usually used to close the modal by `closeById` method.
+   * @default -1
    */
   id: string | number
   /**
    * Whether to enable built-in closing mechanisms.
+   * 
+   * - `ESC` key
+   * - `click` on the overlay
    *
    * @default true
    */
   closable: boolean
   /**
-   * Whether to keep mounted modal until a new one is oped.
-   *
-   * @default false
-   */
+   * Use `id` parameter with unique value instead.
+   * @example
+   * Modal.open(Component, { id: 1 })
+   * @example
+   * Modal.open(Component, { id: 2 })
+   * @example
+   * Modal.open(Component, { id: Date.now() })
+   * 
+   * @deprecated
+  */
   weak: boolean
   /**
-   * Whether to open a new modal as a standalone. Each fork will be one layer above previous.
-   *
-   * @default false
-   */
+   * Use `layer` instead.
+   * @deprecated
+  */
   fork: boolean
-}
-
-export interface ModalWindow<P = unknown> {
-  component: ModalComponent<ModalParams & P>
-  params: ModalParams & P
-
   /**
-   * Removes the modal from the queue. If
+   * Forks the modal window to a new layer.
+   * 
+   * @default 0
    */
-  close: () => void
+  layer: number
   /**
-   * Indicates that the `close` method has been called and the modal window is going to be removed.
-   *
-   * @default
-   * false
+   * Keep all open modals mounted until the last one is closed.
    */
-  closed: boolean
+  keepMounted: boolean
   /**
-   * Indicates that the modal is currently active.
-   *
-   * @note
-   *
-   * This is not the same as `!closed` because the modal may be not closed but still be in the queue.
-   *
-   * @default
-   * true
+   * *Usually* used to set the `aria-label` attribute.
    */
-  focused: boolean
+  label: string
 }
 
 /**
@@ -100,3 +107,11 @@ export interface ModalWindow<P = unknown> {
  */
 export type ModalWindowParams<P = unknown> =
   HasRequiredKeys<NonNullable<P>> extends true ? [Partial<ModalParams> & P] : [(Partial<ModalParams> & P)?]
+
+/**
+ * This is intented to fix errors related to passing `ModalWindowParams` to spreaded array of `ModalWindowParams`.
+ * 
+ * Removes `undefined` from `ModalWindowParams`, otherwise it will show `"'P' could be instantiated with an arbitrary type..."` error.
+ * Even though it's ok to pass `undefined` and arbitrary type there.
+ */
+export type MODAL_WINDOW_PARAMS_EXPLANATION<P> = Partial<ModalParams> & P

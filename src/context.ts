@@ -18,6 +18,6 @@ copies or substantial portions of the Software.
 
 import { createContext } from "react"
 
-import { ModalWindow } from "./types"
+import { ModalWindow } from "./ModalWindow"
 
 export const modalContext = createContext<ModalWindow | null>(null)

@@ -16,7 +16,17 @@ copies or substantial portions of the Software.
 
 */
 
-export { ModalController } from "./ModalController"
-export { ModalWindow } from "./ModalWindow"
-export { ModalContainer } from "./ModalContainer"
-export { useModalWindow, useModalSnapshot } from "./hooks"
+class Deffered<T> {
+  public promise: Promise<T>
+  public resolve!: (value: T) => void
+  public reject!: (reason: unknown) => void
+
+  constructor() {
+    this.promise = new Promise((resolve, reject) => {
+      this.resolve = resolve
+      this.reject = reject
+    })
+  }
+}
+
+export default Deffered
