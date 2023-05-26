@@ -21,4 +21,4 @@ export { ModalWindow } from "./ModalWindow"
 export { ModalContainer } from "./ModalContainer"
 export { useModalWindow, useModalSnapshot } from "./hooks"
 
-export { ModalPortal } from "./components"
+export { ModalPortal } from "./ModalPortal"
