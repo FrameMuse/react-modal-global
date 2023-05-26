@@ -16,10 +16,9 @@ copies or substantial portions of the Software.
 
 */
 
-import { ReactNode, useEffect, useId, useMemo } from "react"
+import { ReactNode, useEffect, useId, useState } from "react"
 import { createPortal } from "react-dom"
 
-import { modalContext } from "./context"
 import { ModalController } from "./ModalController"
 import { ModalParams } from "./types"
 
@@ -49,65 +48,58 @@ export function ModalPortal(props: ModalPortalProps) {
     }
   }, [props.controller, id])
 
-  return useMemo(() => {
-    const portalElement = document.createElement("div")
+  // return useMemo(() => {
+  //   const portalElement = document.createDocumentFragment()
 
-    function replaceWithFragment(element: HTMLDivElement | null) {
-      if (element == null) return
+  //   function replaceWithFragment(element: HTMLDivElement | null) {
+  //     if (element == null) return
 
-      element.replaceWith(portalElement)
-    }
+  //     portalElement.replaceChildren(element)
+  //   }
 
 
-    function ModalViewComponent() {
-      return <div ref={replaceWithFragment} />
-    }
+  //   const ModalViewComponent = () => <div ref={replaceWithFragment} />
+  //   const modal = props.controller.open(ModalViewComponent, { ...props.params, id })
+  //   if (props.onClose) {
+  //     modal.on("close", props.onClose)
+  //   }
 
+
+  //   return (
+  //     <modalContext.Provider value={modal}>
+  //       {createPortal(props.children, portalElement, id)}
+  //     </modalContext.Provider>
+  //   )
+  // }, [props.controller, id])
+
+  const [fragment, setFragment] = useState<HTMLDivElement | null>(null)
+
+  function replaceWithFragment(element: HTMLDivElement | null) {
+    if (element == null) return
+
+    setFragment(element)
+  }
+
+  useEffect(() => {
+    const ModalViewComponent = () => <div ref={replaceWithFragment} />
     const modal = props.controller.open(ModalViewComponent, { ...props.params, id })
     if (props.onClose) {
       modal.on("close", props.onClose)
     }
 
+    return () => {
+      modal.close()
 
-    return (
-      <modalContext.Provider value={modal}>
-        {createPortal(props.children, portalElement, id)}
-      </modalContext.Provider>
-    )
+      // // Delayed close to prevent flickering and unnecessary closing, opening animations.
+      // setTimeout(() => modal.close())
+    }
   }, [props.controller, id])
 
-  // useEffect(() => {
-  //   const documentFragment = document.createDocumentFragment()
-  //   setFragment(documentFragment)
+  if (fragment == null) {
+    return null
+  }
 
-  //   function ModalViewComponent() {
-  //     const element = useRef<HTMLDivElement | null>(null)
-
-  //     useLayoutEffect(() => {
-  //       element.current?.replaceWith(documentFragment)
-  //     }, [])
-
-  //     return <div ref={element} />
-  //   }
-
-  //   const modal = props.controller.open(ModalViewComponent, { id })
-  //   if (props.onClose) {
-  //     modal.on("close", props.onClose)
-  //   }
-
-  //   return () => {
-  //     modal.close()
-
-  //     // // Delayed close to prevent flickering and unnecessary closing, opening animations.
-  //     // setTimeout(() => modal.close())
-  //   }
-  // }, [props.controller])
-
-  // if (fragment == null) {
-  //   return null
-  // }
-
-  // return createPortal(props.children, fragment, id)
+  return createPortal(props.children, fragment, id)
 }
 
 
