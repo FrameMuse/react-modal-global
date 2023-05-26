@@ -53,11 +53,9 @@ export function ModalPortal(props: ModalPortalProps) {
     const portalElement = document.createElement("div")
 
     function replaceWithFragment(element: HTMLDivElement | null) {
-      const parentElement = element?.parentElement
-      if (parentElement == null) return
+      if (element == null) return
 
-      parentElement.replaceWith(portalElement)
-      portalElement.setAttribute("class", parentElement.className)
+      element.replaceWith(portalElement)
     }
 
 
