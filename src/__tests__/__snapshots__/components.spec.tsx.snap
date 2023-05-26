@@ -11,6 +11,9 @@ exports[`Components ModalPortal 1`] = `
       class="modal__container"
     >
       <div
+        style="display: none;"
+      />
+      <div
         id="a"
       >
         a_
