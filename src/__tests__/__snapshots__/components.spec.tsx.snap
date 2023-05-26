@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Components ModalOpen 1`] = `
+exports[`Components ModalPortal 1`] = `
 <div>
   <div
     aria-hidden="false"
@@ -13,33 +13,8 @@ exports[`Components ModalOpen 1`] = `
       <div
         id="a"
       >
-        a
-        1
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Components ModalView 1`] = `
-<div>
-  <div
-    aria-hidden="false"
-    aria-modal="true"
-    class="modal modal--active"
-  >
-    <div
-      class="modal__container"
-    >
-      <div
-        id="test1"
-      >
-        123
-      </div>
-      <div
-        id="test2"
-      >
-        675
+        a_
+        test-a
       </div>
     </div>
   </div>
