@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Components ModalPortal 1`] = `
+<div>
+  <div
+    aria-hidden="false"
+    aria-modal="true"
+    class="modal modal--active"
+  >
+    <div
+      class="modal__container"
+    >
+      <div
+        style="display: none;"
+      />
+      <div
+        id="a"
+      >
+        a_
+        test-a
+      </div>
+    </div>
+  </div>
+</div>
+`;

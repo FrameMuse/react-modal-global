@@ -34,6 +34,7 @@
   "include": [
     "src",
     "scripts",
-    "@types"
+    "@types",
+    "rollup.config.ts"
   ]
 }
