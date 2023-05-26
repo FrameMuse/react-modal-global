@@ -19,7 +19,9 @@ copies or substantial portions of the Software.
 import { ReactNode, useEffect, useId, useMemo } from "react"
 import { createPortal } from "react-dom"
 
+import { modalContext } from "./context"
 import { ModalController } from "./ModalController"
+import { ModalParams } from "./types"
 
 
 interface ModalPortalProps {
@@ -27,10 +29,10 @@ interface ModalPortalProps {
    * If not presented, will be used from the context.
    */
   controller: ModalController
+  children: ReactNode
 
   onClose?(): void
-
-  children: ReactNode
+  params?: Partial<ModalParams>
 }
 
 /**
@@ -63,13 +65,17 @@ export function ModalPortal(props: ModalPortalProps) {
       return <div ref={replaceWithFragment} />
     }
 
-    const modal = props.controller.open(ModalViewComponent, { id })
+    const modal = props.controller.open(ModalViewComponent, { ...props.params, id })
     if (props.onClose) {
       modal.on("close", props.onClose)
     }
 
 
-    return createPortal(props.children, portalElement, id)
+    return (
+      <modalContext.Provider value={modal}>
+        {createPortal(props.children, portalElement, id)}
+      </modalContext.Provider>
+    )
   }, [props.controller, id])
 
   // useEffect(() => {
