@@ -16,10 +16,12 @@ copies or substantial portions of the Software.
 
 */
 
-import { ReactNode, useEffect, useId, useState } from "react"
+import { ReactNode, useEffect, useId, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
+import { modalContext } from "./context"
 import { ModalController } from "./ModalController"
+import { ModalWindow, ModalWindowAny } from "./ModalWindow"
 import { ModalParams } from "./types"
 
 
@@ -41,65 +43,38 @@ interface ModalPortalProps {
  */
 export function ModalPortal(props: ModalPortalProps) {
   const id = useId()
+  const modalWindowRef = useRef<ModalWindowAny>(new ModalWindow(() => null, {}))
 
-  useEffect(() => {
-    return () => {
-      props.controller.closeById(id)
-    }
-  }, [props.controller, id])
-
-  // return useMemo(() => {
-  //   const portalElement = document.createDocumentFragment()
-
-  //   function replaceWithFragment(element: HTMLDivElement | null) {
-  //     if (element == null) return
-
-  //     portalElement.replaceChildren(element)
-  //   }
-
-
-  //   const ModalViewComponent = () => <div ref={replaceWithFragment} />
-  //   const modal = props.controller.open(ModalViewComponent, { ...props.params, id })
-  //   if (props.onClose) {
-  //     modal.on("close", props.onClose)
-  //   }
-
-
-  //   return (
-  //     <modalContext.Provider value={modal}>
-  //       {createPortal(props.children, portalElement, id)}
-  //     </modalContext.Provider>
-  //   )
-  // }, [props.controller, id])
-
-  const [fragment, setFragment] = useState<HTMLDivElement | null>(null)
+  const [portalElement, setPortalElement] = useState<HTMLElement | null>(null)
 
   function replaceWithFragment(element: HTMLDivElement | null) {
-    if (element == null) return
+    const parentElement = element?.parentElement
+    if (parentElement == null) return
 
-    setFragment(element)
+    setPortalElement(parentElement)
   }
 
   useEffect(() => {
-    const ModalViewComponent = () => <div ref={replaceWithFragment} />
+    const ModalViewComponent = () => <div style={{ display: "none" }} ref={replaceWithFragment} />
     const modal = props.controller.open(ModalViewComponent, { ...props.params, id })
+    modalWindowRef.current = modal
+
     if (props.onClose) {
       modal.on("close", props.onClose)
     }
 
-    return () => {
-      modal.close()
-
-      // // Delayed close to prevent flickering and unnecessary closing, opening animations.
-      // setTimeout(() => modal.close())
-    }
+    return () => modal.close()
   }, [props.controller, id])
 
-  if (fragment == null) {
+  if (portalElement == null) {
     return null
   }
 
-  return createPortal(props.children, fragment, id)
+  return (
+    <modalContext.Provider value={modalWindowRef.current}>
+      {createPortal(props.children, portalElement, id)}
+    </modalContext.Provider>
+  )
 }
 
 
