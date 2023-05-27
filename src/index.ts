@@ -21,4 +21,7 @@ export { ModalWindow } from "./ModalWindow"
 export { ModalContainer } from "./ModalContainer"
 export { useModalWindow, useModalSnapshot } from "./hooks"
 
+export { default as DrawerLayout } from "./layouts/DrawerLayout"
+export { default as PopupLayout } from "./layouts/PopupLayout"
+
 export { ModalPortal } from "./ModalPortal"
