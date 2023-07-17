@@ -32,7 +32,7 @@
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "rollup": "^2.77.0",
     "rollup-plugin-dts": "^4.2.2",
     "sass": "^1.53.0",
