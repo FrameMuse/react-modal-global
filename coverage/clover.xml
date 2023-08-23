@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1685218719782" clover="3.2.0">
-  <project timestamp="1685218719782" name="All files">
-    <metrics statements="171" coveredstatements="162" conditionals="71" coveredconditionals="58" methods="60" coveredmethods="56" elements="302" coveredelements="276" complexity="0" loc="171" ncloc="171" packages="1" files="10" classes="10"/>
+<coverage generated="1692774547856" clover="3.2.0">
+  <project timestamp="1692774547857" name="All files">
+    <metrics statements="173" coveredstatements="164" conditionals="71" coveredconditionals="58" methods="61" coveredmethods="57" elements="305" coveredelements="279" complexity="0" loc="173" ncloc="173" packages="1" files="10" classes="10"/>
     <file name="Deffered.ts" path="/home/kotto/github/react-modal-global/src/Deffered.ts">
       <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <line num="25" count="76" type="stmt"/>
-      <line num="26" count="76" type="stmt"/>
-      <line num="27" count="76" type="stmt"/>
+      <line num="25" count="77" type="stmt"/>
+      <line num="26" count="77" type="stmt"/>
+      <line num="27" count="77" type="stmt"/>
     </file>
     <file name="ModalContainer.tsx" path="/home/kotto/github/react-modal-global/src/ModalContainer.tsx">
       <metrics statements="11" coveredstatements="11" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
@@ -23,76 +23,78 @@
       <line num="67" count="37" type="stmt"/>
     </file>
     <file name="ModalController.ts" path="/home/kotto/github/react-modal-global/src/ModalController.ts">
-      <metrics statements="69" coveredstatements="62" conditionals="30" coveredconditionals="22" methods="27" coveredmethods="25"/>
-      <line num="38" count="52" type="stmt"/>
-      <line num="39" count="52" type="stmt"/>
-      <line num="42" count="137" type="stmt"/>
-      <line num="45" count="52" type="stmt"/>
-      <line num="47" count="53" type="stmt"/>
-      <line num="50" count="384" type="stmt"/>
-      <line num="58" count="15" type="cond" truecount="1" falsecount="1"/>
-      <line num="60" count="15" type="stmt"/>
-      <line num="61" count="15" type="stmt"/>
-      <line num="67" count="70" type="cond" truecount="2" falsecount="0"/>
-      <line num="69" count="38" type="stmt"/>
-      <line num="70" count="38" type="stmt"/>
-      <line num="99" count="74" type="stmt"/>
-      <line num="102" count="74" type="stmt"/>
-      <line num="106" count="74" type="cond" truecount="2" falsecount="0"/>
+      <metrics statements="71" coveredstatements="64" conditionals="30" coveredconditionals="22" methods="28" coveredmethods="26"/>
+      <line num="38" count="54" type="stmt"/>
+      <line num="39" count="54" type="stmt"/>
+      <line num="42" count="140" type="stmt"/>
+      <line num="45" count="54" type="stmt"/>
+      <line num="47" count="55" type="stmt"/>
+      <line num="50" count="394" type="stmt"/>
+      <line num="58" count="16" type="cond" truecount="1" falsecount="1"/>
+      <line num="60" count="16" type="stmt"/>
+      <line num="61" count="16" type="stmt"/>
+      <line num="67" count="71" type="cond" truecount="2" falsecount="0"/>
+      <line num="69" count="39" type="stmt"/>
+      <line num="70" count="39" type="stmt"/>
+      <line num="99" count="75" type="stmt"/>
+      <line num="102" count="75" type="stmt"/>
+      <line num="106" count="75" type="cond" truecount="2" falsecount="0"/>
       <line num="107" count="36" type="stmt"/>
       <line num="108" count="36" type="cond" truecount="2" falsecount="0"/>
       <line num="109" count="4" type="stmt"/>
-      <line num="113" count="70" type="cond" truecount="4" falsecount="0"/>
+      <line num="113" count="71" type="cond" truecount="4" falsecount="0"/>
       <line num="114" count="3" type="stmt"/>
-      <line num="116" count="70" type="stmt"/>
-      <line num="117" count="70" type="stmt"/>
-      <line num="119" count="70" type="stmt"/>
-      <line num="121" count="70" type="stmt"/>
-      <line num="127" count="4" type="stmt"/>
-      <line num="129" count="4" type="stmt"/>
+      <line num="116" count="71" type="stmt"/>
+      <line num="117" count="71" type="stmt"/>
+      <line num="119" count="71" type="stmt"/>
+      <line num="121" count="71" type="stmt"/>
+      <line num="127" count="5" type="stmt"/>
+      <line num="129" count="5" type="stmt"/>
       <line num="138" count="6" type="stmt"/>
       <line num="139" count="6" type="cond" truecount="2" falsecount="0"/>
       <line num="140" count="5" type="stmt"/>
       <line num="143" count="6" type="stmt"/>
       <line num="150" count="4" type="stmt"/>
       <line num="152" count="4" type="stmt"/>
-      <line num="159" count="29" type="cond" truecount="1" falsecount="1"/>
-      <line num="160" count="29" type="cond" truecount="1" falsecount="1"/>
-      <line num="162" count="29" type="cond" truecount="2" falsecount="0"/>
-      <line num="163" count="15" type="stmt"/>
-      <line num="165" count="15" type="stmt"/>
+      <line num="159" count="30" type="cond" truecount="1" falsecount="1"/>
+      <line num="160" count="30" type="cond" truecount="1" falsecount="1"/>
+      <line num="162" count="30" type="cond" truecount="2" falsecount="0"/>
+      <line num="163" count="16" type="stmt"/>
+      <line num="165" count="16" type="stmt"/>
       <line num="168" count="14" type="stmt"/>
       <line num="169" count="14" type="stmt"/>
       <line num="176" count="5" type="stmt"/>
       <line num="177" count="2" type="stmt"/>
-      <line num="184" count="2" type="stmt"/>
-      <line num="185" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="184" count="3" type="stmt"/>
+      <line num="185" count="10" type="cond" truecount="2" falsecount="0"/>
       <line num="186" count="1" type="stmt"/>
-      <line num="189" count="8" type="cond" truecount="1" falsecount="1"/>
+      <line num="189" count="9" type="cond" truecount="1" falsecount="1"/>
       <line num="190" count="0" type="cond" truecount="0" falsecount="2"/>
       <line num="191" count="0" type="stmt"/>
-      <line num="195" count="8" type="stmt"/>
-      <line num="197" count="8" type="stmt"/>
-      <line num="204" count="4" type="stmt"/>
-      <line num="209" count="8" type="stmt"/>
-      <line num="211" count="8" type="cond" truecount="1" falsecount="1"/>
-      <line num="212" count="0" type="stmt"/>
-      <line num="215" count="8" type="cond" truecount="1" falsecount="1"/>
-      <line num="216" count="0" type="stmt"/>
-      <line num="219" count="8" type="stmt"/>
-      <line num="233" count="0" type="stmt"/>
-      <line num="235" count="0" type="stmt"/>
-      <line num="236" count="0" type="stmt"/>
-      <line num="248" count="117" type="stmt"/>
-      <line num="249" count="117" type="stmt"/>
-      <line num="250" count="117" type="stmt"/>
-      <line num="252" count="117" type="stmt"/>
-      <line num="253" count="65" type="stmt"/>
-      <line num="254" count="65" type="stmt"/>
-      <line num="255" count="65" type="stmt"/>
-      <line num="259" count="299" type="stmt"/>
-      <line num="262" count="52" type="stmt"/>
-      <line num="264" count="137" type="stmt"/>
+      <line num="195" count="9" type="stmt"/>
+      <line num="197" count="9" type="stmt"/>
+      <line num="201" count="1" type="stmt"/>
+      <line num="203" count="1" type="stmt"/>
+      <line num="210" count="4" type="stmt"/>
+      <line num="215" count="10" type="stmt"/>
+      <line num="217" count="10" type="cond" truecount="1" falsecount="1"/>
+      <line num="218" count="0" type="stmt"/>
+      <line num="221" count="10" type="cond" truecount="1" falsecount="1"/>
+      <line num="222" count="0" type="stmt"/>
+      <line num="225" count="10" type="stmt"/>
+      <line num="239" count="0" type="stmt"/>
+      <line num="241" count="0" type="stmt"/>
+      <line num="242" count="0" type="stmt"/>
+      <line num="254" count="119" type="stmt"/>
+      <line num="255" count="119" type="stmt"/>
+      <line num="256" count="119" type="stmt"/>
+      <line num="258" count="119" type="stmt"/>
+      <line num="259" count="65" type="stmt"/>
+      <line num="260" count="65" type="stmt"/>
+      <line num="261" count="65" type="stmt"/>
+      <line num="265" count="299" type="stmt"/>
+      <line num="268" count="54" type="stmt"/>
+      <line num="270" count="140" type="stmt"/>
     </file>
     <file name="ModalPortal.tsx" path="/home/kotto/github/react-modal-global/src/ModalPortal.tsx">
       <metrics statements="16" coveredstatements="15" conditionals="6" coveredconditionals="5" methods="6" coveredmethods="5"/>
@@ -117,21 +119,21 @@
       <metrics statements="18" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="4"/>
       <line num="25" count="4" type="stmt"/>
       <line num="32" count="4" type="stmt"/>
-      <line num="75" count="76" type="stmt"/>
-      <line num="76" count="76" type="stmt"/>
-      <line num="78" count="76" type="stmt"/>
-      <line num="79" count="76" type="stmt"/>
-      <line num="81" count="76" type="stmt"/>
-      <line num="83" count="76" type="stmt"/>
-      <line num="84" count="76" type="stmt"/>
-      <line num="86" count="76" type="stmt"/>
-      <line num="99" count="76" type="stmt"/>
+      <line num="75" count="77" type="stmt"/>
+      <line num="76" count="77" type="stmt"/>
+      <line num="78" count="77" type="stmt"/>
+      <line num="79" count="77" type="stmt"/>
+      <line num="81" count="77" type="stmt"/>
+      <line num="83" count="77" type="stmt"/>
+      <line num="84" count="77" type="stmt"/>
+      <line num="86" count="77" type="stmt"/>
+      <line num="99" count="77" type="stmt"/>
       <line num="100" count="15" type="stmt"/>
       <line num="101" count="15" type="stmt"/>
       <line num="103" count="15" type="stmt"/>
       <line num="115" count="2" type="stmt"/>
-      <line num="128" count="74" type="stmt"/>
-      <line num="130" count="74" type="stmt"/>
+      <line num="128" count="75" type="stmt"/>
+      <line num="130" count="75" type="stmt"/>
       <line num="131" count="0" type="stmt"/>
     </file>
     <file name="context.ts" path="/home/kotto/github/react-modal-global/src/context.ts">
@@ -160,26 +162,26 @@
       <line num="31" count="26" type="stmt"/>
       <line num="33" count="26" type="stmt"/>
       <line num="34" count="26" type="stmt"/>
-      <line num="39" count="77" type="cond" truecount="1" falsecount="1"/>
-      <line num="42" count="77" type="stmt"/>
-      <line num="43" count="77" type="stmt"/>
-      <line num="44" count="330" type="cond" truecount="4" falsecount="0"/>
-      <line num="45" count="178" type="cond" truecount="2" falsecount="0"/>
+      <line num="39" count="78" type="cond" truecount="1" falsecount="1"/>
+      <line num="42" count="78" type="stmt"/>
+      <line num="43" count="78" type="stmt"/>
+      <line num="44" count="334" type="cond" truecount="4" falsecount="0"/>
+      <line num="45" count="180" type="cond" truecount="2" falsecount="0"/>
       <line num="46" count="7" type="stmt"/>
-      <line num="48" count="171" type="stmt"/>
-      <line num="51" count="323" type="stmt"/>
-      <line num="56" count="330" type="cond" truecount="2" falsecount="0"/>
-      <line num="58" count="84" type="cond" truecount="4" falsecount="0"/>
+      <line num="48" count="173" type="stmt"/>
+      <line num="51" count="327" type="stmt"/>
+      <line num="56" count="334" type="cond" truecount="2" falsecount="0"/>
+      <line num="58" count="85" type="cond" truecount="4" falsecount="0"/>
       <line num="59" count="22" type="stmt"/>
-      <line num="62" count="62" type="stmt"/>
-      <line num="65" count="246" type="stmt"/>
-      <line num="69" count="77" type="stmt"/>
-      <line num="71" count="77" type="stmt"/>
-      <line num="72" count="330" type="stmt"/>
-      <line num="74" count="330" type="stmt"/>
-      <line num="75" count="330" type="stmt"/>
-      <line num="79" count="77" type="stmt"/>
-      <line num="80" count="77" type="stmt"/>
+      <line num="62" count="63" type="stmt"/>
+      <line num="65" count="249" type="stmt"/>
+      <line num="69" count="78" type="stmt"/>
+      <line num="71" count="78" type="stmt"/>
+      <line num="72" count="334" type="stmt"/>
+      <line num="74" count="334" type="stmt"/>
+      <line num="75" count="334" type="stmt"/>
+      <line num="79" count="78" type="stmt"/>
+      <line num="80" count="78" type="stmt"/>
       <line num="89" count="37" type="stmt"/>
       <line num="90" count="8" type="cond" truecount="3" falsecount="1"/>
       <line num="91" count="8" type="cond" truecount="2" falsecount="0"/>
@@ -188,17 +190,17 @@
       <line num="108" count="3" type="stmt"/>
       <line num="110" count="1" type="stmt"/>
       <line num="112" count="1" type="stmt"/>
-      <line num="121" count="76" type="stmt"/>
-      <line num="122" count="76" type="stmt"/>
-      <line num="124" count="76" type="stmt"/>
-      <line num="125" count="5681" type="stmt"/>
-      <line num="127" count="5681" type="stmt"/>
-      <line num="128" count="5681" type="stmt"/>
-      <line num="131" count="76" type="stmt"/>
-      <line num="132" count="76" type="stmt"/>
-      <line num="133" count="76" type="stmt"/>
-      <line num="134" count="76" type="stmt"/>
-      <line num="136" count="76" type="stmt"/>
+      <line num="121" count="77" type="stmt"/>
+      <line num="122" count="77" type="stmt"/>
+      <line num="124" count="77" type="stmt"/>
+      <line num="125" count="5719" type="stmt"/>
+      <line num="127" count="5719" type="stmt"/>
+      <line num="128" count="5719" type="stmt"/>
+      <line num="131" count="77" type="stmt"/>
+      <line num="132" count="77" type="stmt"/>
+      <line num="133" count="77" type="stmt"/>
+      <line num="134" count="77" type="stmt"/>
+      <line num="136" count="77" type="stmt"/>
       <line num="140" count="2" type="cond" truecount="1" falsecount="1"/>
       <line num="142" count="2" type="stmt"/>
       <line num="144" count="2" type="stmt"/>
