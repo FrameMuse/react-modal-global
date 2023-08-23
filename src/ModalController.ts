@@ -197,6 +197,12 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
     modalWindows.forEach(modalWindow => this.close(modalWindow))
   }
 
+  public closeByName(componentName: keyof Config["components"]): void {
+    const component = this.getNamedComponent(componentName)
+
+    this.closeByComponent(component)
+  }
+
   /**
    * Closes all modals.
    */

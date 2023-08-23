@@ -166,5 +166,22 @@ describe("ModalController (with container)", () => {
       controller.replaceNamed("test2", { b: 2 })
       controller.replaceNamed("lazied", { controller: new ModalController })
     })
+
+    it("closeByName", () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      function Test1(props: { a: 1 }) { return null }
+
+      const controller = new ModalController({
+        components: {
+          test1: Test1,
+        }
+      })
+
+      controller.openNamed("test1", { a: 1 })
+      expect(controller.active).toBe(true)
+
+      controller.closeByName("test1")
+      expect(controller.active).toBe(false)
+    })
   })
 })
