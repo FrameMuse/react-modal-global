@@ -10,7 +10,7 @@ const config = defineConfig([{
   output: [
     {
       file: pkg.main,
-      format: "cjs",
+      format: "esm",
     },
   ],
   plugins: [
@@ -20,7 +20,7 @@ const config = defineConfig([{
 },
 {
   input: "src/index.ts",
-  output: [{ file: pkg.types, format: "cjs" }],
+  output: [{ file: pkg.types, format: "esm" }],
   plugins: [dts()],
 }])
 

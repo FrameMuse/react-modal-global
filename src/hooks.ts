@@ -38,8 +38,8 @@ export function useModalWindow<T>(): ModalWindow<T extends ModalComponent<infer 
 
   // It's safe to case to `any` here because the context is always set to a `ModalWindow`
   // and the arbitrary type `T` is difened by the user.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return context as ModalWindow<any>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return
+  return context
 }
 
 
