@@ -97,6 +97,8 @@ class ModalWindow<CustomParams = unknown> {
    * modal.close()
    */
   close = () => {
+    if (this.closed) return
+
     this.closed = true
     this.deffered.resolve()
 
