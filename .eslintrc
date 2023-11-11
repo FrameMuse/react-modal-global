@@ -3,18 +3,22 @@
     "node": true,
     "commonjs": true,
     "browser": true,
-    "es2021": true,
-    "jest": true
+    "es2024": true,
+    "jest": true,
+    "worker": true,
+    "serviceworker": true,
+    "webextensions": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:react/jsx-runtime"
-    // "eslint-config-prettier"
   ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": "tsconfig.json",
     "ecmaFeatures": {
       "jsx": true,
       "modules": true
@@ -29,13 +33,15 @@
     "@typescript-eslint",
     "unused-imports",
     "simple-import-sort"
-    // "eslint-plugin-prettier"
   ],
   "rules": {
+    // Useful
     "default-case": "error",
     "no-multi-spaces": "error",
     "simple-import-sort/imports": "warn",
     "unused-imports/no-unused-imports": "warn",
+    "deprecation/deprecation": "error",
+    // Stylistic
     "semi": [
       "error",
       "never"
@@ -54,6 +60,24 @@
         "allowTemplateLiterals": true
       }
     ],
+    // asd
+    "no-magic-numbers": "off",
+    "@typescript-eslint/no-magic-numbers": [
+      "error",
+      {
+        "ignore": [
+          0,
+          1,
+          -1
+        ],
+        "ignoreArrayIndexes": true,
+        "ignoreEnums": true,
+        "ignoreNumericLiteralTypes": true,
+        "ignoreReadonlyClassProperties": true,
+        "ignoreTypeIndexes": true
+      }
+    ],
+    // Curly & Parens
     "arrow-parens": [
       "warn",
       "as-needed"
@@ -62,17 +86,33 @@
       "error",
       "always"
     ],
+    "curly": [
+      "error",
+      "multi-line",
+      "consistent"
+    ],
+    // Function rules
+    "func-style": [
+      "error",
+      "declaration"
+    ],
     // OFF
-    // "prettier/prettier": [
-    //   "error",
-    //   "off"
-    // ],
     "@typescript-eslint/end-of-line": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/prefer-namespace-keyword": "off",
-    "@typescript-eslint/no-namespace": "off"
+    "@typescript-eslint/prefer-function-type": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/class-literal-property-style": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    // OFF - React Hooks
+    "react-hooks/exhaustive-deps": "off"
   },
   "ignorePatterns": [
     "node_modules",
