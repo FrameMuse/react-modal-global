@@ -62,9 +62,11 @@ export function ModalPortal(props: ModalPortalProps) {
     const modal = props.controller.open(ModalViewComponent, { ...props.params, id })
     modalWindowRef.current = modal
 
-    modal.on("close", props.onClose)
-    const offUserClose = props.onUserClose && modal.on("close", props.onUserClose)
+    if (props.onClose) {
+      modal.on("close", props.onClose)
+    }
 
+    const offUserClose = props.onUserClose && modal.on("close", props.onUserClose)
     return () => {
       offUserClose?.()
       props.onUnmountClose?.()
