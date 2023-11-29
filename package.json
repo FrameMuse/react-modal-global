@@ -18,7 +18,6 @@
     }
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0",
     "type-fest": "^4.0.0"
   },
   "devDependencies": {
