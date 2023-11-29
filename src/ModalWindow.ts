@@ -16,17 +16,16 @@ copies or substantial portions of the Software.
 
 */
 
-import EventEmitter from "eventemitter3"
-
 import Deffered from "./Deffered"
+import EventEmitter from "./EventEmitter"
 import { ModalComponent, ModalParams } from "./types"
 import { cyrb53, serialize } from "./utils"
 
 const MODAL_SEED = Date.now()
 
 interface ModalWindowEvents {
-  open: []
-  close: []
+  open(): void
+  close(): void
 }
 
 const DEFAULT_PARAMS: ModalParams = {
@@ -43,12 +42,12 @@ const DEFAULT_PARAMS: ModalParams = {
 class ModalWindow<CustomParams = unknown> {
   /**
    * Hash of `serialized` property.
-   * 
+   *
    * Unique id of the modal window.
    * If two modals have the same id, they will be treated as the same modal.
-   * 
+   *
    * This is usually used in `key` prop for React components.
-   * 
+   *
    * @note
    * This is not the same as `params.id` because `id` is unique for each modal window.
    */
@@ -62,7 +61,7 @@ class ModalWindow<CustomParams = unknown> {
   public params: ModalParams & CustomParams
   /**
    * Indicates that the `close` method has been called and the modal window is going to be removed.
-   * 
+   *
    * @default
    * false
    */
@@ -88,10 +87,10 @@ class ModalWindow<CustomParams = unknown> {
 
   /**
    * Closes the modal window.
-   * 
+   *
    * @note
    * This is an arrow function, which prevents `this` from being lost - You can use it without `bind`.
-   * 
+   *
    * @example
    * const modal = Modal.open(PopupHello, { title: "Hello" })
    * modal.close()
@@ -108,7 +107,7 @@ class ModalWindow<CustomParams = unknown> {
 
   /**
    * Can be used to wait for the modal to be closed before performing an action.
-   * 
+   *
    * @example
    * await Modal.open(PopupHello, { title: "Hello" })
    * doAnyAction()
@@ -121,12 +120,12 @@ class ModalWindow<CustomParams = unknown> {
    * @example
    * const modal = Modal.open(PopupHello, { title: "Hello" })
    * modal.on("close", () => { })
-   * 
+   *
    * @note If you want to do something on close, you can use await directly on this instance. For details see `then` method in `ModalWindow`.
-   * 
+   *
    * @returns `unsubscribe` method
    */
-  on<K extends keyof ModalWindowEvents>(event: K, listener: (...args: ModalWindowEvents[K]) => void) {
+  on<K extends keyof ModalWindowEvents>(event: K, listener: ModalWindowEvents[K]) {
     this.events.on(event, listener)
 
     return () => {
@@ -137,7 +136,7 @@ class ModalWindow<CustomParams = unknown> {
 
 /**
  * This is a workaround for TypeScript.
- * 
+ *
  * Used if it doesn't matter what type of `CustomParams` is used.
 */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
