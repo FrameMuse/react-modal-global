@@ -49,7 +49,7 @@ export interface ModalParams {
   id: string | number
   /**
    * Whether to enable built-in closing mechanisms.
-   * 
+   *
    * - `ESC` key
    * - `click` on the overlay
    *
@@ -57,25 +57,8 @@ export interface ModalParams {
    */
   closable: boolean
   /**
-   * Use `id` parameter with unique value instead.
-   * @example
-   * Modal.open(Component, { id: 1 })
-   * @example
-   * Modal.open(Component, { id: 2 })
-   * @example
-   * Modal.open(Component, { id: Date.now() })
-   * 
-   * @deprecated
-  */
-  weak: boolean
-  /**
-   * Use `layer` instead.
-   * @deprecated
-  */
-  fork: boolean
-  /**
    * Forks the modal window to a new layer.
-   * 
+   *
    * @default 0
    */
   layer: number
@@ -110,7 +93,7 @@ export type ModalWindowParams<P = unknown> =
 
 /**
  * This is intented to fix errors related to passing `ModalWindowParams` to spreaded array of `ModalWindowParams`.
- * 
+ *
  * Removes `undefined` from `ModalWindowParams`, otherwise it will show `"'P' could be instantiated with an arbitrary type..."` error.
  * Even though it's ok to pass `undefined` and arbitrary type there.
  */

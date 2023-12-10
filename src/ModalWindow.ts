@@ -33,10 +33,7 @@ const DEFAULT_PARAMS: ModalParams = {
   closable: true,
   keepMounted: false,
   layer: 0,
-  label: "Content is unknown. Bad guy didn't set a label.",
-
-  weak: false,
-  fork: false
+  label: "Content is unknown. Bad guy didn't set a label."
 }
 
 class ModalWindow<CustomParams = unknown> {
