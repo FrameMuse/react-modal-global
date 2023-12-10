@@ -16,16 +16,15 @@ copies or substantial portions of the Software.
 
 */
 
-import EventEmitter from "eventemitter3"
-
+import EventEmitter from "./EventEmitter"
 import { ModalWindow, ModalWindowAny } from "./ModalWindow"
 import { ExternalStore, MODAL_WINDOW_PARAMS_EXPLANATION, ModalComponent, ModalComponentProps, ModalNamedComponents, ModalParams, ModalSnapshot, ModalWindowParams } from "./types"
 
 
 interface ModalControllerEvents {
-  add: [ModalWindowAny]
-  remove: [ModalWindowAny]
-  update: []
+  add(modalWindow: ModalWindowAny): void
+  remove(modalWindow: ModalWindowAny): void
+  update(): void
 }
 
 interface ModalControllerConfig<Components extends ModalNamedComponents = ModalNamedComponents> {
@@ -86,11 +85,11 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
    * @example
    * await Modal.open(MyModal, { id: 1 })
    * console.log("Modal was closed")
-   * 
+   *
    * @example
    * const modal = Modal.open(MyModal, { id: 1 })
    * modal.then(() => console.log("Modal was closed"))
-   * 
+   *
    * @example
    * const modal = Modal.open(MyModal, { id: 1 })
    * modal.on("close", () => console.log("Modal was closed"))
@@ -229,13 +228,13 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
 
   /**
    * Subscribes to `event` with `listener`.
-   * 
+   *
    * @example
    * Modal.on("close", () => { })
-   * 
+   *
    * @returns `unsubscribe` method
    */
-  public on<T extends keyof ModalControllerEvents>(event: T, listener: (...args: ModalControllerEvents[T]) => void) {
+  public on<T extends keyof ModalControllerEvents>(event: T, listener: ModalControllerEvents[T]) {
     this.events.on(event, listener)
 
     return () => {
@@ -245,9 +244,9 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
 
   /**
    * Used for container component to get the current state.
-   * 
+   *
    * Observes the state and calls the callback on any changes.
-   * 
+   *
    * @returns `unsubscribe` method to stop observing.
    */
   public subscribe(callback: () => void) {
