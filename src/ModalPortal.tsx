@@ -33,6 +33,9 @@ interface ModalPortalProps {
   children: ReactNode
 
   onClose?(): void
+  onUserClose?(): void
+  onUnmountClose?(): void
+
   params?: Partial<ModalParams>
 }
 
@@ -63,7 +66,12 @@ export function ModalPortal(props: ModalPortalProps) {
       modal.on("close", props.onClose)
     }
 
-    return () => modal.close()
+    const offUserClose = props.onUserClose && modal.on("close", props.onUserClose)
+    return () => {
+      offUserClose?.()
+      props.onUnmountClose?.()
+      modal.close()
+    }
   }, [props.controller, id])
 
   if (portalElement == null) {
