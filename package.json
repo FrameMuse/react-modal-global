@@ -34,7 +34,7 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unused-imports": "^3.0.0",
-    "rollup": "^2.77.0",
+    "rollup": "^4.9.2",
     "rollup-plugin-dts": "^6.1.0",
     "sass": "^1.53.0",
     "tslib": "^2.4.0",
