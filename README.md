@@ -37,12 +37,12 @@ I was looking for a way to use modals in `useEffect` hook without using `useStat
 
 So I decided to create this package that would solve all these problems at once.
 
-I was insipered a lot by packages like [react-toastify](https://npmjs.com/package/react-toastify) and [react-modal](https://npmjs.com/package/react-modal).
+I was inspired by packages like [react-toastify](https://npmjs.com/package/react-toastify) and [react-modal](https://npmjs.com/package/react-modal).
 
 ## Playgrounds
 | Title | Playground |
 | --- | --- |
-| Example of layouts usage | [![Edit react-modal-global](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-modal-global-examples-47yoil)        |
+| Example of layouts usage | [![Edit react-modal-global](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/edit/react-modal-global)        |
 | Example of usage with ChakraUI (by [@laurensnl](https://github.com/laurensnl)) | [![Edit react-modal-global](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/chakraui-nextjs-react-modal-global-h0g21f) |
 
 
@@ -76,7 +76,7 @@ function App() {
     <>
       {/* ... Other components ... */}
       {/* It's better if `ModalContainer` goes after all other components */}
-      <ModalContainer controller={Modal} /> 
+      <ModalContainer controller={Modal} />
     </>
   )
 }
@@ -379,7 +379,7 @@ But this way has some problems, one of them is that you have to create a compone
 This is an approach just consumes "`title` and `description`" or "`header` and `body`" props and renders them in a common container.
 
 This approach lacks of flexibility, but it's easier to use.
-There also may be problems 
+There also may be problems
 - styling, because you can't style a modal component itself, you can only style a container
 - multiple languages, because you can't apply its own translation to each modal window separately, you will have to pass it to a method, which is not convenient
 
