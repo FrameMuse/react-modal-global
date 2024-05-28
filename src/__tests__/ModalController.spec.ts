@@ -116,10 +116,7 @@ describe("ModalController (with container)", () => {
         closable: false,
         keepMounted: true,
         layer: 2,
-        label: "TEST",
-
-        weak: true,
-        fork: true
+        label: "TEST"
       }
       const controller = new ModalController({ defaultParams })
       const modal = controller.open(() => createElement(Fragment))
