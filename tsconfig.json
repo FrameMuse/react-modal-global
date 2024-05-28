@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
     "lib": [
       "DOM",
       "DOM.Iterable",
@@ -26,16 +26,16 @@
     "noImplicitAny": true,
     "jsx": "react-jsx",
     "importHelpers": true,
-    "typeRoots": [
-      "node_modules/@types",
-      "@types"
-    ],
+    "types": [
+      "vite/client"
+    ]
   },
   "include": [
-    "src",
-    "scripts",
-    "@types",
-    ".eslintrc",
-    "rollup.config.ts"
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
