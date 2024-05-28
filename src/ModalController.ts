@@ -98,7 +98,7 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
     const modalWindow = new ModalWindow(component, { ...this.config?.defaultParams, ...modalParams as MODAL_WINDOW_PARAMS_EXPLANATION<P> })
     // Using `on` instead of `then` since `then` will only be executed on the next event loop iteration.
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Event_loop.
-    modalWindow.on("close", () => this.close(modalWindow))
+    modalWindow.on("close", () => this.remove(modalWindow))
 
 
     // Skip adding to queue if the window is already the last modal.
@@ -155,6 +155,12 @@ class ModalController<Config extends Partial<ModalControllerConfig> = ModalContr
    * Closes modal by its instance.
    */
   public close(modalWindow: ModalWindowAny): void {
+    if (!this.windows.has(modalWindow)) return
+
+    modalWindow.close()
+  }
+
+  private remove(modalWindow: ModalWindowAny): void {
     if (this.windows.size === 0) return
     if (!this.windows.has(modalWindow)) return
 

@@ -1,9 +1,9 @@
 {
   "type": "module",
   "name": "react-modal-global",
-  "version": "2.3.4",
+  "version": "2.3.6",
   "description": "Uncontrollable Global React Modal",
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
