@@ -10,4 +10,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          echo "Labels: ${{github.event.pull_request.labels}}"
+          echo "Labels: ${{github.event.pull_request.labels[*]}}"
+          echo ${{${github.event.pull_request.labels[*]}}}
