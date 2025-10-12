@@ -39,6 +39,61 @@ So I decided to create this package that would solve all these problems at once.
 
 I was inspired by packages like [react-toastify](https://npmjs.com/package/react-toastify) and [react-modal](https://npmjs.com/package/react-modal).
 
+## Quick Peek
+
+**`Usage.tsx`**
+```tsx
+function Usage() {
+  return <div onClick={() => Modal.open(ModalComponent)} />
+}
+```
+
+**`modal.ts`**
+```tsx
+import { ModalController } from "react-modal-global"
+
+export const Modal = new ModalController
+```
+
+**`main.ts`**
+```tsx
+import "react-modal-global/styles/modal.scss"
+
+import React from "react"
+import ReactDOM from "react-dom"
+import { ModalContainer } from "react-modal-global"
+
+import Modal from "./Modal" // Your modal.
+
+function App() {
+  return (
+    <>
+      <Usage />
+      {/* ... Other components ... */}
+      {/* It's better if `ModalContainer` goes after all other components */}
+      <ModalContainer controller={Modal} />
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById("root"))
+```
+**`ModalComponent.tsx`**
+```tsx
+function ModalComponent() {
+  const modal = useModalWindow() // Getting modal context of a modal window related to this component.
+
+  return (
+    <>
+      <h2>Title</h2>
+      <p>Content text</p>
+
+      <button type="button" onClick={modal.close}>close</button>
+    </>
+  )
+}
+```
+
 ## Playgrounds
 | Title | Playground |
 | --- | --- |
