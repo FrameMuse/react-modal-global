@@ -43,6 +43,9 @@ I was inspired by packages like [react-toastify](https://npmjs.com/package/react
 
 **`Usage.tsx`**
 ```tsx
+import { Modal } from "./modal.ts" // Local instance.
+import { ModalComponent } from "./ModalComponent.ts"
+
 function Usage() {
   return <div onClick={() => Modal.open(ModalComponent)} />
 }
