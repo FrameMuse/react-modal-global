@@ -213,7 +213,7 @@ This is how you disaply your modal components
 // Import default styles.
 import "react-modal-global/styles/modal.scss"
 
-import { Modal } from "react-modal-global"
+import { Modal } from "./modal.ts" // Your local Modal instance.
 
 import PopupLogin from "./PopupLogin"
 
