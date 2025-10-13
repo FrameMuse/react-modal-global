@@ -43,6 +43,9 @@ I was inspired by packages like [react-toastify](https://npmjs.com/package/react
 
 **`Usage.tsx`**
 ```tsx
+import { Modal } from "./modal.ts" // Local instance.
+import { ModalComponent } from "./ModalComponent.ts"
+
 function Usage() {
   return <div onClick={() => Modal.open(ModalComponent)} />
 }
@@ -210,7 +213,7 @@ This is how you disaply your modal components
 // Import default styles.
 import "react-modal-global/styles/modal.scss"
 
-import { Modal } from "react-modal-global"
+import { Modal } from "./modal.ts" // Your local Modal instance.
 
 import PopupLogin from "./PopupLogin"
 
