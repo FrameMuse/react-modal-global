@@ -4,7 +4,10 @@
 <p align="center">
   <a href="https://codecov.io/gh/FrameMuse/react-modal-global">
     <img src="https://codecov.io/gh/FrameMuse/react-modal-global/branch/main/graph/badge.svg?token=1FRUN6AQDA" />
+    <img alt="npm package minimized gzipped size" src="https://img.shields.io/bundlejs/size/react-modal-global">
   </a>
+
+  <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg" alt="Commitizen friendly" /></a>
 </p>
 <p align="center">
   <a href="https://www.npmjs.com/package/react-modal-global">
