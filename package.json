@@ -38,7 +38,7 @@
     "sass": "^1.53.0",
     "typescript": "^5.4.5",
     "uglify-js": "^3.17.4",
-    "vite": "5.4.21",
+    "vite": "7.1.12",
     "vite-plugin-dts": "^3.7.3"
   },
   "scripts": {
